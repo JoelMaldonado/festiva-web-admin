@@ -1,0 +1,51 @@
+<div>
+  <app-club-location [(visible)]="visible" [clubId]="selectedClubId" />
+
+  <span>{{visible}}</span>
+
+  <p-table [value]="clubs" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template #header>
+      <tr>
+        <th>Club</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-product>
+      <tr>
+        <td>
+          <div class="flex flex-row items-center gap-2">
+            <img
+              [src]="product.logoUrl"
+              alt="Logo"
+              class="w-10 h-10 object-cover rounded-md"
+            />
+            {{ product.name }}
+          </div>
+        </td>
+        <td>
+          <div>
+            <p-button
+              pTooltip="Location"
+              showDelay="100"
+              hideDelay="100"
+              icon="pi pi-map-marker"
+              [rounded]="true"
+              [text]="true"
+              (click)="openDrawer(product.id)"
+            />
+
+            <p-button
+              pTooltip="Phones"
+              showDelay="100"
+              hideDelay="100"
+              icon="pi pi-phone"
+              [rounded]="true"
+              [text]="true"
+              (click)="findPhones(product.id)"
+            />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
