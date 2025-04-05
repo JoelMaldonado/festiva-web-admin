@@ -30,6 +30,7 @@
         [routerLink]="item.routerLink"
         routerLinkActive="text-p1"
         class="block transition hover:text-p1"
+        (click)="closeMenu()"
       >
         {{ item.label }}
       </a>

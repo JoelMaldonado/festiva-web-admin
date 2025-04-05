@@ -39,10 +39,6 @@ export class ToolbarComponent {
     },
   ];
 
-  navigate(routerLink: String) {
-    this.router.navigate(['menu', routerLink]);
-  }
-
   logout() {
     Swal.fire({
       title: '¿Cerrar sesión?',
