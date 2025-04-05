@@ -4,11 +4,10 @@ import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
 import Swal from 'sweetalert2';
 import { StorageService } from '../core/services/storage.service';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-toolbar',
-  imports: [ToolbarModule, ButtonModule, RouterModule, NgIf],
+  imports: [ToolbarModule, ButtonModule, RouterModule],
   templateUrl: './toolbar.component.html',
 })
 export class ToolbarComponent {
