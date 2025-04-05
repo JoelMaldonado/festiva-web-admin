@@ -1,0 +1,76 @@
+<div class="flex flex-col min-h-screen text-white bg-b1 md:flex-row">
+  <!-- Lado visual con imagen de fiesta -->
+  <div
+    class="relative items-center justify-center flex-1 hidden overflow-hidden md:flex"
+  >
+    <img
+      src="https://cdn.pixabay.com/photo/2019/10/15/03/16/black-and-white-4550471_1280.jpg"
+      alt="Fiesta"
+      class="absolute object-cover w-full h-full"
+    />
+    <div class="absolute inset-0 bg-black bg-opacity-80"></div>
+    <div class="relative z-10 px-10 text-center">
+      <img src="festiva.png" alt="Mi Marca" class="h-16 mx-auto mb-4" />
+      <h1 class="text-4xl font-extrabold tracking-wide">¡Bienvenido!</h1>
+      <p class="mt-2 text-lg text-gray-300">
+        Conectá con tus eventos favoritos
+      </p>
+    </div>
+  </div>
+
+  <!-- Formulario de login -->
+  <div class="flex items-center justify-center flex-1 px-6 py-12">
+    <div class="w-full max-w-md p-8 shadow-2xl bg-zinc-900 rounded-2xl">
+      <h2 class="mb-6 text-2xl font-bold text-center text-white">
+        Iniciar sesión
+      </h2>
+
+      <form (ngSubmit)="login()" class="space-y-5" #loginForm="ngForm">
+        <div>
+          <label class="block text-sm font-medium text-gray-300">Usuario</label>
+          <input
+            type="text"
+            name="username"
+            required
+            [(ngModel)]="username"
+            class="w-full p-3 mt-1 text-white border rounded-xl bg-zinc-800 border-zinc-700 focus:outline-none focus:ring-2 focus:ring-p1"
+            placeholder="Tu usuario"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300"
+            >Contraseña</label
+          >
+          <input
+            type="password"
+            name="password"
+            required
+            [(ngModel)]="password"
+            class="w-full p-3 mt-1 text-white border rounded-xl bg-zinc-800 border-zinc-700 focus:outline-none focus:ring-2 focus:ring-p1"
+            placeholder="••••••••"
+          />
+        </div>
+
+        <!-- Error -->
+        <div *ngIf="error" class="text-sm text-red-500">
+          {{ error }}
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-3 font-semibold text-white transition bg-p1 rounded-xl hover:bg-pink-700 disabled:opacity-50"
+          [disabled]="loading"
+        >
+          <span *ngIf="!loading">Iniciar sesión</span>
+          <span *ngIf="loading">Cargando...</span>
+        </button>
+
+        <div class="mt-4 text-sm text-center text-gray-400">
+          ¿Olvidaste tu contraseña?
+          <a href="#" class="text-p1 hover:underline">Recuperar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

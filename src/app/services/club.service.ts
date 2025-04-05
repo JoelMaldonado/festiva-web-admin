@@ -13,6 +13,14 @@ export class ClubService {
   private readonly url = `${environment.baseUrl}/club`;
   private readonly http = inject(HttpClient);
 
+  add(name: string, description: string) {
+    const body = {
+      name: name,
+      description: description,
+    };
+    return this.http.post<Result<Club>>(`${this.url}`, body);
+  }
+
   fetchAll() {
     return this.http.get<Result<Club[]>>(`${this.url}/detail`);
   }

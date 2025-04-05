@@ -4,14 +4,12 @@ import { ClubService } from '../../services/club.service';
 import { Club } from '../../interfaces/club';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
-import { DrawerModule } from 'primeng/drawer';
-
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { InputTextModule } from 'primeng/inputtext';
 import { ClubLocationComponent } from './components/club-location/club-location.component';
+import { DialogModule } from 'primeng/dialog';
+import { AddClubComponent } from './components/add-club/add-club.component';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-clubs',
@@ -22,13 +20,30 @@ import { ClubLocationComponent } from './components/club-location/club-location.
     ButtonModule,
     TooltipModule,
     ClubLocationComponent,
+    DialogModule,
+    AddClubComponent,
   ],
   templateUrl: './clubs.component.html',
 })
 export class ClubsComponent implements OnInit {
   clubs: Club[] = [];
+  clubsFiltered: Club[] = [];
 
   clubService = inject(ClubService);
+
+  filter = '';
+
+  showForm = false;
+
+  search() {
+    if (this.filter.length === 0) {
+      this.clubsFiltered = this.clubs;
+    } else {
+      this.clubsFiltered = this.clubs.filter((club) =>
+        club.name.toLowerCase().includes(this.filter.toLowerCase())
+      );
+    }
+  }
 
   ngOnInit(): void {
     this.getClubs();
@@ -37,17 +52,34 @@ export class ClubsComponent implements OnInit {
   value: string | undefined;
   visible = false;
   selectedClubId: number | null = null;
+  isLoading = false;
+
+  onSavedClub() {
+    this.showForm = false;
+    this.getClubs();
+  }
 
   getClubs() {
-    this.clubService.fetchAll().subscribe({
-      next: (res) => {
-        if (res.isSuccess) {
-          this.clubs = res.data;
-        } else {
-          console.error(res.message);
-        }
-      },
-    });
+    this.isLoading = true;
+    this.clubService
+      .fetchAll()
+      .pipe(delay(500))
+      .subscribe({
+        next: (res) => {
+          if (res.isSuccess) {
+            this.clubs = res.data;
+            this.clubsFiltered = res.data;
+          } else {
+            console.error(res.message);
+          }
+        },
+        error: (err) => {
+          console.error(err);
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
   }
 
   openDrawer(id: number) {

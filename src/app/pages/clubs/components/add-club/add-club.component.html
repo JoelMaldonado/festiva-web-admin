@@ -1,0 +1,34 @@
+<form (ngSubmit)="save()" class="space-y-4">
+  <div>
+    <label class="block mb-1 text-sm">Nombre</label>
+    <input
+      type="text"
+      pInputText
+      [(ngModel)]="name"
+      name="name"
+      class="w-full"
+      required
+    />
+  </div>
+
+  <div>
+    <label class="block mb-1 text-sm">Descripción</label>
+    <textarea
+      rows="5"
+      cols="30"
+      pTextarea
+      [(ngModel)]="description"
+      name="description"
+      class="w-full"
+    ></textarea>
+  </div>
+
+  <div class="flex justify-end pt-4">
+    <p-button
+      label="Guardar"
+      type="submit"
+      icon="pi pi-save"
+      [loading]="isLoading"
+    />
+  </div>
+</form>

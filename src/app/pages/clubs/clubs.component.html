@@ -1,9 +1,35 @@
-<div>
+<div class="flex flex-col gap-4">
+  <p-dialog
+    header="Agregar Club"
+    [(visible)]="showForm"
+    [modal]="true"
+    [closable]="true"
+    [style]="{ width: '400px' }"
+    [breakpoints]="{ '768px': '95vw' }"
+  >
+    <add-club (onSave)="onSavedClub()" />
+  </p-dialog>
+
   <app-club-location [(visible)]="visible" [clubId]="selectedClubId" />
 
-  <span>{{visible}}</span>
+  <div class="flex items-center justify-between">
+    <p-button icon="pi pi-plus" label="Agregar" (click)="showForm = true" />
+    <form (submit)="search()" class="flex items-center gap-3">
+      <input
+        type="text"
+        pInputText
+        name="filter"
+        [(ngModel)]="filter"
+        placeholder="Filtrar por nombre"
+      />
+      <p-button type="submit" icon="pi pi-search" label="Buscar" />
+    </form>
+  </div>
+  @if (isLoading) {
+  <div class="loader"></div>
+  } @else {
 
-  <p-table [value]="clubs" [tableStyle]="{ 'min-width': '50rem' }">
+  <p-table [value]="clubsFiltered" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template #header>
       <tr>
         <th>Club</th>
@@ -17,7 +43,7 @@
             <img
               [src]="product.logoUrl"
               alt="Logo"
-              class="w-10 h-10 object-cover rounded-md"
+              class="object-cover w-10 h-10 rounded-md"
             />
             {{ product.name }}
           </div>
@@ -48,4 +74,5 @@
       </tr>
     </ng-template>
   </p-table>
+  }
 </div>
