@@ -10,6 +10,7 @@ import { ClubLocationComponent } from './components/club-location/club-location.
 import { DialogModule } from 'primeng/dialog';
 import { AddClubComponent } from './components/add-club/add-club.component';
 import { delay } from 'rxjs';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-clubs',
@@ -22,6 +23,7 @@ import { delay } from 'rxjs';
     ClubLocationComponent,
     DialogModule,
     AddClubComponent,
+    InputTextModule,
   ],
   templateUrl: './clubs.component.html',
 })
