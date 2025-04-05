@@ -6,6 +6,18 @@ module.exports = {
     extend: {
       colors: {
         p1: "#FF4081",
+        primary: {
+          50: "#fef1f6",
+          100: "#fee5ef",
+          200: "#ffcae1",
+          300: "#ff9fc6",
+          400: "#ff639f",
+          500: "fef1f6",
+          600: "#f01253",
+          700: "#d1053b",
+          800: "#ad0731",
+          900: "#8f0c2d",
+        },
         green: "#00C64F",
         blue: "#1463FE",
         red: "#DA1818",
