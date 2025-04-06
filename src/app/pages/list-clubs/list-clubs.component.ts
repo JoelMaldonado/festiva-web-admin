@@ -1,20 +1,20 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { TableModule } from 'primeng/table';
-import { ClubService } from '../../services/club.service';
 import { Club } from '../../interfaces/club';
-import { ButtonModule } from 'primeng/button';
-import { TooltipModule } from 'primeng/tooltip';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { ClubLocationComponent } from './components/club-location/club-location.component';
-import { DialogModule } from 'primeng/dialog';
-import { AddClubComponent } from './components/add-club/add-club.component';
-import { delay } from 'rxjs';
-import { InputTextModule } from 'primeng/inputtext';
+import { ClubService } from '../../services/club.service';
 import { Router } from '@angular/router';
+import { delay } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
+import { AddClubComponent } from './components/add-club/add-club.component';
+import { ClubLocationComponent } from './components/club-location/club-location.component';
 
 @Component({
-  selector: 'app-clubs',
+  selector: 'app-list-clubs',
   imports: [
     CommonModule,
     FormsModule,
@@ -26,9 +26,10 @@ import { Router } from '@angular/router';
     AddClubComponent,
     InputTextModule,
   ],
-  templateUrl: './clubs.component.html',
+  templateUrl: './list-clubs.component.html',
+  styleUrl: './list-clubs.component.css',
 })
-export class ClubsComponent implements OnInit {
+export class ListClubsComponent implements OnInit {
   clubs: Club[] = [];
   clubsFiltered: Club[] = [];
 

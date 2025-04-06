@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { ArtistsComponent } from './pages/artists/artists.component';
 import { EventsComponent } from './pages/events/events.component';
-import { ClubsComponent } from './pages/clubs/clubs.component';
 import { MenuComponent } from './pages/menu/menu.component';
 import { PanelAdminComponent } from './pages/panel-admin/panel-admin.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -13,6 +12,7 @@ import { UserTypesComponent } from './pages/panel-admin/pages/user-types/user-ty
 import { DetailArtistComponent } from './pages/detail-artist/detail-artist.component';
 import { DetailClubComponent } from './pages/detail-club/detail-club.component';
 import { DetailEventComponent } from './pages/detail-event/detail-event.component';
+import { ListClubsComponent } from './pages/list-clubs/list-clubs.component';
 
 export const routes: Routes = [
   {
@@ -42,7 +42,7 @@ export const routes: Routes = [
       },
       {
         path: 'clubs',
-        component: ClubsComponent,
+        component: ListClubsComponent,
       },
       {
         path: 'clubs/:id',
