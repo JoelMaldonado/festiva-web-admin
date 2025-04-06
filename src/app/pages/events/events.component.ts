@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { CardComponent } from "./components/card-event.component";
+import { Component, inject } from '@angular/core';
+import { CardComponent } from './components/card-event.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-events',
@@ -7,5 +8,9 @@ import { CardComponent } from "./components/card-event.component";
   templateUrl: './events.component.html',
 })
 export class EventsComponent {
+  router = inject(Router);
 
+  nav(id: number) {
+    this.router.navigate(['menu', 'events', id]);
+  }
 }

@@ -11,6 +11,7 @@ import { DialogModule } from 'primeng/dialog';
 import { AddClubComponent } from './components/add-club/add-club.component';
 import { delay } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-clubs',
@@ -55,6 +56,7 @@ export class ClubsComponent implements OnInit {
   visible = false;
   selectedClubId: number | null = null;
   isLoading = false;
+  router = inject(Router);
 
   onSavedClub() {
     this.showForm = false;
@@ -82,6 +84,10 @@ export class ClubsComponent implements OnInit {
           this.isLoading = false;
         },
       });
+  }
+
+  toDetail(id: number) {
+    this.router.navigate(['menu', 'clubs', id]);
   }
 
   openDrawer(id: number) {
