@@ -72,8 +72,8 @@ export class ListClubsComponent implements OnInit {
       .subscribe({
         next: (res) => {
           if (res.isSuccess) {
-            this.clubs = res.data;
-            this.clubsFiltered = res.data;
+            this.clubs = res.data ?? [];
+            this.clubsFiltered = res.data ?? [];
           } else {
             console.error(res.message);
           }

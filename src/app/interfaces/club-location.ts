@@ -1,6 +1,7 @@
 export interface ClubLocation {
-    address: string;
-    mapsUrl: string;
-    latitude: number;
-    longitude: number;
+  id: number;
+  address: string;
+  latitude: number;
+  longitude: number;
+  mapsUrl: string;
 }

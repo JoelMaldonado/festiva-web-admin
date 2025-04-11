@@ -47,6 +47,10 @@ export const routes: Routes = [
       {
         path: 'clubs/:id',
         component: DetailClubComponent,
+        loadChildren: () =>
+          import('./pages/detail-club/detail-club.routes').then(
+            (m) => m.detailClubRoutes
+          ),
       },
       {
         path: 'panel-admin',

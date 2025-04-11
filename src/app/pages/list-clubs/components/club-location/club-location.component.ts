@@ -52,10 +52,12 @@ export class ClubLocationComponent implements OnChanges {
     this.service.fetchLocation(this.clubId!).subscribe({
       next: (res) => {
         if (res.isSuccess) {
-          this.address.setValue(res.data.address);
-          this.mapsUrl.setValue(res.data.mapsUrl);
-          this.latitude.setValue(res.data.latitude);
-          this.longitude.setValue(res.data.longitude);
+          if (res.data) {
+            this.address.setValue(res.data.address);
+            this.mapsUrl.setValue(res.data.mapsUrl);
+            this.latitude.setValue(res.data.latitude);
+            this.longitude.setValue(res.data.longitude);
+          }
         } else {
           console.error(res.message);
         }
