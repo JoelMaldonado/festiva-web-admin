@@ -1,8 +1,10 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   inject,
   Input,
+  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
@@ -11,21 +13,16 @@ import { ButtonModule } from 'primeng/button';
 import { ClubLocation } from '../../../../../interfaces/club-location';
 import Swal from 'sweetalert2';
 import { ClubLocationService } from '../../../../../services/club-location.service';
+import mapboxgl from 'mapbox-gl';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'card-club-location',
   imports: [ButtonModule],
   template: `
-    <div class="overflow-hidden shadow-md bg-b1 rounded-2xl">
+    <div class="overflow-hidden shadow-md bg-b2 rounded-2xl">
       <!-- Mapa embebido arriba -->
-      <iframe
-        class="w-full h-48"
-        [src]="getMapUrl(clubLocation.latitude, clubLocation.longitude)"
-        frameborder="0"
-        allowfullscreen
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-      ></iframe>
+      <div [id]="getIdMap()" style="width: 100%; height: 192px;"></div>
 
       <!-- Cuerpo del card -->
       <div class="p-4 space-y-2">
@@ -53,17 +50,35 @@ import { ClubLocationService } from '../../../../../services/club-location.servi
     </div>
   `,
 })
-export class CardClubLocation {
+export class CardClubLocation implements AfterViewInit, OnDestroy {
   @Input({ required: true }) clubLocation!: ClubLocation;
   @Output() onDeleted = new EventEmitter<void>();
 
+  map!: mapboxgl.Map;
+
+  getIdMap(): string {
+    return `map-${this.clubLocation.id}`;
+  }
+
+  ngAfterViewInit(): void {
+    mapboxgl.accessToken = environment.mapboxToken;
+    this.map = new mapboxgl.Map({
+      container: this.getIdMap(),
+      style: 'mapbox://styles/mapbox/dark-v11',
+      center: [this.clubLocation.longitude, this.clubLocation.latitude],
+      zoom: 15,
+    });
+    new mapboxgl.Marker()
+      .setLngLat([this.clubLocation.longitude, this.clubLocation.latitude])
+      .addTo(this.map);
+  }
+
+  ngOnDestroy(): void {
+    this.map?.remove();
+  }
+
   sanitizer = inject(DomSanitizer);
   clubLocationService = inject(ClubLocationService);
-
-  getMapUrl(lat: number, lng: number): SafeResourceUrl {
-    const url = `https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed`;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
-  }
 
   onDelete() {
     Swal.fire({
