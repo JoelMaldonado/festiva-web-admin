@@ -13,6 +13,6 @@ export class DetailClubComponent {
   router = inject(Router);
 
   toLocations() {
-    this.router.navigate(['menu', 'clubs', 4, 'locations']);
+    this.router.navigate(['menu', 'clubs', this.idClub, 'locations']);
   }
 }

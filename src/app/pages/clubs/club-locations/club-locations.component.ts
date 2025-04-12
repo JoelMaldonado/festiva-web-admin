@@ -1,20 +1,31 @@
 import { Location } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { ClubLocation } from '../../../interfaces/club-location';
 import { ClubService } from '../../../services/club.service';
 import { ClubLocationService } from '../../../services/club-location.service';
 import { CardClubLocation } from './components/card-club-location';
+import { Router } from '@angular/router';
+import { DrawerModule } from 'primeng/drawer';
+import { DrawerFormClubLocation } from './components/drawer-form-club-location';
 
 @Component({
   selector: 'app-club-locations',
-  imports: [ButtonModule, CardClubLocation],
+  imports: [
+    ButtonModule,
+    CardClubLocation,
+    DrawerModule,
+    DrawerFormClubLocation,
+  ],
   templateUrl: './club-locations.component.html',
   styleUrl: './club-locations.component.css',
 })
 export class ClubLocationsComponent implements OnInit {
   locations: ClubLocation[] = [];
 
+  @Input() idClub!: string;
+
+  router = inject(Router);
   location = inject(Location);
   clubService = inject(ClubService);
   clubLocationService = inject(ClubLocationService);
@@ -27,8 +38,21 @@ export class ClubLocationsComponent implements OnInit {
     this.location.back();
   }
 
+  isFormVisible = false;
+  selectedClubLocation?: ClubLocation = undefined;
+
+  addNewClubLocation() {
+    this.selectedClubLocation = undefined;
+    this.isFormVisible = true;
+  }
+
+  editClubLocation(location: ClubLocation) {
+    this.selectedClubLocation = location;
+    this.isFormVisible = true;
+  }
+
   getClubLocations() {
-    this.clubLocationService.fetchByIdClub(4).subscribe({
+    this.clubLocationService.fetchByIdClub(this.idClub).subscribe({
       next: (res) => {
         if (res.isSuccess) {
           this.locations = res.data ?? [];

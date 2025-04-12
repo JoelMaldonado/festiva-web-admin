@@ -1,4 +1,16 @@
 <!-- Header -->
+<p-drawer
+  [header]="selectedClubLocation ? 'Editar' : 'Agregar'"
+  [(visible)]="isFormVisible"
+  position="right"
+>
+  <drawer-form-club-location
+    [idClub]="idClub"
+    [clubLocation]="selectedClubLocation"
+    (onSaved)="getClubLocations(); isFormVisible = false"
+  />
+</p-drawer>
+
 <div class="px-4 py-6 mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
   <div class="flex items-center justify-between">
     <div class="flex items-center gap-3">
@@ -10,11 +22,11 @@
       />
       <h1 class="text-2xl font-bold text-primary">Ubicaciones del Club</h1>
     </div>
-    <button
-      class="px-4 py-2 text-white transition rounded-lg bg-p1 hover:bg-p1/90"
-    >
-      <i class="mr-2 pi pi-plus"></i> Agregar ubicación
-    </button>
+    <p-button
+      label="Agregar"
+      icon="pi pi-plus"
+      (click)="addNewClubLocation()"
+    />
   </div>
 
   <!-- Buscador -->
@@ -34,6 +46,7 @@
       class="w-full"
       [clubLocation]="item"
       (onDeleted)="getClubLocations()"
+      (edit)="editClubLocation(item)"
     />
     }
   </div>

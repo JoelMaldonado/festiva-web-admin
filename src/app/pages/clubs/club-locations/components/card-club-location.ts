@@ -37,6 +37,7 @@ import { environment } from '../../../../../environments/environment';
             label="Editar"
             [text]="true"
             severity="info"
+            (click)="onEdit()"
           />
           <p-button
             icon="pi pi-trash"
@@ -53,6 +54,7 @@ import { environment } from '../../../../../environments/environment';
 export class CardClubLocation implements AfterViewInit, OnDestroy {
   @Input({ required: true }) clubLocation!: ClubLocation;
   @Output() onDeleted = new EventEmitter<void>();
+  @Output() edit = new EventEmitter<void>();
 
   map!: mapboxgl.Map;
 
@@ -79,6 +81,10 @@ export class CardClubLocation implements AfterViewInit, OnDestroy {
 
   sanitizer = inject(DomSanitizer);
   clubLocationService = inject(ClubLocationService);
+
+  onEdit() {
+    this.edit.emit();
+  }
 
   onDelete() {
     Swal.fire({

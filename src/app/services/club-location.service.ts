@@ -11,8 +11,22 @@ export class ClubLocationService {
   private readonly url = `${environment.baseUrl}/club`;
   private readonly http = inject(HttpClient);
 
-  fetchByIdClub(id: number) {
+  fetchByIdClub(id: string) {
     return this.http.get<Result<ClubLocation[]>>(`${this.url}/${id}/locations`);
+  }
+
+  create(idClub: string, data: any) {
+    return this.http.post<Result<ClubLocation>>(
+      `${this.url}/${idClub}/locations`,
+      data
+    );
+  }
+
+  update(idClubLocation: number, data: any) {
+    return this.http.patch<Result<any>>(
+      `${this.url}/locations/${idClubLocation}`,
+      data
+    );
   }
 
   deleteById(id: number) {
