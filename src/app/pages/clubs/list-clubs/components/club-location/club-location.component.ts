@@ -14,7 +14,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { ClubService } from '../../../../services/club.service';
+import { ClubService } from '../../../../../services/club.service';
 
 @Component({
   selector: 'app-club-location',

@@ -10,11 +10,11 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ButtonModule } from 'primeng/button';
-import { ClubLocation } from '../../../../../interfaces/club-location';
+import { ClubLocation } from '../../../../interfaces/club-location';
 import Swal from 'sweetalert2';
-import { ClubLocationService } from '../../../../../services/club-location.service';
+import { ClubLocationService } from '../../../../services/club-location.service';
 import mapboxgl from 'mapbox-gl';
-import { environment } from '../../../../../../environments/environment';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'card-club-location',

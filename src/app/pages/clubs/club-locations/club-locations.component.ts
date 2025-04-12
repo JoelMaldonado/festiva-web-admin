@@ -1,9 +1,9 @@
 import { Location } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { ClubLocation } from '../../../../interfaces/club-location';
-import { ClubService } from '../../../../services/club.service';
-import { ClubLocationService } from '../../../../services/club-location.service';
+import { ClubLocation } from '../../../interfaces/club-location';
+import { ClubService } from '../../../services/club.service';
+import { ClubLocationService } from '../../../services/club-location.service';
 import { CardClubLocation } from './components/card-club-location';
 
 @Component({

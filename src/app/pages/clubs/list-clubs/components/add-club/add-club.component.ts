@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
-import { ClubService } from '../../../../services/club.service';
 import { delay } from 'rxjs';
+import { ClubService } from '../../../../../services/club.service';
 
 @Component({
   selector: 'add-club',

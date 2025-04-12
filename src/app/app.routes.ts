@@ -10,9 +10,10 @@ import { SocialNetworksComponent } from './pages/panel-admin/pages/social-networ
 import { EventCategoriesComponent } from './pages/panel-admin/pages/event-categories/event-categories.component';
 import { UserTypesComponent } from './pages/panel-admin/pages/user-types/user-types.component';
 import { DetailArtistComponent } from './pages/detail-artist/detail-artist.component';
-import { DetailClubComponent } from './pages/detail-club/detail-club.component';
+import { DetailClubComponent } from './pages/clubs/detail-club/detail-club.component';
 import { DetailEventComponent } from './pages/detail-event/detail-event.component';
-import { ListClubsComponent } from './pages/list-clubs/list-clubs.component';
+import { ListClubsComponent } from './pages/clubs/list-clubs/list-clubs.component';
+import { ClubsComponents } from './pages/clubs/clubs.components';
 
 export const routes: Routes = [
   {
@@ -42,15 +43,9 @@ export const routes: Routes = [
       },
       {
         path: 'clubs',
-        component: ListClubsComponent,
-      },
-      {
-        path: 'clubs/:id',
-        component: DetailClubComponent,
+        component: ClubsComponents,
         loadChildren: () =>
-          import('./pages/detail-club/detail-club.routes').then(
-            (m) => m.detailClubRoutes
-          ),
+          import('./pages/clubs/clubs.routes').then((m) => m.clubRoutes),
       },
       {
         path: 'panel-admin',
