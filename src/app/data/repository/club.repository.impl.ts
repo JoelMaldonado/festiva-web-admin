@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { Club } from '@interfaces/club';
-import { Result } from '@interfaces/result';
+import { Club } from 'app/data/dto/club';
+import { Result } from 'app/data/dto/result';
 import { ClubService } from '@services/club.service';
 import { ClubRepository } from 'app/domain/repository/club.repository';
 import { Observable } from 'rxjs';

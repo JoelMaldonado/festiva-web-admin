@@ -14,7 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabel } from 'primeng/floatlabel';
 import Swal from 'sweetalert2';
 import { ClubLocationService } from '@services/club-location.service';
-import { ClubLocation } from '@interfaces/club-location';
+import { ClubLocation } from 'app/data/dto/club-location';
 
 @Component({
   selector: 'drawer-form-club-location',

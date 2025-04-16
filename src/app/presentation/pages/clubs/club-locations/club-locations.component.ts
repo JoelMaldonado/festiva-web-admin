@@ -7,7 +7,7 @@ import { DrawerModule } from 'primeng/drawer';
 import { DrawerFormClubLocation } from './components/drawer-form-club-location';
 import { ClubService } from '@services/club.service';
 import { ClubLocationService } from '@services/club-location.service';
-import { ClubLocation } from '@interfaces/club-location';
+import { ClubLocation } from 'app/data/dto/club-location';
 
 @Component({
   selector: 'app-club-locations',

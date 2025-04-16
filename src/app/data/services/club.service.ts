@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
-import { ClubLocation } from '@interfaces/club-location';
-import { Result } from '@interfaces/result';
-import { Club } from '@interfaces/club';
-import { ClubPhone } from '@interfaces/club-phone';
+import { ClubLocation } from 'app/data/dto/club-location';
+import { Result } from 'app/data/dto/result';
+import { Club } from 'app/data/dto/club';
+import { ClubPhone } from 'app/data/dto/club-phone';
 
 @Injectable({
   providedIn: 'root',

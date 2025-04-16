@@ -10,8 +10,8 @@ import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { AddClubComponent } from './components/add-club/add-club.component';
 import { ClubLocationComponent } from './components/club-location/club-location.component';
-import { Club } from '../../../../data/interfaces/club';
 import { ClubService } from '@services/club.service';
+import { Club } from '@dto/club';
 
 @Component({
   selector: 'app-list-clubs',

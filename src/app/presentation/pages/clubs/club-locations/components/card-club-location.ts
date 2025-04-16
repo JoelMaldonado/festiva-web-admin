@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 import mapboxgl from 'mapbox-gl';
 import { environment } from '../../../../../../environments/environment';
 import { ClubLocationService } from '@services/club-location.service';
-import { ClubLocation } from '@interfaces/club-location';
+import { ClubLocation } from 'app/data/dto/club-location';
 
 @Component({
   selector: 'card-club-location',

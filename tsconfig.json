@@ -21,8 +21,9 @@
     "paths": {
       "@impl/*": ["app/data/repository/*"],
       "@services/*": ["app/data/services/*"],
-      "@interfaces/*": ["app/data/interfaces/*"],
+      "@dto/*": ["app/data/dto/*"],
       "@repository/*": ["app/domain/repository/*"],
+      "@model/*": ["app/domain/model/*"],
       "@components/*": ["app/presentation/components/*"]
     }
   },
