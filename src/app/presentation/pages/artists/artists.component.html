@@ -20,7 +20,7 @@
   >
     @for (item of listArtists; track $index) {
     <card-artist
-      class="w-[280px] h-[320px]"
+      class="w-full md:w-[280px] h-[320px]"
       [name]="item.name"
       [fotoUrl]="item.profileUrl"
       [description]="item.description"

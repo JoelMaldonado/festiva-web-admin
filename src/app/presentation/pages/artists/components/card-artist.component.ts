@@ -13,11 +13,12 @@ import { Component, Input, OnInit } from '@angular/core';
       />
       <h3 class="text-lg font-bold">{{ name }}</h3>
       <p class="mb-2 text-sm text-gray-400">Cantante / Actriz</p>
-      <p class="mb-2 text-sm text-gray-300">
+      <p class="mb-1 text-sm text-gray-300 line-clamp-3">
         {{ description }}
       </p>
+      <!--
       <span class="text-xs text-gray-500">12 eventos registrados</span>
-    </div>
+--></div>
   `,
 })
 export class CardArtistComponent {
