@@ -1,19 +1,19 @@
 import { Routes } from '@angular/router';
-import { ArtistsComponent } from './pages/artists/artists.component';
-import { EventsComponent } from './pages/events/events.component';
-import { MenuComponent } from './pages/menu/menu.component';
-import { PanelAdminComponent } from './pages/panel-admin/panel-admin.component';
-import { LoginComponent } from './pages/login/login.component';
+import { ArtistsComponent } from './presentation/pages/artists/artists.component';
+import { EventsComponent } from './presentation/pages/events/events.component';
+import { MenuComponent } from './presentation/pages/menu/menu.component';
+import { PanelAdminComponent } from './presentation/pages/panel-admin/panel-admin.component';
+import { LoginComponent } from './presentation/pages/login/login.component';
 import { authGuard } from './core/guard/auth.guard';
-import { HomePanelAdminComponent } from './pages/panel-admin/pages/home/home.component';
-import { SocialNetworksComponent } from './pages/panel-admin/pages/social-networks/social-networks.component';
-import { EventCategoriesComponent } from './pages/panel-admin/pages/event-categories/event-categories.component';
-import { UserTypesComponent } from './pages/panel-admin/pages/user-types/user-types.component';
-import { DetailArtistComponent } from './pages/detail-artist/detail-artist.component';
-import { DetailClubComponent } from './pages/clubs/detail-club/detail-club.component';
-import { DetailEventComponent } from './pages/detail-event/detail-event.component';
-import { ListClubsComponent } from './pages/clubs/list-clubs/list-clubs.component';
-import { ClubsComponents } from './pages/clubs/clubs.components';
+import { HomePanelAdminComponent } from './presentation/pages/panel-admin/pages/home/home.component';
+import { SocialNetworksComponent } from './presentation/pages/panel-admin/pages/social-networks/social-networks.component';
+import { EventCategoriesComponent } from './presentation/pages/panel-admin/pages/event-categories/event-categories.component';
+import { UserTypesComponent } from './presentation/pages/panel-admin/pages/user-types/user-types.component';
+import { DetailArtistComponent } from './presentation/pages/detail-artist/detail-artist.component';
+import { DetailClubComponent } from './presentation/pages/clubs/detail-club/detail-club.component';
+import { DetailEventComponent } from './presentation/pages/detail-event/detail-event.component';
+import { ListClubsComponent } from './presentation/pages/clubs/list-clubs/list-clubs.component';
+import { ClubsComponents } from './presentation/pages/clubs/clubs.components';
 
 export const routes: Routes = [
   {
@@ -45,7 +45,7 @@ export const routes: Routes = [
         path: 'clubs',
         component: ClubsComponents,
         loadChildren: () =>
-          import('./pages/clubs/clubs.routes').then((m) => m.clubRoutes),
+          import('./presentation/pages/clubs/clubs.routes').then((m) => m.clubRoutes),
       },
       {
         path: 'panel-admin',
