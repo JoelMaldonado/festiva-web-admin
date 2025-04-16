@@ -69,6 +69,17 @@ import { FileUploadModule, UploadEvent } from 'primeng/fileupload';
         <label for="biography">Biography</label>
       </p-floatlabel>
 
+      <p-fileupload
+        #fu
+        mode="basic"
+        chooseLabel="Choose"
+        chooseIcon="pi pi-upload"
+        name="demo[]"
+        url="https://www.primefaces.org/cdn/api/upload.php"
+        accept="image/*"
+        maxFileSize="1000000"
+        (onUpload)="onUpload($event)"
+      />
       <p-button type="submit" label="Guardar" styleClass="w-full" />
     </form>
   `,
