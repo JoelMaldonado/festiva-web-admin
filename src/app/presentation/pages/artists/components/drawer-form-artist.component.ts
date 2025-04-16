@@ -9,7 +9,8 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
 import { ArtistRepository } from '@repository/artist.repository';
 import { CreateArtistRequest } from '@dto/request/create-artist.request';
-import { FileUploadModule, UploadEvent } from 'primeng/fileupload';
+import { FileUploadModule } from 'primeng/fileupload';
+import { UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
 
 @Component({
   selector: 'drawer-form-artist',
@@ -68,19 +69,20 @@ import { FileUploadModule, UploadEvent } from 'primeng/fileupload';
         ></textarea>
         <label for="biography">Biography</label>
       </p-floatlabel>
-
-      <p-fileupload
-        #fu
-        mode="basic"
-        chooseLabel="Choose"
-        chooseIcon="pi pi-upload"
-        name="demo[]"
-        url="https://www.primefaces.org/cdn/api/upload.php"
+      <p-fileUpload
+        name="file"
         accept="image/*"
-        maxFileSize="1000000"
-        (onUpload)="onUpload($event)"
+        mode="basic"
+        chooseLabel="Subir Imagen"
+        [auto]="false"
+        (onSelect)="onSelectImage($event)"
       />
-      <p-button type="submit" label="Guardar" styleClass="w-full" />
+      <p-button
+        type="submit"
+        label="Guardar"
+        styleClass="w-full"
+        [loading]="isLoading"
+      />
     </form>
   `,
 })
@@ -94,6 +96,7 @@ export class DrawerFormArtistComponent implements OnInit {
 
   artistTypeRepo = inject(ArtistTypeRepository);
   artistRepo = inject(ArtistRepository);
+  private readonly uploadImage = inject(UploadImageUseCase);
 
   @Output() onSaved = new EventEmitter<void>();
 
@@ -114,6 +117,8 @@ export class DrawerFormArtistComponent implements OnInit {
     }
   }
 
+  isLoading = false;
+
   async createArtist() {
     try {
       if (this.name.invalid) {
@@ -125,18 +130,25 @@ export class DrawerFormArtistComponent implements OnInit {
         this.selectedArtistType.markAsTouched();
         return;
       }
+      this.isLoading = true;
+      var imageUrl: string | null = null;
+      if (this.selectedImageFile) {
+        imageUrl = await this.uploadImage.uploadImage(this.selectedImageFile);
+      }
       const request: CreateArtistRequest = {
         name: this.name.value!,
         idArtistType: this.selectedArtistType.value!.id,
         description: this.descrip.value,
         biography: this.biography.value,
-        profileUrl: null,
+        profileUrl: imageUrl,
       };
       await this.artistRepo.create(request);
       this.onSaved.emit();
       this.resetForm();
     } catch (error) {
       console.log(error);
+    } finally {
+      this.isLoading = false;
     }
   }
 
@@ -146,8 +158,9 @@ export class DrawerFormArtistComponent implements OnInit {
     this.descrip.reset();
     this.biography.reset();
   }
+  selectedImageFile: File | null = null;
 
-  onUpload(event: UploadEvent) {
-    console.log(event);
+  onSelectImage(event: any) {
+    this.selectedImageFile = event.files[0];
   }
 }

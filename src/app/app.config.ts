@@ -6,6 +6,14 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { providePrimeNG } from 'primeng/config';
 import MyPreset from './my-preset';
 import { appProviders } from './app.providers';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import {
+  getAnalytics,
+  provideAnalytics,
+  ScreenTrackingService,
+} from '@angular/fire/analytics';
+import { getStorage, provideStorage } from '@angular/fire/storage';
+import { environment } from 'environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,5 +30,9 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     ...appProviders,
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideAnalytics(() => getAnalytics()),
+    ScreenTrackingService,
+    provideStorage(() => getStorage()),
   ],
 };
