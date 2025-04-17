@@ -52,8 +52,22 @@ export class ArtistTypesComponent implements OnInit {
 
   name = new FormControl('');
 
+  isLoadingSave = false;
+  isLoadingTable = false;
+
   ngOnInit(): void {
     this.getAll();
+  }
+
+  async getAll() {
+    try {
+      this.isLoadingTable = true;
+      this.list = await this.repo.fetchAllArtistTypes(StatusEnum.all);
+    } catch (error) {
+      console.error('Error fetching artist types:', error);
+    } finally {
+      this.isLoadingTable = false;
+    }
   }
 
   showFormNew() {
@@ -67,8 +81,6 @@ export class ArtistTypesComponent implements OnInit {
     this.name.setValue(artist.name);
     this.showForm = true;
   }
-
-  isLoadingSave = false;
 
   async onSubmit(event: Event) {
     event.preventDefault();
@@ -107,14 +119,6 @@ export class ArtistTypesComponent implements OnInit {
       });
     } finally {
       this.isLoadingSave = false;
-    }
-  }
-
-  async getAll() {
-    try {
-      this.list = await this.repo.fetchAllArtistTypes(StatusEnum.all);
-    } catch (error) {
-      console.error('Error fetching artist types:', error);
     }
   }
 

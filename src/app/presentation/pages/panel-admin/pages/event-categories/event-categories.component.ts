@@ -17,6 +17,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-event-categories',
@@ -52,8 +53,23 @@ export class EventCategoriesComponent implements OnInit {
 
   name = new FormControl('');
 
+  isLoadingSave = false;
+  isLoadingTable = false;
+
   ngOnInit(): void {
     this.getAll();
+  }
+
+  getAll() {
+    this.isLoadingTable = true;
+    this.repo
+      .fetchAllEventCategory(StatusEnum.all)
+      .pipe(delay(500))
+      .subscribe({
+        next: (res) => (this.list = res),
+        error: (err) => this.showError(err),
+        complete: () => (this.isLoadingTable = false),
+      });
   }
 
   showFormNew() {
@@ -67,8 +83,6 @@ export class EventCategoriesComponent implements OnInit {
     this.name.setValue(eventCagtegory.name);
     this.showForm = true;
   }
-
-  isLoadingSave = false;
 
   onSubmit(event: Event) {
     event.preventDefault();
@@ -115,13 +129,6 @@ export class EventCategoriesComponent implements OnInit {
       severity: 'error',
       summary: 'Error',
       detail: message,
-    });
-  }
-
-  getAll() {
-    this.repo.fetchAllEventCategory(StatusEnum.all).subscribe({
-      next: (res) => (this.list = res),
-      error: (err) => this.showError(err),
     });
   }
 

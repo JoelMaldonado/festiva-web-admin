@@ -19,7 +19,7 @@
       />
       <label for="name">Name</label>
     </p-floatlabel>
-    <p-button type="submit" label="Guardar"></p-button>
+    <p-button type="submit" label="Guardar" [loading]="isLoadingSave" />
   </form>
 </p-drawer>
 
@@ -35,6 +35,7 @@
   class="overflow-hidden rounded-lg shadow"
   [paginator]="true"
   [rows]="10"
+  [loading]="isLoadingTable"
 >
   <ng-template pTemplate="header">
     <tr>
