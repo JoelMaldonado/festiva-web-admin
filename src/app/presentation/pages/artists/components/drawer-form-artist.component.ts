@@ -8,7 +8,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ArtistType } from '@model/artist-type';
 import { ArtistTypeRepository } from '@repository/artist-type.repository';
 import { SelectModule } from 'primeng/select';
@@ -21,6 +21,7 @@ import { CreateArtistRequest } from '@dto/request/create-artist.request';
 import { FileUploadModule } from 'primeng/fileupload';
 import { UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
 import { Artist } from '@dto/artist';
+import { StatusEnum } from 'app/data/enum/status-enum';
 
 @Component({
   selector: 'drawer-form-artist',
@@ -178,7 +179,9 @@ export class DrawerFormArtistComponent implements OnInit, OnChanges {
 
   async getAllArtistType() {
     try {
-      this.listArtistType = await this.artistTypeRepo.fetchAll();
+      this.listArtistType = await this.artistTypeRepo.fetchAll(
+        StatusEnum.active
+      );
     } catch (error) {
       console.log(error);
     }
