@@ -19,6 +19,14 @@ export class ArtistRepositoryImpl extends ArtistRepository {
     return res.data ?? [];
   }
 
+  override async getById(id: number): Promise<Artist> {
+    const res = await firstValueFrom(this.service.getById(id));
+    if (!res.isSuccess || !res.data) {
+      throw new Error(res.message);
+    }
+    return res.data;
+  }
+
   override async create(request: CreateArtistRequest): Promise<void> {
     try {
       const res = await firstValueFrom(this.service.create(request));
@@ -28,6 +36,18 @@ export class ArtistRepositoryImpl extends ArtistRepository {
       return;
     } catch (e) {
       throw new Error('Error creating artist');
+    }
+  }
+
+  override async delete(id: number): Promise<void> {
+    try {
+      const res = await firstValueFrom(this.service.delete(id));
+      if (!res.isSuccess) {
+        throw new Error(res.message);
+      }
+      return;
+    } catch (e) {
+      throw new Error('Error deleting artist');
     }
   }
 }

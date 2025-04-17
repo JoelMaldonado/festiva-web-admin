@@ -1,0 +1,54 @@
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+import { Artist } from '@dto/artist';
+import { ArtistRepository } from '@repository/artist.repository';
+import { ButtonModule } from 'primeng/button';
+import { CardArtistComponent } from '../../components/card-artist.component';
+import { DrawerModule } from 'primeng/drawer';
+import { DrawerFormArtistComponent } from '../../components/drawer-form-artist.component';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'home-artist',
+  imports: [
+    CommonModule,
+    ButtonModule,
+    CardArtistComponent,
+    DrawerModule,
+    DrawerFormArtistComponent,
+  ],
+  templateUrl: './home-artist.component.html',
+})
+export class HomeArtistComponent implements OnInit {
+  private readonly artistaRepo = inject(ArtistRepository);
+  private readonly router = inject(Router);
+
+  listArtists: Artist[] = [];
+
+  showForm = false;
+
+  ngOnInit(): void {
+    this.getArtists();
+  }
+
+  toDetail(id: number) {
+    this.router.navigate(['menu', 'artists', id]);
+  }
+
+  async deleteArtist(id: number) {
+    try {
+      await this.artistaRepo.delete(id);
+      this.getArtists();
+    }catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getArtists() {
+    try {
+      this.listArtists = await this.artistaRepo.fetchAll();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}

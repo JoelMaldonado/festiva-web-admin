@@ -9,11 +9,11 @@ import { HomePanelAdminComponent } from './presentation/pages/panel-admin/pages/
 import { SocialNetworksComponent } from './presentation/pages/panel-admin/pages/social-networks/social-networks.component';
 import { EventCategoriesComponent } from './presentation/pages/panel-admin/pages/event-categories/event-categories.component';
 import { UserTypesComponent } from './presentation/pages/panel-admin/pages/user-types/user-types.component';
-import { DetailArtistComponent } from './presentation/pages/detail-artist/detail-artist.component';
+import { DetailArtistComponent } from './presentation/pages/artists/pages/detail/detail-artist.component';
 import { DetailClubComponent } from './presentation/pages/clubs/detail-club/detail-club.component';
 import { DetailEventComponent } from './presentation/pages/detail-event/detail-event.component';
 import { ListClubsComponent } from './presentation/pages/clubs/list-clubs/list-clubs.component';
-import { ClubsComponents } from './presentation/pages/clubs/clubs.components';
+import { ClubsComponents } from './presentation/pages/clubs/clubs.component';
 
 export const routes: Routes = [
   {
@@ -26,14 +26,6 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {
-        path: 'artists',
-        component: ArtistsComponent,
-      },
-      {
-        path: 'artists/:id',
-        component: DetailArtistComponent,
-      },
-      {
         path: 'events',
         component: EventsComponent,
       },
@@ -42,10 +34,20 @@ export const routes: Routes = [
         component: DetailEventComponent,
       },
       {
+        path: 'artists',
+        component: ArtistsComponent,
+        loadChildren: () =>
+          import('./presentation/pages/artists/artists.routes').then(
+            (m) => m.artistRoutes
+          ),
+      },
+      {
         path: 'clubs',
         component: ClubsComponents,
         loadChildren: () =>
-          import('./presentation/pages/clubs/clubs.routes').then((m) => m.clubRoutes),
+          import('./presentation/pages/clubs/clubs.routes').then(
+            (m) => m.clubRoutes
+          ),
       },
       {
         path: 'panel-admin',

@@ -1,41 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
-import { CardArtistComponent } from './components/card-artist.component';
-import { Artist } from 'app/data/dto/artist';
-import { ArtistRepository } from '@repository/artist.repository';
-import { ArtistTypeRepository } from '@repository/artist-type.repository';
-import { CommonModule } from '@angular/common';
-import { DrawerModule } from 'primeng/drawer';
-import { DrawerFormArtistComponent } from './components/drawer-form-artist.component';
+import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-artists',
-  imports: [
-    CommonModule,
-    ButtonModule,
-    CardArtistComponent,
-    DrawerModule,
-    DrawerFormArtistComponent,
-  ],
-  templateUrl: './artists.component.html',
+  imports: [RouterModule],
+  template: ` <router-outlet /> `,
 })
-export class ArtistsComponent implements OnInit {
-  artistaRepo = inject(ArtistRepository);
-  artistTypeRepo = inject(ArtistTypeRepository);
-
-  listArtists: Artist[] = [];
-
-  showForm = false;
-
-  ngOnInit(): void {
-    this.getArtists();
-  }
-
-  async getArtists() {
-    try {
-      this.listArtists = await this.artistaRepo.fetchAll();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-}
+export class ArtistsComponent {}

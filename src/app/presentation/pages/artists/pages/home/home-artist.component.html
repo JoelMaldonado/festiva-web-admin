@@ -24,6 +24,8 @@
       [name]="item.name"
       [fotoUrl]="item.profileUrl"
       [description]="item.description"
+      (toDetail)="toDetail(item.id)"
+      (toDelete)="deleteArtist(item.id)"
     />
     }
   </div>

@@ -7,4 +7,3 @@ import { RouterModule } from '@angular/router';
   template: `<router-outlet />`,
 })
 export class ClubsComponents {}
-// 

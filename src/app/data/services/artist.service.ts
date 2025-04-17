@@ -17,7 +17,15 @@ export class ArtistService {
     return this.http.get<Result<Artist[]>>(this.url);
   }
 
+  getById(id: number) {
+    return this.http.get<Result<Artist>>(`${this.url}/${id}`);
+  }
+
   create(data: CreateArtistRequest) {
     return this.http.post<Result<Artist>>(this.url, data);
+  }
+
+  delete(id: number) {
+    return this.http.delete<Result<Artist>>(`${this.url}/${id}`);
   }
 }
