@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ArtistType } from '@model/artist-type';
-import { ArtistTypeRepository } from '@repository/artist-type.repository';
+import { CommonRepository } from '@repository/common.repository';
 import { StatusEnum } from 'app/data/enum/status-enum';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -41,7 +41,7 @@ import { ButtonModule } from 'primeng/button';
   providers: [ConfirmationService, MessageService],
 })
 export class ArtistTypesComponent implements OnInit {
-  private readonly repo = inject(ArtistTypeRepository);
+  private readonly repo = inject(CommonRepository);
   private readonly confirmationService = inject(ConfirmationService);
   private readonly messageService = inject(MessageService);
 
@@ -83,9 +83,12 @@ export class ArtistTypesComponent implements OnInit {
     try {
       this.isLoadingSave = true;
       if (this.artistSelected) {
-        await this.repo.update(this.artistSelected.id, this.name.value);
+        await this.repo.updateArtistType(
+          this.artistSelected.id,
+          this.name.value
+        );
       } else {
-        await this.repo.create(this.name.value);
+        await this.repo.createArtistType(this.name.value);
       }
       this.messageService.add({
         severity: 'success',
@@ -109,7 +112,7 @@ export class ArtistTypesComponent implements OnInit {
 
   async getAll() {
     try {
-      this.list = await this.repo.fetchAll(StatusEnum.all);
+      this.list = await this.repo.fetchAllArtistTypes(StatusEnum.all);
     } catch (error) {
       console.error('Error fetching artist types:', error);
     }
@@ -133,7 +136,7 @@ export class ArtistTypesComponent implements OnInit {
       },
       accept: async () => {
         try {
-          await this.repo.delete(id);
+          await this.repo.deleteArtistType(id);
           await this.getAll();
         } catch (error) {
           console.log(error);
@@ -160,7 +163,7 @@ export class ArtistTypesComponent implements OnInit {
       },
       accept: async () => {
         try {
-          await this.repo.restore(id);
+          await this.repo.restoreArtistType(id);
           await this.getAll();
         } catch (error) {
           console.log(error);

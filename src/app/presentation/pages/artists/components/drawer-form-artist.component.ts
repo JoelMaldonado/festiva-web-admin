@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ArtistType } from '@model/artist-type';
-import { ArtistTypeRepository } from '@repository/artist-type.repository';
+import { CommonRepository } from '@repository/common.repository';
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
@@ -107,7 +107,7 @@ export class DrawerFormArtistComponent implements OnInit, OnChanges {
   descrip = new FormControl('');
   biography = new FormControl('');
 
-  artistTypeRepo = inject(ArtistTypeRepository);
+  artistTypeRepo = inject(CommonRepository);
   artistRepo = inject(ArtistRepository);
   private readonly uploadImage = inject(UploadImageUseCase);
   selectedImageFile: File | null = null;
@@ -179,7 +179,7 @@ export class DrawerFormArtistComponent implements OnInit, OnChanges {
 
   async getAllArtistType() {
     try {
-      this.listArtistType = await this.artistTypeRepo.fetchAll(
+      this.listArtistType = await this.artistTypeRepo.fetchAllArtistTypes(
         StatusEnum.active
       );
     } catch (error) {

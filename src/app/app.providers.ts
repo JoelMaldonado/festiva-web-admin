@@ -1,8 +1,8 @@
 import { Provider } from '@angular/core';
 import { ArtistRepository } from '@repository/artist.repository';
-import { ArtistTypeRepository } from '@repository/artist-type.repository';
 import { ArtistRepositoryImpl } from '@impl/artist.repository.impl';
-import { ArtistTypeRepositoryImpl } from '@impl/artist-type.repository.impl';
+import { CommonRepository } from '@repository/common.repository';
+import { CommonRepositoryImpl } from '@impl/common.repository.impl';
 
 export const appProviders: Provider[] = [
   {
@@ -10,7 +10,7 @@ export const appProviders: Provider[] = [
     useClass: ArtistRepositoryImpl,
   },
   {
-    provide: ArtistTypeRepository,
-    useClass: ArtistTypeRepositoryImpl,
+    provide: CommonRepository,
+    useClass: CommonRepositoryImpl,
   },
 ];

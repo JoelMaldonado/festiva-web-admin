@@ -1,1 +1,87 @@
-<p>social-networks works!</p>
+<p-confirmdialog />
+<p-toast />
+<p-drawer
+  [header]="artistSelected ? 'Edit Artist Type' : 'Create Artist Type'"
+  [(visible)]="showForm"
+  position="right"
+>
+  <form
+    (submit)="onSubmit($event)"
+    class="flex flex-col items-center gap-6 pt-2"
+  >
+    <p-floatlabel variant="on" class="w-full">
+      <input
+        pInputText
+        id="name"
+        [formControl]="name"
+        autocomplete="off"
+        class="w-full"
+      />
+      <label for="name">Name</label>
+    </p-floatlabel>
+    <p-button type="submit" label="Guardar"></p-button>
+  </form>
+</p-drawer>
+
+<div class="flex items-center justify-between mb-4">
+  <app-top title="Redes Sociales" />
+  <button mat-raised-button type="button" (click)="showFormNew()">
+    Agregar
+  </button>
+</div>
+
+<p-table
+  [value]="list"
+  class="overflow-hidden rounded-lg shadow"
+  [paginator]="true"
+  [rows]="10"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="text-left">Nro</th>
+      <th class="text-left">Nombre</th>
+      <th class="text-left">Estado</th>
+      <th class="text-left">Acciones</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-item let-i="rowIndex">
+    <tr>
+      <td>{{ i + 1 }}</td>
+      <td>{{ item.name }}</td>
+      <td>
+        <p-tag
+          [value]="item.statusId === 1 ? 'Activo' : 'Inactivo'"
+          [severity]="item.statusId === 1 ? 'success' : 'danger'"
+        >
+        </p-tag>
+      </td>
+      <td>
+        @if (item.statusId == 1) {
+        <button
+          mat-icon-button
+          matTooltip="Editar"
+          (click)="showFormEdit(item)"
+        >
+          <mat-icon class="text-t1">edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          matTooltip="Eliminar"
+          (click)="deleteItem($event, item.id)"
+        >
+          <mat-icon class="text-t1">delete</mat-icon>
+        </button>
+        } @else {
+        <button
+          mat-icon-button
+          matTooltip="Restaurar"
+          (click)="restoreItem($event, item.id)"
+        >
+          <mat-icon class="text-t1">restore_alt</mat-icon>
+        </button>
+        }
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
