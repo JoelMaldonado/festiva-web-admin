@@ -8,6 +8,7 @@ import { ArtistTypeService } from '@services/artist-type.service';
 import { EventCategoryService } from '@services/event-category.service';
 import { SocialNetwork } from '@model/social-network';
 import { SocialNetworkService } from '@services/social-network.service';
+import { UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
 
 @Injectable({
   providedIn: 'root',

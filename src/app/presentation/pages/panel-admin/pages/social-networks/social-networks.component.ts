@@ -9,10 +9,12 @@ import { ArtistType } from '@model/artist-type';
 import { SocialNetwork } from '@model/social-network';
 import { CommonRepository } from '@repository/common.repository';
 import { StatusEnum } from 'app/data/enum/status-enum';
+import { UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DrawerModule } from 'primeng/drawer';
+import { FileUploadModule } from 'primeng/fileupload';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
@@ -37,18 +39,23 @@ import { ToastModule } from 'primeng/toast';
     ToastModule,
     InputTextModule,
     FloatLabelModule,
+    FileUploadModule,
   ],
   templateUrl: './social-networks.component.html',
   providers: [ConfirmationService, MessageService],
 })
 export class SocialNetworksComponent implements OnInit {
   private readonly repo = inject(CommonRepository);
+  private readonly uploadImageUseCase = inject(UploadImageUseCase);
   private readonly confirmationService = inject(ConfirmationService);
   private readonly messageService = inject(MessageService);
 
   list: SocialNetwork[] = [];
 
+  selectedImageFile: File | null = null;
+
   socialNetworkSelected: SocialNetwork | null = null;
+
   showForm = false;
 
   name = new FormControl('');
@@ -71,7 +78,7 @@ export class SocialNetworksComponent implements OnInit {
 
   isLoadingSave = false;
 
-  onSubmit(event: Event) {
+  async onSubmit(event: Event) {
     event.preventDefault();
     if (!this.name.value) {
       this.messageService.add({
@@ -82,12 +89,18 @@ export class SocialNetworksComponent implements OnInit {
       return;
     }
     this.isLoadingSave = true;
+
+    var url: string | null = null;
+    if (this.selectedImageFile) {
+      url = await this.uploadImageUseCase.uploadImage(this.selectedImageFile);
+    }
+
     if (this.socialNetworkSelected) {
       this.repo
         .updateSocialNetwork(
           this.socialNetworkSelected.id,
           this.name.value,
-          null
+          url
         )
         .subscribe({
           next: () => this.onSuccess(),
@@ -95,7 +108,7 @@ export class SocialNetworksComponent implements OnInit {
           complete: () => (this.isLoadingSave = false),
         });
     } else {
-      this.repo.createSocialNetwork(this.name.value, null).subscribe({
+      this.repo.createSocialNetwork(this.name.value, url).subscribe({
         next: () => this.onSuccess(),
         error: (err) => this.showError(err),
         complete: () => (this.isLoadingSave = false),
@@ -111,6 +124,7 @@ export class SocialNetworksComponent implements OnInit {
     });
     this.showForm = false;
     this.socialNetworkSelected = null;
+    this.selectedImageFile = null;
     this.name.reset();
     this.getAll();
   }
@@ -178,5 +192,9 @@ export class SocialNetworksComponent implements OnInit {
         });
       },
     });
+  }
+
+  onSelectImage(event: any) {
+    this.selectedImageFile = event.files[0];
   }
 }
