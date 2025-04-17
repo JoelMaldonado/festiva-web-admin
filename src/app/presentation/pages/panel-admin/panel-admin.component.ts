@@ -4,6 +4,6 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-panel-admin',
   imports: [RouterModule],
-  templateUrl: './panel-admin.component.html',
+  template: ` <router-outlet />`,
 })
 export class PanelAdminComponent {}

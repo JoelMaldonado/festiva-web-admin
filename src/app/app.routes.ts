@@ -5,7 +5,7 @@ import { MenuComponent } from './presentation/pages/menu/menu.component';
 import { PanelAdminComponent } from './presentation/pages/panel-admin/panel-admin.component';
 import { LoginComponent } from './presentation/pages/login/login.component';
 import { authGuard } from './core/guard/auth.guard';
-import { HomePanelAdminComponent } from './presentation/pages/panel-admin/pages/home/home.component';
+import { HomePanelAdminComponent } from './presentation/pages/panel-admin/pages/home/home-panel-admin.component';
 import { SocialNetworksComponent } from './presentation/pages/panel-admin/pages/social-networks/social-networks.component';
 import { EventCategoriesComponent } from './presentation/pages/panel-admin/pages/event-categories/event-categories.component';
 import { UserTypesComponent } from './presentation/pages/panel-admin/pages/user-types/user-types.component';
@@ -52,24 +52,10 @@ export const routes: Routes = [
       {
         path: 'panel-admin',
         component: PanelAdminComponent,
-        children: [
-          {
-            path: '',
-            component: HomePanelAdminComponent,
-          },
-          {
-            path: 'event-categories',
-            component: EventCategoriesComponent,
-          },
-          {
-            path: 'social-network',
-            component: SocialNetworksComponent,
-          },
-          {
-            path: 'user-types',
-            component: UserTypesComponent,
-          },
-        ],
+        loadChildren: () =>
+          import('./presentation/pages/panel-admin/panel-admin.routes').then(
+            (m) => m.panelAdminRoutes
+          ),
       },
     ],
   },
