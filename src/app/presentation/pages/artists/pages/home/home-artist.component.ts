@@ -25,6 +25,7 @@ export class HomeArtistComponent implements OnInit {
 
   listArtists: Artist[] = [];
 
+  artistSelected?: Artist;
   showForm = false;
 
   ngOnInit(): void {
@@ -39,7 +40,7 @@ export class HomeArtistComponent implements OnInit {
     try {
       await this.artistaRepo.delete(id);
       this.getArtists();
-    }catch (error) {
+    } catch (error) {
       console.log(error);
     }
   }
@@ -50,5 +51,15 @@ export class HomeArtistComponent implements OnInit {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  newArtist() {
+    this.artistSelected = undefined;
+    this.showForm = true;
+  }
+
+  editArtist(artist: Artist) {
+    this.artistSelected = artist;
+    this.showForm = true;
   }
 }

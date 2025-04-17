@@ -25,6 +25,10 @@ export class ArtistService {
     return this.http.post<Result<Artist>>(this.url, data);
   }
 
+  update(id: number, data: CreateArtistRequest) {
+    return this.http.patch<Result<Artist>>(`${this.url}/${id}`, data);
+  }
+
   delete(id: number) {
     return this.http.delete<Result<Artist>>(`${this.url}/${id}`);
   }

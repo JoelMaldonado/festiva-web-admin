@@ -1,19 +1,19 @@
 <div>
-  <p-drawer header="Create Artist" [(visible)]="showForm" position="right">
-    <drawer-form-artist (onSaved)="showForm = false; getArtists()" />
+  <p-drawer
+    [header]="artistSelected ? 'Editar Artista' : 'Crear Artista'"
+    [(visible)]="showForm"
+    position="right"
+  >
+    <drawer-form-artist
+      (onSaved)="showForm = false; getArtists()"
+      [artist]="artistSelected"
+    />
   </p-drawer>
 
   <div
     class="flex flex-col gap-4 mb-8 md:flex-row md:items-center md:justify-between"
   >
-    <div class="flex flex-1 gap-2">
-      <input
-        type="text"
-        placeholder="Buscar artistas..."
-        class="w-full p-3 text-white border rounded-xl bg-zinc-800 border-zinc-700 focus:outline-none focus:ring-2 focus:ring-pink-500"
-      />
-    </div>
-    <p-button (click)="showForm = true" label="Agregar" />
+    <p-button (click)="newArtist()" label="Agregar" />
   </div>
   <div
     class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
@@ -24,6 +24,7 @@
       [name]="item.name"
       [fotoUrl]="item.profileUrl"
       [description]="item.description"
+      (toEdit)="editArtist(item)"
       (toDetail)="toDetail(item.id)"
       (toDelete)="deleteArtist(item.id)"
     />

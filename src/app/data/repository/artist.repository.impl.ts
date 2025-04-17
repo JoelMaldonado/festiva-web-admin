@@ -39,6 +39,21 @@ export class ArtistRepositoryImpl extends ArtistRepository {
     }
   }
 
+  override async update(
+    id: number,
+    request: CreateArtistRequest
+  ): Promise<void> {
+    try {
+      const res = await firstValueFrom(this.service.update(id, request));
+      if (!res.isSuccess) {
+        throw new Error(res.message);
+      }
+      return;
+    } catch (e) {
+      throw new Error('Error updating artist');
+    }
+  }
+
   override async delete(id: number): Promise<void> {
     try {
       const res = await firstValueFrom(this.service.delete(id));

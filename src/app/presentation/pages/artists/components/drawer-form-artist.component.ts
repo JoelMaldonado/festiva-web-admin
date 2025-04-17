@@ -1,4 +1,13 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ArtistType } from '@model/artist-type';
 import { ArtistTypeRepository } from '@repository/artist-type.repository';
@@ -11,6 +20,7 @@ import { ArtistRepository } from '@repository/artist.repository';
 import { CreateArtistRequest } from '@dto/request/create-artist.request';
 import { FileUploadModule } from 'primeng/fileupload';
 import { UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
+import { Artist } from '@dto/artist';
 
 @Component({
   selector: 'drawer-form-artist',
@@ -86,8 +96,10 @@ import { UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
     </form>
   `,
 })
-export class DrawerFormArtistComponent implements OnInit {
+export class DrawerFormArtistComponent implements OnInit, OnChanges {
   listArtistType: ArtistType[] = [];
+
+  @Input() artist?: Artist;
 
   name = new FormControl('');
   selectedArtistType = new FormControl<ArtistType | undefined>(undefined);
@@ -97,6 +109,8 @@ export class DrawerFormArtistComponent implements OnInit {
   artistTypeRepo = inject(ArtistTypeRepository);
   artistRepo = inject(ArtistRepository);
   private readonly uploadImage = inject(UploadImageUseCase);
+  selectedImageFile: File | null = null;
+  isLoading = false;
 
   @Output() onSaved = new EventEmitter<void>();
 
@@ -104,32 +118,36 @@ export class DrawerFormArtistComponent implements OnInit {
     this.getAllArtistType();
   }
 
-  onSubmit(event: Event) {
-    event.preventDefault();
-    this.createArtist();
-  }
-
-  async getAllArtistType() {
-    try {
-      this.listArtistType = await this.artistTypeRepo.fetchAll();
-    } catch (error) {
-      console.log(error);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['artist'] && this.artist) {
+      this.name.setValue(this.artist.name);
+      this.descrip.setValue(this.artist.description);
+      this.biography.setValue(this.artist.biography);
+      const type = this.listArtistType.find(
+        (e) => e.id == this.artist?.idArtistType
+      );
+      this.selectedArtistType.setValue(type);
+    } else {
+      this.name.reset();
+      this.descrip.reset();
+      this.biography.reset();
+      this.selectedArtistType.reset();
     }
   }
 
-  isLoading = false;
+  async onSubmit(event: Event) {
+    event.preventDefault();
 
-  async createArtist() {
+    if (this.name.invalid) {
+      this.name.markAsTouched();
+      return;
+    }
+
+    if (this.selectedArtistType.invalid) {
+      this.selectedArtistType.markAsTouched();
+      return;
+    }
     try {
-      if (this.name.invalid) {
-        this.name.markAsTouched();
-        return;
-      }
-
-      if (this.selectedArtistType.invalid) {
-        this.selectedArtistType.markAsTouched();
-        return;
-      }
       this.isLoading = true;
       var imageUrl: string | null = null;
       if (this.selectedImageFile) {
@@ -142,13 +160,27 @@ export class DrawerFormArtistComponent implements OnInit {
         biography: this.biography.value,
         profileUrl: imageUrl,
       };
-      await this.artistRepo.create(request);
-      this.onSaved.emit();
-      this.resetForm();
+      if (this.artist) {
+        await this.artistRepo.update(this.artist.id, request);
+        this.onSaved.emit();
+        this.resetForm();
+      } else {
+        await this.artistRepo.create(request);
+        this.onSaved.emit();
+        this.resetForm();
+      }
     } catch (error) {
       console.log(error);
     } finally {
       this.isLoading = false;
+    }
+  }
+
+  async getAllArtistType() {
+    try {
+      this.listArtistType = await this.artistTypeRepo.fetchAll();
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -157,8 +189,8 @@ export class DrawerFormArtistComponent implements OnInit {
     this.selectedArtistType.reset();
     this.descrip.reset();
     this.biography.reset();
+    this.selectedImageFile = null;
   }
-  selectedImageFile: File | null = null;
 
   onSelectImage(event: any) {
     this.selectedImageFile = event.files[0];
