@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AppTopComponent } from '@components/app-top.component';
 import { ArtistType } from '@model/artist-type';
+import { SocialNetwork } from '@model/social-network';
 import { CommonRepository } from '@repository/common.repository';
 import { StatusEnum } from 'app/data/enum/status-enum';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -45,9 +46,9 @@ export class SocialNetworksComponent implements OnInit {
   private readonly confirmationService = inject(ConfirmationService);
   private readonly messageService = inject(MessageService);
 
-  list: ArtistType[] = [];
+  list: SocialNetwork[] = [];
 
-  artistSelected: ArtistType | null = null;
+  socialNetworkSelected: SocialNetwork | null = null;
   showForm = false;
 
   name = new FormControl('');
@@ -57,20 +58,20 @@ export class SocialNetworksComponent implements OnInit {
   }
 
   showFormNew() {
-    this.artistSelected = null;
+    this.socialNetworkSelected = null;
     this.name.reset();
     this.showForm = true;
   }
 
-  showFormEdit(artist: ArtistType) {
-    this.artistSelected = artist;
-    this.name.setValue(artist.name);
+  showFormEdit(socialNetwork: SocialNetwork) {
+    this.socialNetworkSelected = socialNetwork;
+    this.name.setValue(socialNetwork.name);
     this.showForm = true;
   }
 
   isLoadingSave = false;
 
-  async onSubmit(event: Event) {
+  onSubmit(event: Event) {
     event.preventDefault();
     if (!this.name.value) {
       this.messageService.add({
@@ -80,45 +81,56 @@ export class SocialNetworksComponent implements OnInit {
       });
       return;
     }
-    try {
-      this.isLoadingSave = true;
-      if (this.artistSelected) {
-        await this.repo.updateArtistType(
-          this.artistSelected.id,
-          this.name.value
-        );
-      } else {
-        await this.repo.createArtistType(this.name.value);
-      }
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Éxito',
-        detail: 'Artista guardado correctamente.',
+    this.isLoadingSave = true;
+    if (this.socialNetworkSelected) {
+      this.repo
+        .updateSocialNetwork(
+          this.socialNetworkSelected.id,
+          this.name.value,
+          null
+        )
+        .subscribe({
+          next: () => this.onSuccess(),
+          error: (err) => this.showError(err),
+          complete: () => (this.isLoadingSave = false),
+        });
+    } else {
+      this.repo.createSocialNetwork(this.name.value, null).subscribe({
+        next: () => this.onSuccess(),
+        error: (err) => this.showError(err),
+        complete: () => (this.isLoadingSave = false),
       });
-      this.showForm = false;
-      this.artistSelected = null;
-      this.name.reset();
-      await this.getAll();
-    } catch (err) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Error al guardar el artista.',
-      });
-    } finally {
-      this.isLoadingSave = false;
     }
   }
 
-  async getAll() {
-    try {
-      this.list = await this.repo.fetchAllArtistTypes(StatusEnum.all);
-    } catch (error) {
-      console.error('Error fetching artist types:', error);
-    }
+  onSuccess() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Éxito',
+      detail: 'Event Category guardado correctamente.',
+    });
+    this.showForm = false;
+    this.socialNetworkSelected = null;
+    this.name.reset();
+    this.getAll();
   }
 
-  async deleteItem(event: Event, id: number) {
+  showError(message: string) {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: message,
+    });
+  }
+
+  getAll() {
+    this.repo.fetchAllSocialNetwork(StatusEnum.all).subscribe({
+      next: (res) => (this.list = res),
+      error: (err) => this.showError(err),
+    });
+  }
+
+  deleteItem(event: Event, id: number) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message: '¿Estás seguro que deseas eliminar esta categoría?.',
@@ -134,18 +146,16 @@ export class SocialNetworksComponent implements OnInit {
         label: 'Eliminar',
         severity: 'danger',
       },
-      accept: async () => {
-        try {
-          await this.repo.deleteArtistType(id);
-          await this.getAll();
-        } catch (error) {
-          console.log(error);
-        }
+      accept: () => {
+        this.repo.deleteSocialNetwork(id).subscribe({
+          next: () => this.getAll(),
+          error: (err) => this.showError(err),
+        });
       },
     });
   }
 
-  async restoreItem(event: Event, id: number) {
+  restoreItem(event: Event, id: number) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message: '¿Estás seguro que deseas restaurar esta categoría?',
@@ -161,13 +171,11 @@ export class SocialNetworksComponent implements OnInit {
         label: 'Restaurar',
         severity: 'success',
       },
-      accept: async () => {
-        try {
-          await this.repo.restoreArtistType(id);
-          await this.getAll();
-        } catch (error) {
-          console.log(error);
-        }
+      accept: () => {
+        this.repo.restoreSocialNetwork(id).subscribe({
+          next: () => this.getAll(),
+          error: (err) => this.showError(err),
+        });
       },
     });
   }

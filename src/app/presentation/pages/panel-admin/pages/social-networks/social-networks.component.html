@@ -1,7 +1,9 @@
 <p-confirmdialog />
 <p-toast />
 <p-drawer
-  [header]="artistSelected ? 'Edit Artist Type' : 'Create Artist Type'"
+  [header]="
+    socialNetworkSelected ? 'Edit Social Network' : 'Create Social Network'
+  "
   [(visible)]="showForm"
   position="right"
 >
@@ -51,13 +53,13 @@
       <td>{{ item.name }}</td>
       <td>
         <p-tag
-          [value]="item.statusId === 1 ? 'Activo' : 'Inactivo'"
-          [severity]="item.statusId === 1 ? 'success' : 'danger'"
+          [value]="item.idStatus === 1 ? 'Activo' : 'Inactivo'"
+          [severity]="item.idStatus === 1 ? 'success' : 'danger'"
         >
         </p-tag>
       </td>
       <td>
-        @if (item.statusId == 1) {
+        @if (item.idStatus == 1) {
         <button
           mat-icon-button
           matTooltip="Editar"

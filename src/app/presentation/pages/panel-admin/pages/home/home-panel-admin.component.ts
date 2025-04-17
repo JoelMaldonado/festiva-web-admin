@@ -16,7 +16,7 @@ export class HomePanelAdminComponent {
       path: 'user-types',
     },
     {
-      title: 'Categorías',
+      title: 'Categorías de Evento',
       description:
         'Clasifica tus eventos, artistas o clubes con categorías personalizadas.',
       path: 'event-categories',

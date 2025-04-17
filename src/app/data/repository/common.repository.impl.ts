@@ -6,6 +6,8 @@ import { StatusEnum } from '../enum/status-enum';
 import { EventCategory } from '@model/event-category';
 import { ArtistTypeService } from '@services/artist-type.service';
 import { EventCategoryService } from '@services/event-category.service';
+import { SocialNetwork } from '@model/social-network';
+import { SocialNetworkService } from '@services/social-network.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +15,11 @@ import { EventCategoryService } from '@services/event-category.service';
 export class CommonRepositoryImpl extends CommonRepository {
   private readonly artistTypeService = inject(ArtistTypeService);
   private readonly eventCategoryService = inject(EventCategoryService);
+  private readonly socialNetworkService = inject(SocialNetworkService);
+
+  //*********************************************//
+  //**************** Artist Type ****************//
+  //*********************************************//
 
   override async fetchAllArtistTypes(
     status: StatusEnum
@@ -50,7 +57,9 @@ export class CommonRepositoryImpl extends CommonRepository {
     }
   }
 
+  //************************************************//
   //**************** Event Category ****************//
+  //************************************************//
   override fetchAllEventCategory(
     status: StatusEnum
   ): Observable<EventCategory[]> {
@@ -102,6 +111,76 @@ export class CommonRepositoryImpl extends CommonRepository {
   }
   override restoreEventCategory(id: number): Observable<void> {
     return this.eventCategoryService.restore(id).pipe(
+      map((res) => {
+        if (!res.isSuccess) {
+          throw new Error(res.message);
+        }
+      })
+    );
+  }
+
+  //************************************************//
+  //**************** Social Network ****************//
+  //************************************************//
+
+  override fetchAllSocialNetwork(
+    status: StatusEnum
+  ): Observable<SocialNetwork[]> {
+    return this.socialNetworkService.fetchAll(status).pipe(
+      map((res) => {
+        if (!res.isSuccess) {
+          throw new Error(res.message);
+        }
+        return res.data?.map((e) => SocialNetwork.fromDto(e)) ?? [];
+      })
+    );
+  }
+  override getSocialNetwork(id: number): Observable<SocialNetwork> {
+    return this.socialNetworkService.getById(id).pipe(
+      map((res) => {
+        if (!res.isSuccess) {
+          throw new Error(res.message);
+        }
+        return SocialNetwork.fromDto(res.data!);
+      })
+    );
+  }
+  override createSocialNetwork(
+    name: string,
+    logoUrl: string | null
+  ): Observable<void> {
+    return this.socialNetworkService.create(name, logoUrl).pipe(
+      map((res) => {
+        if (!res.isSuccess) {
+          throw new Error(res.message);
+        }
+      })
+    );
+  }
+  override updateSocialNetwork(
+    id: number,
+    name: string,
+    logoUrl: string | null
+  ): Observable<void> {
+    return this.socialNetworkService.update(id, name, logoUrl).pipe(
+      map((res) => {
+        if (!res.isSuccess) {
+          throw new Error(res.message);
+        }
+      })
+    );
+  }
+  override deleteSocialNetwork(id: number): Observable<void> {
+    return this.socialNetworkService.delete(id).pipe(
+      map((res) => {
+        if (!res.isSuccess) {
+          throw new Error(res.message);
+        }
+      })
+    );
+  }
+  override restoreSocialNetwork(id: number): Observable<void> {
+    return this.socialNetworkService.restore(id).pipe(
       map((res) => {
         if (!res.isSuccess) {
           throw new Error(res.message);
