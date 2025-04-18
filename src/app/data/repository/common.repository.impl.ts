@@ -148,9 +148,10 @@ export class CommonRepositoryImpl extends CommonRepository {
   }
   override createSocialNetwork(
     name: string,
-    logoUrl: string | null
+    imageUrl: string | null,
+    imagePath: string | null
   ): Observable<void> {
-    return this.socialNetworkService.create(name, logoUrl).pipe(
+    return this.socialNetworkService.create(name, imageUrl, imagePath).pipe(
       map((res) => {
         if (!res.isSuccess) {
           throw new Error(res.message);
@@ -161,9 +162,10 @@ export class CommonRepositoryImpl extends CommonRepository {
   override updateSocialNetwork(
     id: number,
     name: string,
-    logoUrl: string | null
+    imageUrl: string | null,
+    imagePath: string | null
   ): Observable<void> {
-    return this.socialNetworkService.update(id, name, logoUrl).pipe(
+    return this.socialNetworkService.update(id, name, imageUrl, imagePath).pipe(
       map((res) => {
         if (!res.isSuccess) {
           throw new Error(res.message);

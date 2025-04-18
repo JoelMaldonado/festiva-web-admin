@@ -29,12 +29,14 @@ export abstract class CommonRepository {
   abstract getSocialNetwork(id: number): Observable<SocialNetwork>;
   abstract createSocialNetwork(
     name: string,
-    logoUrl: string | null
+    imageUrl: string | null,
+    imagePath: string | null
   ): Observable<void>;
   abstract updateSocialNetwork(
     id: number,
     name: string,
-    logoUrl: string | null
+    imageUrl: string | null,
+    imagePath: string | null
   ): Observable<void>;
   abstract deleteSocialNetwork(id: number): Observable<void>;
   abstract restoreSocialNetwork(id: number): Observable<void>;

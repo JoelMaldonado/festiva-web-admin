@@ -18,7 +18,6 @@ import { ClubLocation } from 'app/data/dto/club-location';
     DrawerFormClubLocation,
   ],
   templateUrl: './club-locations.component.html',
-  styleUrl: './club-locations.component.css',
 })
 export class ClubLocationsComponent implements OnInit {
   locations: ClubLocation[] = [];

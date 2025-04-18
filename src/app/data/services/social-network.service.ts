@@ -22,14 +22,24 @@ export class SocialNetworkService {
     return this.http.get<Result<SocialNetworkDto>>(`${this.url}/${id}`);
   }
 
-  create(name: string, logoUrl: string | null) {
-    return this.http.post<Result<any>>(this.url, { name, logoUrl });
+  create(name: string, imageUrl: string | null, imagePath: string | null) {
+    return this.http.post<Result<any>>(this.url, {
+      name,
+      logoUrl: imageUrl,
+      imagePath,
+    });
   }
 
-  update(id: number, name: string, logoUrl: string | null) {
+  update(
+    id: number,
+    name: string,
+    imageUrl: string | null,
+    imagePath: string | null
+  ) {
     return this.http.patch<Result<any>>(`${this.url}/${id}`, {
       name,
-      logoUrl,
+      logoUrl: imageUrl,
+      imagePath: imagePath,
     });
   }
 

@@ -152,7 +152,10 @@ export class DrawerFormArtistComponent implements OnInit, OnChanges {
       this.isLoading = true;
       var imageUrl: string | null = null;
       if (this.selectedImageFile) {
-        imageUrl = await this.uploadImage.uploadImage(this.selectedImageFile);
+        const { url, filePath } = await this.uploadImage.uploadImage(
+          this.selectedImageFile
+        );
+        imageUrl = url;
       }
       const request: CreateArtistRequest = {
         name: this.name.value!,

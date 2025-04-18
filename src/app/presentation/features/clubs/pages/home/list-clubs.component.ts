@@ -27,7 +27,6 @@ import { Club } from '@dto/club';
     InputTextModule,
   ],
   templateUrl: './list-clubs.component.html',
-  styleUrl: './list-clubs.component.css',
 })
 export class ListClubsComponent implements OnInit {
   clubs: Club[] = [];
@@ -68,7 +67,6 @@ export class ListClubsComponent implements OnInit {
     this.isLoading = true;
     this.clubService
       .fetchAll()
-      .pipe(delay(500))
       .subscribe({
         next: (res) => {
           if (res.isSuccess) {
@@ -85,6 +83,10 @@ export class ListClubsComponent implements OnInit {
           this.isLoading = false;
         },
       });
+  }
+
+  toPath(id: number, path: string) {
+    this.router.navigate(['menu', 'clubs', id, path]);
   }
 
   toDetail(id: number) {

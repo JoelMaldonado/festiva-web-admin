@@ -5,22 +5,25 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AppTopComponent } from '@components/app-top.component';
-import { EventCategory } from '@model/event-category';
+import { ArtistType } from '@model/artist-type';
+import { SocialNetwork } from '@model/social-network';
 import { CommonRepository } from '@repository/common.repository';
 import { StatusEnum } from 'app/data/enum/status-enum';
+import { UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DrawerModule } from 'primeng/drawer';
+import { FileUploadModule } from 'primeng/fileupload';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
-import { delay } from 'rxjs';
 
 @Component({
-  selector: 'app-event-categories',
+  selector: 'app-social-networks',
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -36,19 +39,23 @@ import { delay } from 'rxjs';
     ToastModule,
     InputTextModule,
     FloatLabelModule,
+    FileUploadModule,
   ],
-  templateUrl: './event-categories.component.html',
+  templateUrl: './social-networks.component.html',
   providers: [ConfirmationService, MessageService],
-  standalone: true,
 })
-export class EventCategoriesComponent implements OnInit {
+export class SocialNetworksComponent implements OnInit {
   private readonly repo = inject(CommonRepository);
+  private readonly uploadImageUseCase = inject(UploadImageUseCase);
   private readonly confirmationService = inject(ConfirmationService);
   private readonly messageService = inject(MessageService);
 
-  list: EventCategory[] = [];
+  list: SocialNetwork[] = [];
 
-  eventCategorySelected: EventCategory | null = null;
+  selectedImageFile: File | null = null;
+
+  socialNetworkSelected: SocialNetwork | null = null;
+
   showForm = false;
 
   name = new FormControl('');
@@ -62,29 +69,26 @@ export class EventCategoriesComponent implements OnInit {
 
   getAll() {
     this.isLoadingTable = true;
-    this.repo
-      .fetchAllEventCategory(StatusEnum.all)
-      .pipe(delay(500))
-      .subscribe({
-        next: (res) => (this.list = res),
-        error: (err) => this.showError(err),
-        complete: () => (this.isLoadingTable = false),
-      });
+    this.repo.fetchAllSocialNetwork(StatusEnum.all).subscribe({
+      next: (res) => (this.list = res),
+      error: (err) => this.showError(err),
+      complete: () => (this.isLoadingTable = false),
+    });
   }
 
   showFormNew() {
-    this.eventCategorySelected = null;
+    this.socialNetworkSelected = null;
     this.name.reset();
     this.showForm = true;
   }
 
-  showFormEdit(eventCagtegory: EventCategory) {
-    this.eventCategorySelected = eventCagtegory;
-    this.name.setValue(eventCagtegory.name);
+  showFormEdit(socialNetwork: SocialNetwork) {
+    this.socialNetworkSelected = socialNetwork;
+    this.name.setValue(socialNetwork.name);
     this.showForm = true;
   }
 
-  onSubmit(event: Event) {
+  async onSubmit(event: Event) {
     event.preventDefault();
     if (!this.name.value) {
       this.messageService.add({
@@ -95,20 +99,38 @@ export class EventCategoriesComponent implements OnInit {
       return;
     }
     this.isLoadingSave = true;
-    if (this.eventCategorySelected) {
+
+    var imageUrl: string | null = null;
+    var imagePath: string | null = null;
+    if (this.selectedImageFile) {
+      const { url, filePath } = await this.uploadImageUseCase.uploadImage(
+        this.selectedImageFile
+      );
+      imageUrl = url;
+      imagePath = filePath;
+    }
+
+    if (this.socialNetworkSelected) {
       this.repo
-        .updateEventCategory(this.eventCategorySelected.id, this.name.value)
+        .updateSocialNetwork(
+          this.socialNetworkSelected.id,
+          this.name.value,
+          imageUrl,
+          imagePath
+        )
         .subscribe({
           next: () => this.onSuccess(),
           error: (err) => this.showError(err),
           complete: () => (this.isLoadingSave = false),
         });
     } else {
-      this.repo.createEventCategory(this.name.value).subscribe({
-        next: () => this.onSuccess(),
-        error: (err) => this.showError(err),
-        complete: () => (this.isLoadingSave = false),
-      });
+      this.repo
+        .createSocialNetwork(this.name.value, imageUrl, imagePath)
+        .subscribe({
+          next: () => this.onSuccess(),
+          error: (err) => this.showError(err),
+          complete: () => (this.isLoadingSave = false),
+        });
     }
   }
 
@@ -119,7 +141,8 @@ export class EventCategoriesComponent implements OnInit {
       detail: 'Event Category guardado correctamente.',
     });
     this.showForm = false;
-    this.eventCategorySelected = null;
+    this.socialNetworkSelected = null;
+    this.selectedImageFile = null;
     this.name.reset();
     this.getAll();
   }
@@ -149,7 +172,7 @@ export class EventCategoriesComponent implements OnInit {
         severity: 'danger',
       },
       accept: () => {
-        this.repo.deleteEventCategory(id).subscribe({
+        this.repo.deleteSocialNetwork(id).subscribe({
           next: () => this.getAll(),
           error: (err) => this.showError(err),
         });
@@ -174,11 +197,15 @@ export class EventCategoriesComponent implements OnInit {
         severity: 'success',
       },
       accept: () => {
-        this.repo.restoreEventCategory(id).subscribe({
+        this.repo.restoreSocialNetwork(id).subscribe({
           next: () => this.getAll(),
           error: (err) => this.showError(err),
         });
       },
     });
+  }
+
+  onSelectImage(event: any) {
+    this.selectedImageFile = event.files[0];
   }
 }

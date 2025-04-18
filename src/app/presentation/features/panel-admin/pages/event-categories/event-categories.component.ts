@@ -5,16 +5,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AppTopComponent } from '@components/app-top.component';
-import { ArtistType } from '@model/artist-type';
-import { SocialNetwork } from '@model/social-network';
+import { EventCategory } from '@model/event-category';
 import { CommonRepository } from '@repository/common.repository';
 import { StatusEnum } from 'app/data/enum/status-enum';
-import { UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DrawerModule } from 'primeng/drawer';
-import { FileUploadModule } from 'primeng/fileupload';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
@@ -22,8 +19,7 @@ import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 
 @Component({
-  selector: 'app-social-networks',
-  standalone: true,
+  selector: 'app-event-categories',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -39,46 +35,52 @@ import { ToastModule } from 'primeng/toast';
     ToastModule,
     InputTextModule,
     FloatLabelModule,
-    FileUploadModule,
   ],
-  templateUrl: './social-networks.component.html',
+  templateUrl: './event-categories.component.html',
   providers: [ConfirmationService, MessageService],
+  standalone: true,
 })
-export class SocialNetworksComponent implements OnInit {
+export class EventCategoriesComponent implements OnInit {
   private readonly repo = inject(CommonRepository);
-  private readonly uploadImageUseCase = inject(UploadImageUseCase);
   private readonly confirmationService = inject(ConfirmationService);
   private readonly messageService = inject(MessageService);
 
-  list: SocialNetwork[] = [];
+  list: EventCategory[] = [];
 
-  selectedImageFile: File | null = null;
-
-  socialNetworkSelected: SocialNetwork | null = null;
-
+  eventCategorySelected: EventCategory | null = null;
   showForm = false;
 
   name = new FormControl('');
+
+  isLoadingSave = false;
+  isLoadingTable = false;
 
   ngOnInit(): void {
     this.getAll();
   }
 
+  getAll() {
+    this.isLoadingTable = true;
+    this.repo.fetchAllEventCategory(StatusEnum.all).subscribe({
+      next: (res) => (this.list = res),
+      error: (err) => this.showError(err),
+      complete: () => (this.isLoadingTable = false),
+    });
+  }
+
   showFormNew() {
-    this.socialNetworkSelected = null;
+    this.eventCategorySelected = null;
     this.name.reset();
     this.showForm = true;
   }
 
-  showFormEdit(socialNetwork: SocialNetwork) {
-    this.socialNetworkSelected = socialNetwork;
-    this.name.setValue(socialNetwork.name);
+  showFormEdit(eventCagtegory: EventCategory) {
+    this.eventCategorySelected = eventCagtegory;
+    this.name.setValue(eventCagtegory.name);
     this.showForm = true;
   }
 
-  isLoadingSave = false;
-
-  async onSubmit(event: Event) {
+  onSubmit(event: Event) {
     event.preventDefault();
     if (!this.name.value) {
       this.messageService.add({
@@ -89,26 +91,16 @@ export class SocialNetworksComponent implements OnInit {
       return;
     }
     this.isLoadingSave = true;
-
-    var url: string | null = null;
-    if (this.selectedImageFile) {
-      url = await this.uploadImageUseCase.uploadImage(this.selectedImageFile);
-    }
-
-    if (this.socialNetworkSelected) {
+    if (this.eventCategorySelected) {
       this.repo
-        .updateSocialNetwork(
-          this.socialNetworkSelected.id,
-          this.name.value,
-          url
-        )
+        .updateEventCategory(this.eventCategorySelected.id, this.name.value)
         .subscribe({
           next: () => this.onSuccess(),
           error: (err) => this.showError(err),
           complete: () => (this.isLoadingSave = false),
         });
     } else {
-      this.repo.createSocialNetwork(this.name.value, url).subscribe({
+      this.repo.createEventCategory(this.name.value).subscribe({
         next: () => this.onSuccess(),
         error: (err) => this.showError(err),
         complete: () => (this.isLoadingSave = false),
@@ -123,8 +115,7 @@ export class SocialNetworksComponent implements OnInit {
       detail: 'Event Category guardado correctamente.',
     });
     this.showForm = false;
-    this.socialNetworkSelected = null;
-    this.selectedImageFile = null;
+    this.eventCategorySelected = null;
     this.name.reset();
     this.getAll();
   }
@@ -134,13 +125,6 @@ export class SocialNetworksComponent implements OnInit {
       severity: 'error',
       summary: 'Error',
       detail: message,
-    });
-  }
-
-  getAll() {
-    this.repo.fetchAllSocialNetwork(StatusEnum.all).subscribe({
-      next: (res) => (this.list = res),
-      error: (err) => this.showError(err),
     });
   }
 
@@ -161,7 +145,7 @@ export class SocialNetworksComponent implements OnInit {
         severity: 'danger',
       },
       accept: () => {
-        this.repo.deleteSocialNetwork(id).subscribe({
+        this.repo.deleteEventCategory(id).subscribe({
           next: () => this.getAll(),
           error: (err) => this.showError(err),
         });
@@ -186,15 +170,11 @@ export class SocialNetworksComponent implements OnInit {
         severity: 'success',
       },
       accept: () => {
-        this.repo.restoreSocialNetwork(id).subscribe({
+        this.repo.restoreEventCategory(id).subscribe({
           next: () => this.getAll(),
           error: (err) => this.showError(err),
         });
       },
     });
-  }
-
-  onSelectImage(event: any) {
-    this.selectedImageFile = event.files[0];
   }
 }

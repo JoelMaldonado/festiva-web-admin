@@ -11,7 +11,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ButtonModule } from 'primeng/button';
 import Swal from 'sweetalert2';
 import mapboxgl from 'mapbox-gl';
-import { environment } from '../../../../../../environments/environment';
+import { environment } from '../../../../../../../environments/environment';
 import { ClubLocationService } from '@services/club-location.service';
 import { ClubLocation } from 'app/data/dto/club-location';
 
