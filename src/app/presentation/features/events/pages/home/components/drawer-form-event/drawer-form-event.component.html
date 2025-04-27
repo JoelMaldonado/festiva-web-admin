@@ -1,0 +1,72 @@
+<form (submit)="onSubmit($event)" class="flex flex-col gap-4 pt-2">
+  <!-- Select Club -->
+  <p-select
+    [options]="listClub"
+    [formControl]="selectedClub"
+    optionLabel="name"
+    placeholder="Select Club"
+    class="w-full"
+  />
+
+  <!-- Select Category -->
+  <p-select
+    [options]="listEventCategory"
+    [formControl]="selectedEventCategory"
+    optionLabel="name"
+    placeholder="Select Category"
+    class="w-full"
+  />
+
+  <!-- Input Title -->
+  <p-floatlabel variant="on">
+    <input
+      pInputText
+      id="title"
+      [formControl]="title"
+      autocomplete="off"
+      class="w-full"
+    />
+    <label for="title">Title</label>
+  </p-floatlabel>
+
+  <!-- Input Description -->
+  <p-floatlabel variant="on">
+    <textarea
+      pTextarea
+      id="descrip"
+      [formControl]="descrip"
+      rows="5"
+      cols="30"
+      style="resize: none"
+      class="h-full"
+    ></textarea>
+    <label for="descrip">Description</label>
+  </p-floatlabel>
+
+  <p-floatlabel variant="on">
+    <p-datepicker
+      [formControl]="eventDate"
+      inputId="eventDate"
+      showIcon
+      iconDisplay="input"
+      styleClass="w-full"
+    />
+    <label for="eventDate">Event Date</label>
+  </p-floatlabel>
+
+  <!-- Upload File Image -->
+  <p-fileUpload
+    name="file"
+    accept="image/*"
+    mode="basic"
+    chooseLabel="Subir Imagen"
+    [auto]="false"
+    (onSelect)="onSelectImage($event)"
+  />
+  <p-button
+    type="submit"
+    label="Guardar"
+    styleClass="w-full"
+    [loading]="isLoading"
+  />
+</form>

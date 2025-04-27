@@ -19,15 +19,15 @@ const MyPreset = definePreset(Material, {
       light: {
         primary: {
           color: '#FF4081',
-          inverseColor: '#ffffff',
-          hoverColor: '#ff639f',
-          activeColor: '#f01253',
+          inverseColor: '#0c1323',
+          hoverColor: '#7e89b2',
+          activeColor: '#5c6a9e',
         },
         highlight: {
-          background: '#FF4081',
-          focusBackground: '#ff639f',
-          color: '#ffffff',
-          focusColor: '#ffffff',
+          background: 'rgba(160, 168, 199, 0.16)',
+          focusBackground: 'rgba(160, 168, 199, 0.24)',
+          color: 'rgba(255,255,255,.87)',
+          focusColor: 'rgba(255,255,255,.87)',
         },
       },
       dark: {
