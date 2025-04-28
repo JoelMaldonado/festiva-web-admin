@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import {
   FolderFirebase,
   ImageFirebase,
@@ -6,20 +13,54 @@ import {
 } from 'app/domain/usecase/upload-image.usecase';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { FileUploadModule } from 'primeng/fileupload';
+import { FileUpload, FileUploadModule } from 'primeng/fileupload';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'btn-upload-image',
   standalone: true,
   imports: [ButtonModule, DialogModule, FileUploadModule],
-  templateUrl: './btn-upload-image.component.html',
+  template: `
+    <p-button (click)="showDialog()" label="Añadir imagen" />
+
+    <p-dialog header="Agregar Imagen" [modal]="true" [(visible)]="visible">
+      <div class="flex flex-col gap-4">
+        <p-fileUpload
+          #fileUpload
+          mode="advanced"
+          name="image"
+          accept="image/*"
+          maxFileSize="1000000"
+          customUpload="true"
+          (uploadHandler)="onUpload($event)"
+          chooseLabel="Seleccionar"
+          uploadLabel="Subir"
+          cancelLabel="Cancelar"
+        >
+          <ng-template pTemplate="content">
+            <div
+              class="flex flex-col items-center justify-center p-4 border-2 border-dashed surface-border border-round"
+            >
+              @if(isLoading) {
+              <div class="loader"></div>
+              } @else {
+              <p>
+                Arrastra y suelta una imagen aquí o haz clic para seleccionar
+              </p>
+              }
+            </div>
+          </ng-template>
+        </p-fileUpload>
+      </div>
+    </p-dialog>
+  `,
 })
 export class BtnUploadImageComponent {
   private readonly uploadImageUseCase = inject(UploadImageUseCase);
 
   @Input() onUploaded!: (image: ImageFirebase) => Observable<any>;
   @Input() folder: FolderFirebase = FolderFirebase.default;
+  @ViewChild(FileUpload) fileUpload!: FileUpload;
 
   visible: boolean = false;
   isLoading = false;
@@ -42,6 +83,7 @@ export class BtnUploadImageComponent {
         this.onUploaded(result).subscribe({
           next: () => {
             this.visible = false;
+            this.fileUpload.clear();
           },
         });
       }
