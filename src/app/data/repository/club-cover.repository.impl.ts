@@ -21,4 +21,24 @@ export class ClubCoverRepositoryImpl extends ClubCoverRepository {
       })
     );
   }
+  override create(idClub: number, imageUrl: string): Observable<number | null> {
+    return this.service.create(idClub, imageUrl).pipe(
+      map((res) => {
+        if (!res.isSuccess) {
+          throw new Error(res.message);
+        }
+        return res.data ?? null;
+      })
+    );
+  }
+  override delete(id: number): Observable<Result<any>> {
+    return this.service.delete(id).pipe(
+      map((res) => {
+        if (!res.isSuccess) {
+          throw new Error(res.message);
+        }
+        return res;
+      })
+    );
+  }
 }

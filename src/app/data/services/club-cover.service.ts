@@ -14,4 +14,14 @@ export class ClubCoverService {
   fetchAll(idClub: number) {
     return this.http.get<Result<ClubCoverDto[]>>(`${this.url}/${idClub}`);
   }
+
+  create(idClub: number, imageUrl: string) {
+    return this.http.post<Result<number | null>>(`${this.url}/${idClub}`, {
+      imageUrl,
+    });
+  }
+
+  delete(id: number) {
+    return this.http.delete<Result<any>>(`${this.url}/${id}`);
+  }
 }

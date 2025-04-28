@@ -6,25 +6,36 @@ import {
   uploadBytesResumable,
 } from '@angular/fire/storage';
 
+export interface ImageFirebase {
+  url: string;
+  filePath: string;
+}
+
+export enum FolderFirebase {
+  default = 'Photos',
+  clubs = 'Clubs',
+  artists = 'Artists',
+  events = 'Events',
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class UploadImageUseCase {
   private readonly storage = inject(Storage);
 
-  async uploadImage(file: File): Promise<{ url: string; filePath: string }> {
-    try {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = now.getMonth() + 1;
-      const fileExtension = file.name.split('.').pop() ?? '';
-      const filePath = `Photos/${year}/${month}/${Date.now()}.${fileExtension}`;
-      const storageRef = ref(this.storage, filePath);
-      const snapshot = await uploadBytesResumable(storageRef, file);
-      const url = await getDownloadURL(snapshot.ref);
-      return { url, filePath };
-    } catch (error) {
-      throw error;
-    }
+  async uploadImage(
+    file: File,
+    folder: FolderFirebase = FolderFirebase.default
+  ): Promise<ImageFirebase> {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const fileExtension = file.name.split('.').pop() ?? '';
+    const filePath = `${folder}/${year}/${month}/${Date.now()}.${fileExtension}`;
+    const storageRef = ref(this.storage, filePath);
+    const snapshot = await uploadBytesResumable(storageRef, file);
+    const url = await getDownloadURL(snapshot.ref);
+    return { url, filePath };
   }
 }
