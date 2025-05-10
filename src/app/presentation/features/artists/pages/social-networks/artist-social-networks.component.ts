@@ -1,18 +1,18 @@
-import { Component, Inject, inject, Input, OnInit } from '@angular/core';
-import { ClubSocialNetworkService } from 'app/services/club-social-network.service';
+import { Component, inject, Input, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { AppTopComponent } from '@components/app-top.component';
+import { SocialNetwork } from '@model/social-network';
+import { SocialNetworkService } from '@services/social-network.service';
+import { ArtistSocialNetworkService } from 'app/services/artist-social-network.service';
 import { ButtonModule } from 'primeng/button';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { delay } from 'rxjs';
-import { AppTopComponent } from '../../../../components/app-top.component';
-import { SelectModule } from 'primeng/select';
-import { FormsModule } from '@angular/forms';
-import { SocialNetworkService } from '@services/social-network.service';
-import { SocialNetwork } from '@model/social-network';
-import { InputTextModule } from 'primeng/inputtext';
-import { FloatLabelModule } from 'primeng/floatlabel';
 
 @Component({
-  selector: 'app-club-social-networks',
+  selector: 'artist-social-networks',
   imports: [
     FormsModule,
     ButtonModule,
@@ -22,14 +22,15 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     InputTextModule,
     FloatLabelModule,
   ],
-  templateUrl: './club-social-networks.component.html',
+  templateUrl: './artist-social-networks.component.html',
+  standalone: true,
 })
-export class ClubSocialNetworksComponent implements OnInit {
-  private readonly clubSocialNetworkService = inject(ClubSocialNetworkService);
+export class ArtistSocialNetworks implements OnInit {
+  private readonly artistSocialNetworkService = inject(
+    ArtistSocialNetworkService
+  );
   private readonly socialNetworkService = inject(SocialNetworkService);
-
-  @Input() idClub?: string;
-
+  @Input() idArtist?: string;
   listClubSocialNetworks: any = [];
   isLoading = false;
   isLoadingSave = false;
@@ -62,11 +63,11 @@ export class ClubSocialNetworksComponent implements OnInit {
   add() {
     this.isLoadingSave = true;
     const query = {
-      idClub: Number(this.idClub),
-      idSocialNetwork: this.socialNetworkSelected?.id,
+      idArtist: Number(this.idArtist),
+      socialNetworkId: this.socialNetworkSelected?.id,
       url: this.url,
     };
-    this.clubSocialNetworkService
+    this.artistSocialNetworkService
       .create(query)
       .pipe(delay(300))
       .subscribe({
@@ -90,8 +91,8 @@ export class ClubSocialNetworksComponent implements OnInit {
 
   getAll() {
     this.isLoading = true;
-    this.clubSocialNetworkService
-      .getAll(this.idClub!)
+    this.artistSocialNetworkService
+      .getAll(this.idArtist!)
       .pipe(delay(300))
       .subscribe({
         next: (res) => {
@@ -113,7 +114,7 @@ export class ClubSocialNetworksComponent implements OnInit {
 
   remove(id: number) {
     if (confirm('¿Está seguro de eliminar este registro?')) {
-      this.clubSocialNetworkService.delete(id).subscribe({
+      this.artistSocialNetworkService.delete(id).subscribe({
         next: (res) => {
           if (res.isSuccess) {
             this.getAll();

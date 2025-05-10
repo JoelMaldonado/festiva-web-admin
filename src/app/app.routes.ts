@@ -1,10 +1,8 @@
 import { Routes } from '@angular/router';
-import { ArtistsComponent } from './presentation/features/artists/artists.component';
 import { MenuComponent } from './presentation/features/menu/menu.component';
 import { PanelAdminComponent } from './presentation/features/panel-admin/panel-admin.component';
 import { LoginComponent } from './presentation/features/login/login.component';
 import { authGuard } from './core/guard/auth.guard';
-import { ClubsComponents } from './presentation/features/clubs/clubs.component';
 
 export const routes: Routes = [
   {
@@ -25,7 +23,6 @@ export const routes: Routes = [
       },
       {
         path: 'artists',
-        component: ArtistsComponent,
         loadChildren: () =>
           import('./presentation/features/artists/artists.routes').then(
             (m) => m.artistRoutes
@@ -33,7 +30,6 @@ export const routes: Routes = [
       },
       {
         path: 'clubs',
-        component: ClubsComponents,
         loadChildren: () =>
           import('./presentation/features/clubs/clubs.routes').then(
             (m) => m.clubRoutes

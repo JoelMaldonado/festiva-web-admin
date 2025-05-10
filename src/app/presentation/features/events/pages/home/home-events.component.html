@@ -23,6 +23,15 @@
         <td>{{ event.eventDatetime | date : "dd/MM/yyyy" }}</td>
         <td>{{ event.eventDatetime | date : "HH:mm a" }}</td>
         <td>
+          <p-button
+            pTooltip="Artists"
+            showDelay="100"
+            hideDelay="100"
+            icon="pi pi-users"
+            [rounded]="true"
+            [text]="true"
+            (click)="toPath(event.id, 'artists')"
+          />
           <button>Edit</button>
           <button>Delete</button>
         </td>

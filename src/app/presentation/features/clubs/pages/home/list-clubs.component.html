@@ -89,6 +89,42 @@
               [text]="true"
               (click)="toDetail(product.id)"
             />
+            <p-button
+              pTooltip="Schedule"
+              showDelay="100"
+              hideDelay="100"
+              icon="pi pi-clock"
+              [rounded]="true"
+              [text]="true"
+              (click)="toPath(product.id, 'schedule')"
+            />
+            <p-button
+              pTooltip="Social Networks"
+              showDelay="100"
+              hideDelay="100"
+              icon="pi pi-share-alt"
+              [rounded]="true"
+              [text]="true"
+              (click)="toPath(product.id, 'social-networks')"
+            />
+            <p-button
+              pTooltip="Contact Email"
+              showDelay="100"
+              hideDelay="100"
+              icon="pi pi-envelope"
+              [rounded]="true"
+              [text]="true"
+              (click)="toPath(product.id, 'emails')"
+            />
+            <p-button
+              pTooltip="Contact Phone"
+              showDelay="100"
+              hideDelay="100"
+              icon="pi pi-phone"
+              [rounded]="true"
+              [text]="true"
+              (click)="toPath(product.id, 'phones')"
+            />
           </div>
         </td>
       </tr>

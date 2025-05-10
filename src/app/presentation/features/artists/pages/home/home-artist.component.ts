@@ -45,6 +45,14 @@ export class HomeArtistComponent implements OnInit {
     }
   }
 
+  async toSocialNetworks(id: number) {
+    this.router.navigate(['menu', 'artists', id, 'social-networks']);
+  }
+
+  async toTags(id: number) {
+    this.router.navigate(['menu', 'artists', id, 'tags']);
+  }
+
   async getArtists() {
     try {
       this.listArtists = await this.artistaRepo.fetchAll();

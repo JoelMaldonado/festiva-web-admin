@@ -6,16 +6,24 @@ import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { TableModule } from 'primeng/table';
 import { delay } from 'rxjs';
-import { DrawerFormEvent } from "./components/drawer-form-event/drawer-form-event.component";
+import { DrawerFormEvent } from './components/drawer-form-event/drawer-form-event.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'home-events',
-  imports: [CommonModule, TableModule, ButtonModule, DrawerModule, DrawerFormEvent],
+  imports: [
+    CommonModule,
+    TableModule,
+    ButtonModule,
+    DrawerModule,
+    DrawerFormEvent,
+  ],
   templateUrl: './home-events.component.html',
   standalone: true,
 })
 export class HomeEventsComponent implements OnInit {
   private readonly repo = inject(EventRepository);
+  private readonly router = inject(Router);
 
   listEvents: Event[] = [];
   drawerForm = false;
@@ -37,5 +45,9 @@ export class HomeEventsComponent implements OnInit {
         error: (err) => console.error(err),
         complete: () => (this.isLoadingTable = false),
       });
+  }
+
+  toPath(id: number, path: string) {
+    this.router.navigate(['menu', 'events', id, path]);
   }
 }

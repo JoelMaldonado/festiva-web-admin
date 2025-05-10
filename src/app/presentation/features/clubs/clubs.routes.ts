@@ -1,9 +1,12 @@
 import { Routes } from '@angular/router';
-import { ClubContactsComponent } from './pages/contacts/club-contacts.component';
 import { ClubCoversComponent } from './pages/covers/club-covers.component';
 import { ClubLocationsComponent } from './pages/locations/club-locations.component';
 import { DetailClubComponent } from './pages/detail-club/detail-club.component';
 import { ListClubsComponent } from './pages/home/list-clubs.component';
+import { ClubSchedulesComponent } from './pages/schedules/club-schedules.component';
+import { ClubSocialNetworksComponent } from './pages/social-networks/club-social-networks.component';
+import { ClubContactPhoneComponent } from './pages/contact-phone/contact-phone.component';
+import { ClubContactEmailComponent } from './pages/contact-email/contact-email.component';
 
 export const clubRoutes: Routes = [
   {
@@ -15,15 +18,27 @@ export const clubRoutes: Routes = [
     component: DetailClubComponent,
   },
   {
-    path: 'contacts',
-    component: ClubContactsComponent,
-  },
-  {
     path: ':idClub/covers',
     component: ClubCoversComponent,
   },
   {
     path: ':idClub/locations',
     component: ClubLocationsComponent,
+  },
+  {
+    path: ':idClub/schedule',
+    component: ClubSchedulesComponent,
+  },
+  {
+    path: ':idClub/social-networks',
+    component: ClubSocialNetworksComponent,
+  },
+  {
+    path: ':idClub/emails',
+    component: ClubContactEmailComponent,
+  },
+  {
+    path: ':idClub/phones',
+    component: ClubContactPhoneComponent,
   },
 ];

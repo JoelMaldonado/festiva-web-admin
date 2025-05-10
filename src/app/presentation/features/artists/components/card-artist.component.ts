@@ -37,6 +37,16 @@ import { ConfirmationService } from 'primeng/api';
               <span>Ver detalle</span>
             </button>
 
+            <button mat-menu-item (click)="toSocialNetworks.emit()">
+              <mat-icon>share</mat-icon>
+              <span>Social Networks</span>
+            </button>
+
+            <button mat-menu-item (click)="toTags.emit()">
+              <mat-icon>tag</mat-icon>
+              <span>Etiquetas</span>
+            </button>
+
             <button mat-menu-item (click)="onDelete($event)">
               <mat-icon color="warn">delete</mat-icon>
               <span>Eliminar</span>
@@ -69,6 +79,8 @@ export class CardArtistComponent {
   @Output() toEdit = new EventEmitter<void>();
   @Output() toDelete = new EventEmitter<void>();
   @Output() toDetail = new EventEmitter<void>();
+  @Output() toSocialNetworks = new EventEmitter<void>();
+  @Output() toTags = new EventEmitter<void>();
 
   constructor(private confirmationService: ConfirmationService) {}
 
