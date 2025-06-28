@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { StorageService } from '../../../core/services/storage.service';
+import { AuthService } from 'app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -16,28 +17,26 @@ export class LoginComponent {
   error: string | null = null;
   router = inject(Router);
   storageService = inject(StorageService);
+  authService = inject(AuthService);
 
   async login() {
     this.error = null;
     this.loading = true;
 
-    try {
-      await new Promise((resolve, reject) =>
-        setTimeout(() => {
-          if (this.username === 'admin' && this.password === '1234') {
-            resolve(true);
-          } else {
-            reject('Usuario o contraseña incorrectos');
-          }
-        }, 1500)
-      );
+    this.authService.login(this.username, this.password).subscribe({
+      next: (response) => {
+        console.log(response);
 
-      this.storageService.setToken('token');
-      this.router.navigate(['menu']);
-    } catch (err: any) {
-      this.error = err;
-    } finally {
-      this.loading = false;
-    }
+        this.storageService.setToken('token');
+        this.router.navigate(['menu']);
+      },
+      error: (err) => {
+        console.log(err);
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 }
