@@ -7,6 +7,7 @@ import { TableModule } from 'primeng/table';
 import { delay } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { PhoneFormatPipe } from 'app/pipes/phone-format.pipe';
 
 @Component({
   selector: 'club-contact-phone',
@@ -19,6 +20,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     ButtonModule,
     InputTextModule,
     FloatLabelModule,
+    PhoneFormatPipe,
   ],
 })
 export class ClubContactPhoneComponent implements OnInit {
