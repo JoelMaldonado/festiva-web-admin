@@ -8,8 +8,6 @@
     <add-club [clubSelected]="clubSelected" (onSave)="onSavedClub()" />
   </p-drawer>
 
-  <app-club-location [(visible)]="visible" [clubId]="selectedClubId" />
-
   <div class="flex items-center justify-between">
     <p-button icon="pi pi-plus" label="Agregar" (click)="showForm = true" />
     <form (submit)="search()" class="flex items-center gap-3">
@@ -50,16 +48,6 @@
         <td>
           <div>
             <p-button
-              pTooltip="Location"
-              showDelay="100"
-              hideDelay="100"
-              icon="pi pi-map-marker"
-              [rounded]="true"
-              [text]="true"
-              (click)="openDrawer(product.id)"
-            />
-
-            <p-button
               pTooltip="Covers"
               showDelay="100"
               hideDelay="100"
@@ -69,15 +57,6 @@
               (click)="toPath(product.id, 'covers')"
             />
 
-            <p-button
-              pTooltip="Phones"
-              showDelay="100"
-              hideDelay="100"
-              icon="pi pi-phone"
-              [rounded]="true"
-              [text]="true"
-              (click)="findPhones(product.id)"
-            />
             <p-button
               pTooltip="Detail"
               showDelay="100"
