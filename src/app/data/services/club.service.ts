@@ -22,6 +22,10 @@ export class ClubService {
     return this.http.post<Result<Club>>(`${this.url}`, body);
   }
 
+  getById(id: string) {
+    return this.http.get<Result<any>>(`${this.url}/detail/${id}`);
+  }
+
   fetchAll() {
     return this.http.get<Result<Club[]>>(`${this.url}/detail`);
   }
