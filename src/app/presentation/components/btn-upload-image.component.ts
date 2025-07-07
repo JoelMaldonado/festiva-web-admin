@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, inject, Input, ViewChild } from '@angular/core';
 import {
   FolderFirebase,
   ImageFirebase,

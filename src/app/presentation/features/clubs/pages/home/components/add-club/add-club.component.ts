@@ -1,60 +1,82 @@
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Club } from '@dto/club';
 import { ClubService } from '@services/club.service';
+import {
+  ImageFirebase,
+  UploadImageUseCase,
+} from 'app/domain/usecase/upload-image.usecase';
 import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
-import { delay } from 'rxjs';
+import { InputComponent } from '../../../../../../components/input/input.component';
+import { SelectFileComponent } from '../../../../../../components/select-file/select-file.component';
 
 @Component({
   selector: 'add-club',
-  imports: [
-    CommonModule,
-    FormsModule,
-    InputTextModule,
-    TextareaModule,
-    ButtonModule,
-  ],
+  imports: [InputComponent, SelectFileComponent, ButtonModule],
   templateUrl: './add-club.component.html',
 })
 export class AddClubComponent {
-  name = '';
-  description = '';
-  isLoading = false;
+  private readonly uploadImageUseCase = inject(UploadImageUseCase);
+  private readonly clubService = inject(ClubService);
 
+  @Input() clubSelected?: Club;
   @Output() onSave = new EventEmitter<void>();
 
-  clubService = inject(ClubService);
+  name = '';
+  description = '';
+  logoFile?: File;
 
-  save() {
-    this.isLoading = true;
+  nameError?: string;
+  descriptionError?: string;
 
-    if (this.name.length === 0) {
-      alert('Name is required');
-      this.isLoading = false;
+  onNameChanged(value: string) {
+    this.name = value;
+    this.nameError = undefined;
+  }
+
+  onDescriptionChanged(value: string) {
+    this.description = value;
+    this.descriptionError = undefined;
+  }
+
+  isLoadingSave = false;
+
+  onLogoChange(event?: File) {
+    this.logoFile = event;
+  }
+
+  async onSubmit(event: Event) {
+    event.preventDefault();
+    if (!this.name) {
+      this.nameError = 'Campo requerido.';
       return;
     }
 
-    this.clubService
-      .add(this.name, this.description, '')
-      .pipe(delay(1000))
-      .subscribe({
-        next: (res) => {
-          if (res.isSuccess) {
+    this.isLoadingSave = true;
+
+    var imageFirebase: ImageFirebase | undefined;
+
+    if (this.logoFile) {
+      imageFirebase = await this.uploadImageUseCase.uploadImage(this.logoFile);
+    }
+
+    if (this.clubSelected) {
+      // TODO Update club logic
+    } else {
+      this.clubService
+        .add(this.name, this.description, imageFirebase?.url ?? '')
+        .subscribe({
+          next: () => {
             this.name = '';
             this.description = '';
+            this.logoFile = undefined;
+            this.nameError = undefined;
+            this.descriptionError = undefined;
+
             this.onSave.emit();
-          } else {
-            alert(res.message);
-          }
-        },
-        error: (error) => {
-          alert('Error: ' + error.message);
-        },
-        complete: () => {
-          this.isLoading = false;
-        },
-      });
+          },
+          error: (err) => {},
+          complete: () => (this.isLoadingSave = false),
+        });
+    }
   }
 }

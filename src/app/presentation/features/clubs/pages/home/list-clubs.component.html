@@ -1,45 +1,11 @@
 <div class="flex flex-col gap-4">
   <p-drawer
-    [header]="clubSelected ? 'Edit Social Network' : 'Create Social Network'"
+    [header]="clubSelected ? 'Edit Club' : 'Create Club'"
     [(visible)]="showForm"
     position="right"
+    class="bg-gray-950"
   >
-    <form
-      (submit)="onSubmit($event)"
-      class="flex flex-col items-center gap-6 pt-2"
-    >
-      <p-floatlabel variant="on" class="w-full">
-        <input
-          pInputText
-          id="name"
-          [formControl]="nameClub"
-          autocomplete="off"
-          class="w-full"
-        />
-        <label for="name">Name</label>
-      </p-floatlabel>
-
-      <p-floatlabel variant="on" class="w-full">
-        <input
-          pInputText
-          id="descrip"
-          [formControl]="descriptionClub"
-          autocomplete="off"
-          class="w-full"
-        />
-        <label for="descrip">Description</label>
-      </p-floatlabel>
-
-      <p-fileUpload
-        name="file"
-        accept="image/*"
-        mode="basic"
-        chooseLabel="Subir Imagen"
-        [auto]="false"
-        (onSelect)="onSelectImage($event)"
-      />
-      <p-button type="submit" label="Guardar" [loading]="isLoadingSave" />
-    </form>
+    <add-club [clubSelected]="clubSelected" (onSave)="onSavedClub()" />
   </p-drawer>
 
   <app-club-location [(visible)]="visible" [clubId]="selectedClubId" />

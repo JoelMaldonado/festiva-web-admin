@@ -20,6 +20,7 @@ import {
   ImageFirebase,
   UploadImageUseCase,
 } from 'app/domain/usecase/upload-image.usecase';
+import { InputComponent } from '../../../../components/input/input.component';
 
 @Component({
   selector: 'app-list-clubs',
@@ -37,6 +38,7 @@ import {
     FileUploadModule,
     DrawerModule,
     FloatLabelModule,
+    InputComponent,
   ],
   templateUrl: './list-clubs.component.html',
 })
@@ -133,50 +135,15 @@ export class ListClubsComponent implements OnInit {
   descriptionClub = new FormControl('');
   clubImageFile: File | null = null;
 
-  isLoadingSave = false;
+  myValor = '';
+  myValorError?: string;
 
-  onSelectImage(event: any) {
-    this.clubImageFile = event.files[0];
-  }
-
-  async onSubmit(event: any) {
-    event.preventDefault();
-    if (!this.nameClub.value) {
-      console.log('El nombre del club es requerido.');
-      return;
-    }
-
-    if (!this.descriptionClub.value) {
-      console.log('La descripción del club es requerida.');
-      return;
-    }
-
-    this.isLoadingSave = true;
-
-    var imageFirebase: ImageFirebase | undefined;
-
-    if (this.clubImageFile) {
-      imageFirebase = await this.uploadImageUseCase.uploadImage(
-        this.clubImageFile
-      );
-    }
-
-    if (this.clubSelected) {
-      // TODO Update club logic
-    } else {
-      this.clubService
-        .add(
-          this.nameClub.value,
-          this.descriptionClub.value,
-          imageFirebase?.url ?? ''
-        )
-        .subscribe({
-          next: () => {
-            this.onSavedClub();
-          },
-          error: (err) => {},
-          complete: () => (this.isLoadingSave = false),
-        });
-    }
+  newValor(event: any) {
+  
+    this.myValor = event;
+    this.myValorError =
+      this.myValor.length < 3
+        ? 'El valor debe tener al menos 3 caracteres.'
+        : undefined;
   }
 }

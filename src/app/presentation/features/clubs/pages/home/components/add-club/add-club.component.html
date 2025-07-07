@@ -1,34 +1,23 @@
-<form (ngSubmit)="save()" class="space-y-4">
-  <div>
-    <label class="block mb-1 text-sm">Nombre</label>
-    <input
-      type="text"
-      pInputText
-      [(ngModel)]="name"
-      name="name"
-      class="w-full"
-      required
-    />
-  </div>
+<form (submit)="onSubmit($event)" class="flex flex-col items-center gap-6 pt-2">
+  <app-input
+    label="Name"
+    placeholder="Ingresa el nombre del club"
+    [model]="name"
+    (modelChange)="onNameChanged($event)"
+    class="w-full"
+    [error]="nameError"
+  />
 
-  <div>
-    <label class="block mb-1 text-sm">Descripción</label>
-    <textarea
-      rows="5"
-      cols="30"
-      pTextarea
-      [(ngModel)]="description"
-      name="description"
-      class="w-full"
-    ></textarea>
-  </div>
+  <app-input
+    label="Description"
+    placeholder="Ingresa una breve descripción del club"
+    [model]="description"
+    (modelChange)="onDescriptionChanged($event)"
+    class="w-full"
+    [error]="descriptionError"
+  />
 
-  <div class="flex justify-end pt-4">
-    <p-button
-      label="Guardar"
-      type="submit"
-      icon="pi pi-save"
-      [loading]="isLoading"
-    />
-  </div>
+  <app-select-file class="w-full" label="Logo" [(value)]="logoFile" />
+
+  <p-button type="submit" label="Guardar" [loading]="isLoadingSave" />
 </form>
