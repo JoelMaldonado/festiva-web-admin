@@ -150,6 +150,11 @@ export class DrawerFormClubLocation implements OnChanges {
       this.clubLocationService.update(this.clubLocation.id, data).subscribe({
         next: (res) => {
           if (res.isSuccess) {
+            this.address.reset();
+            this.latitude.reset();
+            this.longitude.reset();
+            this.mapsUrl.reset();
+
             this.onSaved.emit(res.data);
           } else {
             console.log(res.message);

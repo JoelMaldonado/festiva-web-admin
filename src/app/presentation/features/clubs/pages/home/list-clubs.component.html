@@ -56,6 +56,15 @@
               [text]="true"
               (click)="toPath(product.id, 'covers')"
             />
+            <p-button
+              pTooltip="Locations"
+              showDelay="100"
+              hideDelay="100"
+              icon="pi pi-map-marker"
+              [rounded]="true"
+              [text]="true"
+              (click)="toPath(product.id, 'locations')"
+            />
 
             <p-button
               pTooltip="Detail"
@@ -102,16 +111,6 @@
               [rounded]="true"
               [text]="true"
               (click)="toPath(product.id, 'phones')"
-            />
-
-            <p-button
-              pTooltip="Edit Logo"
-              showDelay="100"
-              hideDelay="100"
-              icon="pi pi-image"
-              [rounded]="true"
-              [text]="true"
-              (click)="openEditLogo()"
             />
           </div>
         </td>

@@ -7,7 +7,7 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { AddClubComponent } from './components/add-club/add-club.component';
+import { AddClubComponent } from './components/add-club.component';
 import { ClubService } from '@services/club.service';
 import { Club } from '@dto/club';
 import { FileUploadModule } from 'primeng/fileupload';
@@ -91,12 +91,6 @@ export class ListClubsComponent implements OnInit {
 
   toDetail(id: number) {
     this.router.navigate(['menu', 'clubs', id]);
-  }
-
-  dialogEditLogo = false;
-
-  openEditLogo() {
-    this.dialogEditLogo = true;
   }
 
   clubSelected?: Club;

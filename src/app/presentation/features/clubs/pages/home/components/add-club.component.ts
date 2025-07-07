@@ -6,13 +6,40 @@ import {
   UploadImageUseCase,
 } from 'app/domain/usecase/upload-image.usecase';
 import { ButtonModule } from 'primeng/button';
-import { InputComponent } from '../../../../../../components/input/input.component';
-import { SelectFileComponent } from '../../../../../../components/select-file/select-file.component';
+import { InputComponent } from '../../../../../components/input/input.component';
+import { SelectFileComponent } from '../../../../../components/select-file/select-file.component';
 
 @Component({
   selector: 'add-club',
   imports: [InputComponent, SelectFileComponent, ButtonModule],
-  templateUrl: './add-club.component.html',
+  template: `
+    <form
+      (submit)="onSubmit($event)"
+      class="flex flex-col items-center gap-6 pt-2"
+    >
+      <app-input
+        label="Name"
+        placeholder="Ingresa el nombre del club"
+        [model]="name"
+        (modelChange)="onNameChanged($event)"
+        class="w-full"
+        [error]="nameError"
+      />
+
+      <app-input
+        label="Description"
+        placeholder="Ingresa una breve descripción del club"
+        [model]="description"
+        (modelChange)="onDescriptionChanged($event)"
+        class="w-full"
+        [error]="descriptionError"
+      />
+
+      <app-select-file class="w-full" label="Logo" [(value)]="logoFile" />
+
+      <p-button type="submit" label="Guardar" [loading]="isLoadingSave" />
+    </form>
+  `,
 })
 export class AddClubComponent {
   private readonly uploadImageUseCase = inject(UploadImageUseCase);
