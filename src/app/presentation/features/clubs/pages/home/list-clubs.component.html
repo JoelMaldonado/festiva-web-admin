@@ -1,14 +1,46 @@
 <div class="flex flex-col gap-4">
-  <p-dialog
-    header="Agregar Club"
+  <p-drawer
+    [header]="clubSelected ? 'Edit Social Network' : 'Create Social Network'"
     [(visible)]="showForm"
-    [modal]="true"
-    [closable]="true"
-    [style]="{ width: '400px' }"
-    [breakpoints]="{ '768px': '95vw' }"
+    position="right"
   >
-    <add-club (onSave)="onSavedClub()" />
-  </p-dialog>
+    <form
+      (submit)="onSubmit($event)"
+      class="flex flex-col items-center gap-6 pt-2"
+    >
+      <p-floatlabel variant="on" class="w-full">
+        <input
+          pInputText
+          id="name"
+          [formControl]="nameClub"
+          autocomplete="off"
+          class="w-full"
+        />
+        <label for="name">Name</label>
+      </p-floatlabel>
+
+      <p-floatlabel variant="on" class="w-full">
+        <input
+          pInputText
+          id="descrip"
+          [formControl]="descriptionClub"
+          autocomplete="off"
+          class="w-full"
+        />
+        <label for="descrip">Description</label>
+      </p-floatlabel>
+
+      <p-fileUpload
+        name="file"
+        accept="image/*"
+        mode="basic"
+        chooseLabel="Subir Imagen"
+        [auto]="false"
+        (onSelect)="onSelectImage($event)"
+      />
+      <p-button type="submit" label="Guardar" [loading]="isLoadingSave" />
+    </form>
+  </p-drawer>
 
   <app-club-location [(visible)]="visible" [clubId]="selectedClubId" />
 
@@ -116,6 +148,7 @@
               [text]="true"
               (click)="toPath(product.id, 'emails')"
             />
+
             <p-button
               pTooltip="Contact Phone"
               showDelay="100"
@@ -124,6 +157,16 @@
               [rounded]="true"
               [text]="true"
               (click)="toPath(product.id, 'phones')"
+            />
+
+            <p-button
+              pTooltip="Edit Logo"
+              showDelay="100"
+              hideDelay="100"
+              icon="pi pi-image"
+              [rounded]="true"
+              [text]="true"
+              (click)="openEditLogo()"
             />
           </div>
         </td>

@@ -37,7 +37,7 @@ export class AddClubComponent {
     }
 
     this.clubService
-      .add(this.name, this.description)
+      .add(this.name, this.description, '')
       .pipe(delay(1000))
       .subscribe({
         next: (res) => {
