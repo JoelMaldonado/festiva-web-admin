@@ -24,7 +24,7 @@ export class ClubCoversComponent implements OnInit {
   @Input() idClub!: number;
   listCovers: ClubCover[] = [];
 
-  folder = FolderFirebase.clubs;
+  folder = FolderFirebase.clubsCovers;
 
   ngOnInit(): void {
     if (isNaN(Number(this.idClub))) {
