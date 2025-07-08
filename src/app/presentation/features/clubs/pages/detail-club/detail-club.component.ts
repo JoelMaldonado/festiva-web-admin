@@ -1,7 +1,7 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { AppTopComponent } from '@components/app-top.component';
-import { ClubService } from '@services/club.service';
+import { ClubService } from 'app/services/club.service';
 
 @Component({
   selector: 'app-detail-club',

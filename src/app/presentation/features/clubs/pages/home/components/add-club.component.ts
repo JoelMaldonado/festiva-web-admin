@@ -1,13 +1,13 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Club } from '@dto/club';
-import { ClubService } from '@services/club.service';
+import { ClubService } from 'app/services/club.service';
 import {
   ImageFirebase,
   UploadImageUseCase,
 } from 'app/domain/usecase/upload-image.usecase';
 import { ButtonModule } from 'primeng/button';
-import { InputComponent } from '../../../../../components/input/input.component';
-import { SelectFileComponent } from '../../../../../components/select-file/select-file.component';
+import { SelectFileComponent } from '@components/select-file.component';
+import { InputComponent } from '@components/input.component';
 
 @Component({
   selector: 'add-club',

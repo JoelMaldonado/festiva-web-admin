@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
 import { Artist } from 'app/data/dto/artist';
 import { Result } from 'app/data/dto/result';
 import { CreateArtistRequest } from '@dto/request/create-artist.request';
+import { environment } from 'environments/environment';
 
 @Injectable({
   providedIn: 'root',

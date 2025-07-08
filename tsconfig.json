@@ -20,7 +20,7 @@
     "baseUrl": "src",
     "paths": {
       "@impl/*": ["app/data/repository/*"],
-      "@services/*": ["app/data/services/*"],
+      "@services/*": ["app/services/*"],
       "@dto/*": ["app/data/dto/*"],
       "@repository/*": ["app/domain/repository/*"],
       "@model/*": ["app/domain/model/*"],

@@ -8,7 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { AddClubComponent } from './components/add-club.component';
-import { ClubService } from '@services/club.service';
+import { ClubService } from 'app/services/club.service';
 import { Club } from '@dto/club';
 import { FileUploadModule } from 'primeng/fileupload';
 import { DrawerModule } from 'primeng/drawer';

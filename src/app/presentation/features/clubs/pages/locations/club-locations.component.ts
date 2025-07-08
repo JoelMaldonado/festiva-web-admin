@@ -5,7 +5,7 @@ import { CardClubLocation } from './components/card-club-location';
 import { Router } from '@angular/router';
 import { DrawerModule } from 'primeng/drawer';
 import { DrawerFormClubLocation } from './components/drawer-form-club-location';
-import { ClubService } from '@services/club.service';
+import { ClubService } from 'app/services/club.service';
 import { ClubLocationService } from '@services/club-location.service';
 import { ClubLocation } from 'app/data/dto/club-location';
 

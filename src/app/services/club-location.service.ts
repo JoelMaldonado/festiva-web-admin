@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-import { Result } from '../dto/result';
 import { ClubLocation } from '@dto/club-location';
+import { environment } from 'environments/environment';
+import { Result } from '@dto/result';
 
 @Injectable({
   providedIn: 'root',

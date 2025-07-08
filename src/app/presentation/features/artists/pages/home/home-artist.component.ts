@@ -7,6 +7,7 @@ import { CardArtistComponent } from '../../components/card-artist.component';
 import { DrawerModule } from 'primeng/drawer';
 import { DrawerFormArtistComponent } from '../../components/drawer-form-artist.component';
 import { Router } from '@angular/router';
+import { AppMap } from "@components/map/app.map";
 
 @Component({
   selector: 'home-artist',
@@ -16,7 +17,8 @@ import { Router } from '@angular/router';
     CardArtistComponent,
     DrawerModule,
     DrawerFormArtistComponent,
-  ],
+    AppMap
+],
   templateUrl: './home-artist.component.html',
 })
 export class HomeArtistComponent implements OnInit {

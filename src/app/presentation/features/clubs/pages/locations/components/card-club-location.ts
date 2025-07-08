@@ -68,6 +68,7 @@ export class CardClubLocation implements AfterViewInit, OnDestroy {
       style: 'mapbox://styles/mapbox/dark-v11',
       center: [this.clubLocation.longitude, this.clubLocation.latitude],
       zoom: 15,
+      interactive: false,
     });
     new mapboxgl.Marker()
       .setLngLat([this.clubLocation.longitude, this.clubLocation.latitude])

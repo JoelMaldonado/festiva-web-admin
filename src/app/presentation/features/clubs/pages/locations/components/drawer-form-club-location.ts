@@ -8,75 +8,35 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { FloatLabel } from 'primeng/floatlabel';
 import Swal from 'sweetalert2';
 import { ClubLocationService } from '@services/club-location.service';
 import { ClubLocation } from 'app/data/dto/club-location';
+import { InputComponent } from '@components/input.component';
 
 @Component({
   selector: 'drawer-form-club-location',
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    FloatLabel,
-    ButtonModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, ButtonModule, InputComponent],
   template: `
-    <form (submit)="onSubmit($event)" class="pt-4 flex flex-col gap-4">
-      <p-floatlabel variant="on">
-        <input
-          pInputText
-          id="address"
-          [formControl]="address"
-          autocomplete="off"
-          class="w-full"
+    <div>
+      <form (submit)="onSubmit($event)" class="pt-4 flex flex-col gap-4">
+        <app-input label="Address" [(model)]="address" [error]="addressError" />
+        <app-input label="UrlMaps" [(model)]="mapsUrl" [error]="mapsUrlError" />
+        <app-input
+          label="Latitude"
+          [(model)]="latitude"
+          [error]="latitudeError"
         />
-        <label for="address">Address</label>
-      </p-floatlabel>
-
-      <p-floatlabel variant="on">
-        <input
-          pInputText
-          id="latitude"
-          [formControl]="latitude"
-          autocomplete="off"
-          class="w-full"
+        <app-input
+          label="Longitude"
+          [(model)]="longitude"
+          [error]="longitudeError"
         />
-        <label for="latitude">Latitud</label>
-      </p-floatlabel>
 
-      <p-floatlabel variant="on">
-        <input
-          pInputText
-          id="longitude"
-          [formControl]="longitude"
-          autocomplete="off"
-          class="w-full"
-        />
-        <label for="longitude">Longitud</label>
-      </p-floatlabel>
-
-      <p-floatlabel variant="on">
-        <input
-          pInputText
-          id="mapsUrl"
-          [formControl]="mapsUrl"
-          autocomplete="off"
-          class="w-full"
-        />
-        <label for="mapsUrl">URL de Maps</label>
-      </p-floatlabel>
-
-      @if (error) {
-      <div class="text-red-500 text-sm">{{ error }}</div>
-      }
-
-      <p-button type="submit" icon="pi pi-plus" label="Guardar" />
-    </form>
+        <p-button type="submit" icon="pi pi-plus" label="Guardar" />
+      </form>
+    </div>
   `,
 })
 export class DrawerFormClubLocation implements OnChanges {
@@ -84,65 +44,98 @@ export class DrawerFormClubLocation implements OnChanges {
   @Input() clubLocation?: ClubLocation;
   @Output() onSaved = new EventEmitter<ClubLocation>();
 
-  address = new FormControl('', Validators.required);
-  latitude = new FormControl(0);
-  longitude = new FormControl(0);
-  mapsUrl = new FormControl('');
+  address = '';
+  latitude = '';
+  longitude = '';
+  mapsUrl = '';
+
+  addressError?: string;
+  latitudeError?: string;
+  longitudeError?: string;
+  mapsUrlError?: string;
 
   clubLocationService = inject(ClubLocationService);
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['clubLocation']) {
       if (this.clubLocation) {
-        this.address.setValue(this.clubLocation.address);
-        this.latitude.setValue(this.clubLocation.latitude);
-        this.longitude.setValue(this.clubLocation.longitude);
-        this.mapsUrl.setValue(this.clubLocation.mapsUrl);
+        this.address = this.clubLocation.address;
+        this.latitude = this.clubLocation.latitude.toString();
+        this.longitude = this.clubLocation.longitude.toString();
+        this.mapsUrl = this.clubLocation.mapsUrl;
       } else {
-        this.address.reset();
-        this.latitude.reset();
-        this.longitude.reset();
-        this.mapsUrl.reset();
+        this.address = '';
+        this.latitude = '';
+        this.longitude = '';
+        this.mapsUrl = '';
       }
     }
   }
 
-  error?: string;
-
   onSubmit(event: Event) {
-    this.error = undefined;
     event.preventDefault();
-    if (this.address.invalid) {
-      this.error = 'Address is required';
-      return;
-    }
-    const lat = Number(this.latitude.value);
-    const lon = Number(this.longitude.value);
-
-    if (isNaN(lat)) {
-      this.error = 'Latitude must be a valid number';
-      return;
-    }
-    if (lat >= 100 || lat <= -100) {
-      this.error = 'Latitude must be between -90 and 90';
-      return;
-    }
-
-    if (isNaN(lon)) {
-      this.error = 'Longitude must be a valid number';
-      return;
-    }
-    if (lon >= 200 || lon <= -200) {
-      this.error = 'Longitude must be between -180 and 180';
+    if (!this.validateForm()) {
       return;
     }
 
     this.save({
-      address: this.address.value,
-      latitude: Number(this.latitude.value),
-      longitude: Number(this.longitude.value),
-      mapsUrl: this.mapsUrl.value,
+      address: this.address,
+      latitude: Number(this.latitude),
+      longitude: Number(this.longitude),
+      mapsUrl: this.mapsUrl,
     });
+  }
+
+  validateForm(): boolean {
+    this.addressError = undefined;
+    this.latitudeError = undefined;
+    this.longitudeError = undefined;
+    this.mapsUrlError = undefined;
+
+    let isValid = true;
+
+    if (!this.address) {
+      this.addressError = 'Address is required';
+      isValid = false;
+    }
+
+    if (!this.mapsUrl) {
+      this.mapsUrlError = 'Maps URL is required';
+      isValid = false;
+    }
+
+    if (!this.latitude) {
+      this.latitudeError = 'Latitude is required';
+      isValid = false;
+    } else {
+      const lat = Number(this.latitude);
+      if (isNaN(lat) && this.latitudeError === undefined) {
+        this.latitudeError = 'Latitude must be a valid number';
+        isValid = false;
+      }
+      if ((lat >= 100 || lat <= -100) && this.latitudeError === undefined) {
+        this.latitudeError = 'Latitude must be between -90 and 90';
+        isValid = false;
+      }
+    }
+
+    if (!this.longitude) {
+      this.longitudeError = 'Longitude is required';
+      isValid = false;
+    } else {
+      const lon = Number(this.longitude);
+
+      if (isNaN(lon) && this.longitudeError === undefined) {
+        this.longitudeError = 'Longitude must be a valid number';
+        isValid = false;
+      }
+      if ((lon >= 200 || lon <= -200) && this.longitudeError === undefined) {
+        this.longitudeError = 'Longitude must be between -180 and 180';
+        isValid = false;
+      }
+    }
+
+    return isValid;
   }
 
   save(data: any) {
@@ -150,10 +143,10 @@ export class DrawerFormClubLocation implements OnChanges {
       this.clubLocationService.update(this.clubLocation.id, data).subscribe({
         next: (res) => {
           if (res.isSuccess) {
-            this.address.reset();
-            this.latitude.reset();
-            this.longitude.reset();
-            this.mapsUrl.reset();
+            this.address = '';
+            this.latitude = '';
+            this.longitude = '';
+            this.mapsUrl = '';
 
             this.onSaved.emit(res.data);
           } else {

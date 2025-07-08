@@ -15,16 +15,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
-import { ArtistRepository } from '@repository/artist.repository';
 import { FileUploadModule } from 'primeng/fileupload';
 import { UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
 import { Artist } from '@dto/artist';
 import { StatusEnum } from 'app/data/enum/status-enum';
 import { Club } from '@dto/club';
 import { EventCategory } from '@model/event-category';
-import { ClubRepository } from '@repository/club.repository';
-import { EventRepository } from '@repository/event.repository';
 import { DatePickerModule } from 'primeng/datepicker';
+import { ClubService } from 'app/services/club.service';
 
 @Component({
   selector: 'drawer-form-event',
@@ -41,7 +39,7 @@ import { DatePickerModule } from 'primeng/datepicker';
   templateUrl: './drawer-form-event.component.html',
 })
 export class DrawerFormEvent implements OnInit, OnChanges {
-  private readonly clubRepository = inject(ClubRepository);
+  private readonly clubService = inject(ClubService);
   private readonly commonRepository = inject(CommonRepository);
   private readonly uploadImage = inject(UploadImageUseCase);
 
@@ -133,7 +131,7 @@ export class DrawerFormEvent implements OnInit, OnChanges {
   }
 
   async getAllClub() {
-    this.clubRepository.fetchAll().subscribe({
+    this.clubService.fetchAll().subscribe({
       next: (res) => {
         this.listClub = res.data ?? [];
       },

@@ -14,6 +14,8 @@ import {
 } from '@angular/fire/analytics';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { environment } from 'environments/environment';
+import { provideMapboxGL } from 'ngx-mapbox-gl';
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -34,5 +36,8 @@ export const appConfig: ApplicationConfig = {
     provideAnalytics(() => getAnalytics()),
     ScreenTrackingService,
     provideStorage(() => getStorage()),
+    provideMapboxGL({
+      accessToken: environment.mapboxToken,
+    }),
   ],
 };

@@ -7,8 +7,6 @@ import { ClubCoverRepository } from '@repository/club-cover.repository';
 import { ClubCoverRepositoryImpl } from '@impl/club-cover.repository.impl';
 import { EventRepository } from '@repository/event.repository';
 import { EventRepositoryImpl } from '@impl/event.repository.impl';
-import { ClubRepository } from '@repository/club.repository';
-import { ClubRepositoryImpl } from '@impl/club.repository.impl';
 
 export const appProviders: Provider[] = [
   {
@@ -22,10 +20,6 @@ export const appProviders: Provider[] = [
   {
     provide: CommonRepository,
     useClass: CommonRepositoryImpl,
-  },
-  {
-    provide: ClubRepository,
-    useClass: ClubRepositoryImpl,
   },
   {
     provide: ClubCoverRepository,
