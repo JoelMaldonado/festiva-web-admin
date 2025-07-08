@@ -19,7 +19,7 @@ import { ButtonModule } from 'primeng/button';
 import { ArtistRepository } from '@repository/artist.repository';
 import { CreateArtistRequest } from '@dto/request/create-artist.request';
 import { FileUploadModule } from 'primeng/fileupload';
-import { UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
+import { FolderFirebase, UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
 import { Artist } from '@dto/artist';
 import { StatusEnum } from 'app/data/enum/status-enum';
 
@@ -153,7 +153,8 @@ export class DrawerFormArtistComponent implements OnInit, OnChanges {
       var imageUrl: string | null = null;
       if (this.selectedImageFile) {
         const { url, filePath } = await this.uploadImage.uploadImage(
-          this.selectedImageFile
+          this.selectedImageFile,
+          FolderFirebase.artists
         );
         imageUrl = url;
       }

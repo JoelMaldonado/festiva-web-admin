@@ -2,6 +2,7 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Club } from '@dto/club';
 import { ClubService } from 'app/services/club.service';
 import {
+  FolderFirebase,
   ImageFirebase,
   UploadImageUseCase,
 } from 'app/domain/usecase/upload-image.usecase';
@@ -83,7 +84,10 @@ export class AddClubComponent {
     var imageFirebase: ImageFirebase | undefined;
 
     if (this.logoFile) {
-      imageFirebase = await this.uploadImageUseCase.uploadImage(this.logoFile);
+      imageFirebase = await this.uploadImageUseCase.uploadImage(
+        this.logoFile,
+        FolderFirebase.clubs
+      );
     }
 
     if (this.clubSelected) {

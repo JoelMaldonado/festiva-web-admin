@@ -9,7 +9,10 @@ import { ArtistType } from '@model/artist-type';
 import { SocialNetwork } from '@model/social-network';
 import { CommonRepository } from '@repository/common.repository';
 import { StatusEnum } from 'app/data/enum/status-enum';
-import { UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
+import {
+  FolderFirebase,
+  UploadImageUseCase,
+} from 'app/domain/usecase/upload-image.usecase';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -104,7 +107,8 @@ export class SocialNetworksComponent implements OnInit {
     var imagePath: string | null = null;
     if (this.selectedImageFile) {
       const { url, filePath } = await this.uploadImageUseCase.uploadImage(
-        this.selectedImageFile
+        this.selectedImageFile,
+        FolderFirebase.socialNetworks
       );
       imageUrl = url;
       imagePath = filePath;

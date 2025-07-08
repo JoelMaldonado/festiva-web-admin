@@ -13,10 +13,12 @@ export interface ImageFirebase {
 }
 
 export enum FolderFirebase {
-  default = 'Photos',
-  clubs = 'Clubs',
-  artists = 'Artists',
-  events = 'Events',
+  default = 'photos',
+  clubs = 'clubs',
+  clubsCovers = 'clubs_covers',
+  artists = 'artists',
+  events = 'events',
+  socialNetworks = 'social_networks',
 }
 
 @Injectable({
@@ -27,7 +29,7 @@ export class UploadImageUseCase {
 
   async uploadImage(
     file: File,
-    folder: FolderFirebase = FolderFirebase.default
+    folder: FolderFirebase
   ): Promise<ImageFirebase> {
     const prefix = environment.production ? 'prod' : 'qa';
     const now = new Date();

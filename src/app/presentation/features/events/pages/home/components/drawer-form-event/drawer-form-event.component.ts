@@ -16,7 +16,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
 import { FileUploadModule } from 'primeng/fileupload';
-import { UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
+import { FolderFirebase, UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
 import { Artist } from '@dto/artist';
 import { StatusEnum } from 'app/data/enum/status-enum';
 import { Club } from '@dto/club';
@@ -104,7 +104,8 @@ export class DrawerFormEvent implements OnInit, OnChanges {
       var imageUrl: string | null = null;
       if (this.selectedImageFile) {
         const { url, filePath } = await this.uploadImage.uploadImage(
-          this.selectedImageFile
+          this.selectedImageFile,
+          FolderFirebase.events
         );
         imageUrl = url;
       }
