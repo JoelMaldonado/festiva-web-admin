@@ -26,10 +26,8 @@
             ],
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
-              "node_modules/mapbox-gl/dist/mapbox-gl.css",
               "src/styles.css",
-              "primeicons/primeicons.css",
-              "mapbox-gl/dist/mapbox-gl.css"
+              "primeicons/primeicons.css"
             ],
             "scripts": []
           },

@@ -3,12 +3,13 @@ export const environment = {
   mapboxToken:
     'pk.eyJ1IjoiamptZmRldiIsImEiOiJjbTgybXg0YjUxbGs1MmpxM210OTdmbTE2In0.AjmCpDHaiKjNj-XosGXXuA',
   firebaseConfig: {
-    projectId: 'festiva-548e2',
-    appId: '1:983409623466:web:f42af1eb2beda2fa696bd3',
-    storageBucket: 'festiva-548e2.firebasestorage.app',
-    apiKey: 'AIzaSyCzGMOjv04ADopFhI4Sn_dsohOekORC1HM',
-    authDomain: 'festiva-548e2.firebaseapp.com',
-    messagingSenderId: '983409623466',
-    measurementId: 'G-H9RZFMMFZK',
+    projectId: 'festiva-331ad',
+    appId: '1:1015648741340:web:6d0e0e19111198ca475119',
+    storageBucket: 'festiva-331ad.firebasestorage.app',
+    apiKey: 'AIzaSyBnwrkrD8ZLHkh76V0k6n_FztoVTfowwr0',
+    authDomain: 'festiva-331ad.firebaseapp.com',
+    messagingSenderId: '1015648741340',
+    measurementId: 'G-KX89T3HQH4',
   },
+  production: true,
 };

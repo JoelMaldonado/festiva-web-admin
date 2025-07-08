@@ -10,20 +10,22 @@ import {
 import { DomSanitizer } from '@angular/platform-browser';
 import { ButtonModule } from 'primeng/button';
 import Swal from 'sweetalert2';
-import mapboxgl from 'mapbox-gl';
-import { environment } from '../../../../../../../environments/environment';
 import { ClubLocationService } from '@services/club-location.service';
 import { ClubLocation } from 'app/data/dto/club-location';
+import { MapComponent } from '@components/map.component';
 
 @Component({
   selector: 'card-club-location',
-  imports: [ButtonModule],
+  imports: [ButtonModule, MapComponent],
   template: `
     <div class="overflow-hidden shadow-md bg-b2 rounded-2xl">
-      <!-- Mapa embebido arriba -->
-      <div [id]="getIdMap()" style="width: 100%; height: 192px;"></div>
-
       <!-- Cuerpo del card -->
+      <app-map
+        width="100%"
+        height="200px"
+        [latitude]="clubLocation.latitude"
+        [longitude]="clubLocation.longitude"
+      />
       <div class="p-4 space-y-2">
         <h3 class="text-lg font-semibold text-primary">
           {{ clubLocation.address }}
@@ -50,34 +52,10 @@ import { ClubLocation } from 'app/data/dto/club-location';
     </div>
   `,
 })
-export class CardClubLocation implements AfterViewInit, OnDestroy {
+export class CardClubLocation {
   @Input({ required: true }) clubLocation!: ClubLocation;
   @Output() onDeleted = new EventEmitter<void>();
   @Output() edit = new EventEmitter<void>();
-
-  map!: mapboxgl.Map;
-
-  getIdMap(): string {
-    return `map-${this.clubLocation.id}`;
-  }
-
-  ngAfterViewInit(): void {
-    mapboxgl.accessToken = environment.mapboxToken;
-    this.map = new mapboxgl.Map({
-      container: this.getIdMap(),
-      style: 'mapbox://styles/mapbox/dark-v11',
-      center: [this.clubLocation.longitude, this.clubLocation.latitude],
-      zoom: 15,
-      interactive: false,
-    });
-    new mapboxgl.Marker()
-      .setLngLat([this.clubLocation.longitude, this.clubLocation.latitude])
-      .addTo(this.map);
-  }
-
-  ngOnDestroy(): void {
-    this.map?.remove();
-  }
 
   sanitizer = inject(DomSanitizer);
   clubLocationService = inject(ClubLocationService);

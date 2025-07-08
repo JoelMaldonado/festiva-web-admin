@@ -7,7 +7,7 @@ import { CardArtistComponent } from '../../components/card-artist.component';
 import { DrawerModule } from 'primeng/drawer';
 import { DrawerFormArtistComponent } from '../../components/drawer-form-artist.component';
 import { Router } from '@angular/router';
-import { AppMap } from "@components/map/app.map";
+import { MapComponent } from "@components/map.component";
 
 @Component({
   selector: 'home-artist',
@@ -17,7 +17,7 @@ import { AppMap } from "@components/map/app.map";
     CardArtistComponent,
     DrawerModule,
     DrawerFormArtistComponent,
-    AppMap
+    MapComponent
 ],
   templateUrl: './home-artist.component.html',
 })
