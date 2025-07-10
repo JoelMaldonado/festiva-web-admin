@@ -16,13 +16,18 @@ import { TextareaModule } from 'primeng/textarea';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
 import { FileUploadModule } from 'primeng/fileupload';
-import { FolderFirebase, UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
+import {
+  FolderFirebase,
+  UploadImageUseCase,
+} from 'app/domain/usecase/upload-image.usecase';
 import { Artist } from '@dto/artist';
 import { StatusEnum } from 'app/data/enum/status-enum';
 import { Club } from '@dto/club';
 import { EventCategory } from '@model/event-category';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ClubService } from 'app/services/club.service';
+import { EventModel } from '@model/event';
+import { EventService } from '@services/event.service';
 
 @Component({
   selector: 'drawer-form-event',
@@ -42,11 +47,12 @@ export class DrawerFormEvent implements OnInit, OnChanges {
   private readonly clubService = inject(ClubService);
   private readonly commonRepository = inject(CommonRepository);
   private readonly uploadImage = inject(UploadImageUseCase);
+  private readonly eventService = inject(EventService);
 
   listClub: Club[] = [];
   listEventCategory: EventCategory[] = [];
 
-  @Input() artist?: Artist;
+  @Input() event?: EventModel;
 
   selectedClub = new FormControl<Club | undefined>(undefined);
   selectedEventCategory = new FormControl<EventCategory | undefined>(undefined);
@@ -64,9 +70,9 @@ export class DrawerFormEvent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['club'] && this.artist) {
-      this.title.setValue(this.artist.name);
-      this.descrip.setValue(this.artist.description);
+    if (changes['club'] && this.event) {
+      this.title.setValue(this.event.nameClub);
+      this.descrip.setValue(this.event.description);
       //const type = this.listClub.find(
       //  (e) => e.id == this.artist?.idArtistType
       //);
@@ -81,8 +87,8 @@ export class DrawerFormEvent implements OnInit, OnChanges {
     }
   }
 
-  async onSubmit(event: Event) {
-    event.preventDefault();
+  async onSubmit(e: any) {
+    e.preventDefault();
 
     if (this.title.invalid) {
       this.title.markAsTouched();
@@ -109,20 +115,30 @@ export class DrawerFormEvent implements OnInit, OnChanges {
         );
         imageUrl = url;
       }
+
       const request = {
-        name: this.title.value!,
-        idArtistType: this.selectedClub.value?.id,
-        description: this.descrip.value,
-        profileUrl: imageUrl,
+        clubId: this.selectedClub.value?.id!,
+        title: this.title.value! ?? '',
+        description: this.descrip.value ?? '',
+        imageUrl: imageUrl ?? '',
+        eventDatetime: this.eventDate.value?.toISOString() ?? '',
+        eventCategoryId: this.selectedEventCategory.value?.id!,
       };
-      if (this.artist) {
-        //TODO await this.artistRepo.update(this.artist.id, request);
+
+      if (this.event) {
+        //await this.artistRepo.update(this.artist.id, request);
         this.onSaved.emit();
         this.resetForm();
       } else {
-        //TODO await this.artistRepo.create(request);
-        this.onSaved.emit();
-        this.resetForm();
+        this.eventService.add(request).subscribe({
+          next: (res) => {
+            if (res.isSuccess) {
+              this.onSaved.emit();
+              this.resetForm();
+            }
+          },
+          error: (err) => console.error(err),
+        });
       }
     } catch (error) {
       console.log(error);

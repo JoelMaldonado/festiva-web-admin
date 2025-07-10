@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { Event } from '@model/event';
-import { EventRepository } from '@repository/event.repository';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { TableModule } from 'primeng/table';
 import { delay } from 'rxjs';
 import { DrawerFormEvent } from './components/drawer-form-event/drawer-form-event.component';
 import { Router } from '@angular/router';
+import { EventService } from '@services/event.service';
+import { EventModel } from '@model/event';
 
 @Component({
   selector: 'home-events',
@@ -22,10 +22,10 @@ import { Router } from '@angular/router';
   standalone: true,
 })
 export class HomeEventsComponent implements OnInit {
-  private readonly repo = inject(EventRepository);
+  private readonly eventService = inject(EventService);
   private readonly router = inject(Router);
 
-  listEvents: Event[] = [];
+  listEvents: EventModel[] = [];
   drawerForm = false;
   selectedEvent: Event | null = null;
   showForm = false;
@@ -37,14 +37,13 @@ export class HomeEventsComponent implements OnInit {
 
   getAll() {
     this.isLoadingTable = true;
-    this.repo
-      .fetchAll()
-      .pipe(delay(1000))
-      .subscribe({
-        next: (res) => (this.listEvents = res),
-        error: (err) => console.error(err),
-        complete: () => (this.isLoadingTable = false),
-      });
+    this.eventService.fetchAll().subscribe({
+      next: (res) => {
+        this.listEvents = res.data || [];
+      },
+      error: (err) => console.error(err),
+      complete: () => (this.isLoadingTable = false),
+    });
   }
 
   toPath(id: number, path: string) {

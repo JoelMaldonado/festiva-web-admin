@@ -5,14 +5,8 @@ import { CommonRepository } from '@repository/common.repository';
 import { CommonRepositoryImpl } from '@impl/common.repository.impl';
 import { ClubCoverRepository } from '@repository/club-cover.repository';
 import { ClubCoverRepositoryImpl } from '@impl/club-cover.repository.impl';
-import { EventRepository } from '@repository/event.repository';
-import { EventRepositoryImpl } from '@impl/event.repository.impl';
 
 export const appProviders: Provider[] = [
-  {
-    provide: EventRepository,
-    useClass: EventRepositoryImpl,
-  },
   {
     provide: ArtistRepository,
     useClass: ArtistRepositoryImpl,
