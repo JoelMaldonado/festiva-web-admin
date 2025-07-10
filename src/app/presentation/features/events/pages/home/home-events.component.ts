@@ -3,7 +3,6 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { TableModule } from 'primeng/table';
-import { delay } from 'rxjs';
 import { DrawerFormEvent } from './components/drawer-form-event/drawer-form-event.component';
 import { Router } from '@angular/router';
 import { EventService } from '@services/event.service';
@@ -44,6 +43,11 @@ export class HomeEventsComponent implements OnInit {
       error: (err) => console.error(err),
       complete: () => (this.isLoadingTable = false),
     });
+  }
+
+  onSaved() {
+    this.drawerForm = false;
+    this.getAll();
   }
 
   toPath(id: number, path: string) {

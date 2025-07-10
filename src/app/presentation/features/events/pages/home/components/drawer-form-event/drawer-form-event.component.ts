@@ -28,6 +28,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { ClubService } from 'app/services/club.service';
 import { EventModel } from '@model/event';
 import { EventService } from '@services/event.service';
+import { InputComponent } from '@components/input.component';
 
 @Component({
   selector: 'drawer-form-event',
@@ -40,6 +41,7 @@ import { EventService } from '@services/event.service';
     ButtonModule,
     FileUploadModule,
     DatePickerModule,
+    InputComponent,
   ],
   templateUrl: './drawer-form-event.component.html',
 })
@@ -56,9 +58,12 @@ export class DrawerFormEvent implements OnInit, OnChanges {
 
   selectedClub = new FormControl<Club | undefined>(undefined);
   selectedEventCategory = new FormControl<EventCategory | undefined>(undefined);
-  title = new FormControl('');
-  descrip = new FormControl('');
+
+  title = '';
+  descrip = '';
+
   eventDate = new FormControl(new Date());
+
   selectedImageFile: File | null = null;
   isLoading = false;
 
@@ -71,16 +76,16 @@ export class DrawerFormEvent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['club'] && this.event) {
-      this.title.setValue(this.event.nameClub);
-      this.descrip.setValue(this.event.description);
+      this.title = this.event.nameClub;
+      this.descrip = this.event.description;
       //const type = this.listClub.find(
       //  (e) => e.id == this.artist?.idArtistType
       //);
       //this.selectedClub.setValue(this.artist.idClub);
       //this.selectedEventCategory.setValue(this.artist.idEventCategory);
     } else {
-      this.title.reset();
-      this.descrip.reset();
+      this.title = '';
+      this.descrip = '';
       this.eventDate.reset();
       this.selectedClub.reset();
       this.selectedEventCategory.reset();
@@ -89,11 +94,6 @@ export class DrawerFormEvent implements OnInit, OnChanges {
 
   async onSubmit(e: any) {
     e.preventDefault();
-
-    if (this.title.invalid) {
-      this.title.markAsTouched();
-      return;
-    }
 
     if (this.selectedClub.invalid) {
       this.selectedClub.markAsTouched();
@@ -118,8 +118,8 @@ export class DrawerFormEvent implements OnInit, OnChanges {
 
       const request = {
         clubId: this.selectedClub.value?.id!,
-        title: this.title.value! ?? '',
-        description: this.descrip.value ?? '',
+        title: this.title,
+        description: this.descrip,
         imageUrl: imageUrl ?? '',
         eventDatetime: this.eventDate.value?.toISOString() ?? '',
         eventCategoryId: this.selectedEventCategory.value?.id!,
@@ -166,10 +166,10 @@ export class DrawerFormEvent implements OnInit, OnChanges {
   }
 
   resetForm() {
-    this.title.reset();
+    this.title = '';
+    this.descrip = '';
     this.selectedClub.reset();
     this.selectedEventCategory.reset();
-    this.descrip.reset();
     this.eventDate.reset();
     this.selectedImageFile = null;
   }

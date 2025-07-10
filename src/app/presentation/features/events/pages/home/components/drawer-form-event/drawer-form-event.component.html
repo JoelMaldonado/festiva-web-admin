@@ -17,31 +17,9 @@
     class="w-full"
   />
 
-  <!-- Input Title -->
-  <p-floatlabel variant="on">
-    <input
-      pInputText
-      id="title"
-      [formControl]="title"
-      autocomplete="off"
-      class="w-full"
-    />
-    <label for="title">Title</label>
-  </p-floatlabel>
+  <app-input id="title" label="Title" [(model)]="title" />
 
-  <!-- Input Description -->
-  <p-floatlabel variant="on">
-    <textarea
-      pTextarea
-      id="descrip"
-      [formControl]="descrip"
-      rows="5"
-      cols="30"
-      style="resize: none"
-      class="h-full"
-    ></textarea>
-    <label for="descrip">Description</label>
-  </p-floatlabel>
+  <app-input id="descrip" label="Description" [(model)]="descrip" />
 
   <p-floatlabel variant="on">
     <p-datepicker
@@ -63,6 +41,7 @@
     [auto]="false"
     (onSelect)="onSelectImage($event)"
   />
+
   <p-button
     type="submit"
     label="Guardar"

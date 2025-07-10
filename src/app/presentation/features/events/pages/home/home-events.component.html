@@ -3,7 +3,7 @@
   [(visible)]="showForm"
   position="right"
 >
-  <drawer-form-event (onSaved)="showForm = false; getAll()" />
+  <drawer-form-event (onSaved)="onSaved()" />
 </p-drawer>
 <div class="flex flex-col gap-4">
   <p-button label="Crear Evento" (onClick)="showForm = true" />
