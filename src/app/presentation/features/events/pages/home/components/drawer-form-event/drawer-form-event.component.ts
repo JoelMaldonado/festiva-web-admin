@@ -20,7 +20,6 @@ import {
   FolderFirebase,
   UploadImageUseCase,
 } from 'app/domain/usecase/upload-image.usecase';
-import { Artist } from '@dto/artist';
 import { StatusEnum } from 'app/data/enum/status-enum';
 import { Club } from '@dto/club';
 import { EventCategory } from '@model/event-category';

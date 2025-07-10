@@ -20,7 +20,6 @@ import { InputComponent } from '@components/input.component';
     >
       <app-input
         label="Name"
-        placeholder="Ingresa el nombre del club"
         [model]="name"
         (modelChange)="onNameChanged($event)"
         class="w-full"
@@ -29,7 +28,6 @@ import { InputComponent } from '@components/input.component';
 
       <app-input
         label="Description"
-        placeholder="Ingresa una breve descripción del club"
         [model]="description"
         (modelChange)="onDescriptionChanged($event)"
         class="w-full"

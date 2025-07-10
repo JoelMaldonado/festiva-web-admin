@@ -15,7 +15,6 @@ import { InputText } from 'primeng/inputtext';
           [id]="id"
           autocomplete="off"
           class="w-full"
-          [placeholder]="placeholder"
           [value]="model"
           (input)="onChange($event)"
         />
@@ -30,7 +29,7 @@ import { InputText } from 'primeng/inputtext';
 export class InputComponent {
   @Input() id?: string;
   @Input() label?: string;
-  @Input() placeholder: string = '';
+  //@Input() placeholder: string = '';
   @Input() model: string = '';
   @Input() error?: string;
   @Output() modelChange = new EventEmitter<string>();
