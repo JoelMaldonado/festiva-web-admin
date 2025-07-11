@@ -63,6 +63,8 @@ export class DrawerFormEvent implements OnInit, OnChanges {
 
   eventDate = new FormControl(new Date());
 
+  minDate = new Date();
+
   selectedImageFile: File | null = null;
   isLoading = false;
 
