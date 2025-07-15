@@ -28,6 +28,7 @@ import { ClubService } from 'app/services/club.service';
 import { EventModel } from '@model/event';
 import { EventService } from '@services/event.service';
 import { InputComponent } from '@components/input.component';
+import { AppTextAreaComponent } from "@components/text-area.component";
 
 @Component({
   selector: 'drawer-form-event',
@@ -41,7 +42,8 @@ import { InputComponent } from '@components/input.component';
     FileUploadModule,
     DatePickerModule,
     InputComponent,
-  ],
+    AppTextAreaComponent
+],
   templateUrl: './drawer-form-event.component.html',
 })
 export class DrawerFormEvent implements OnInit, OnChanges {

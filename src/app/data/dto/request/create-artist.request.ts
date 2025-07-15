@@ -4,4 +4,5 @@ export interface CreateArtistRequest {
   description?: string | null;
   biography?: string | null;
   profileUrl?: string | null;
+  profile2Url?: string | null;
 }

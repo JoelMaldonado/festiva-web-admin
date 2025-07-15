@@ -19,7 +19,10 @@ import { ButtonModule } from 'primeng/button';
 import { ArtistRepository } from '@repository/artist.repository';
 import { CreateArtistRequest } from '@dto/request/create-artist.request';
 import { FileUploadModule } from 'primeng/fileupload';
-import { FolderFirebase, UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
+import {
+  FolderFirebase,
+  UploadImageUseCase,
+} from 'app/domain/usecase/upload-image.usecase';
 import { Artist } from '@dto/artist';
 import { StatusEnum } from 'app/data/enum/status-enum';
 
@@ -88,6 +91,14 @@ import { StatusEnum } from 'app/data/enum/status-enum';
         [auto]="false"
         (onSelect)="onSelectImage($event)"
       />
+      <p-fileUpload
+        name="file2"
+        accept="image/*"
+        mode="basic"
+        chooseLabel="Subir Imagen 2"
+        [auto]="false"
+        (onSelect)="onSelectImage2($event)"
+      />
       <p-button
         type="submit"
         label="Guardar"
@@ -111,6 +122,7 @@ export class DrawerFormArtistComponent implements OnInit, OnChanges {
   artistRepo = inject(ArtistRepository);
   private readonly uploadImage = inject(UploadImageUseCase);
   selectedImageFile: File | null = null;
+  selectedImage2File: File | null = null;
   isLoading = false;
 
   @Output() onSaved = new EventEmitter<void>();
@@ -151,6 +163,7 @@ export class DrawerFormArtistComponent implements OnInit, OnChanges {
     try {
       this.isLoading = true;
       var imageUrl: string | null = null;
+      var image2Url: string | null = null;
       if (this.selectedImageFile) {
         const { url, filePath } = await this.uploadImage.uploadImage(
           this.selectedImageFile,
@@ -158,12 +171,20 @@ export class DrawerFormArtistComponent implements OnInit, OnChanges {
         );
         imageUrl = url;
       }
+      if (this.selectedImage2File) {
+        const { url, filePath } = await this.uploadImage.uploadImage(
+          this.selectedImage2File,
+          FolderFirebase.artists
+        );
+        image2Url = url;
+      }
       const request: CreateArtistRequest = {
         name: this.name.value!,
         idArtistType: this.selectedArtistType.value!.id,
         description: this.descrip.value,
         biography: this.biography.value,
         profileUrl: imageUrl,
+        profile2Url: image2Url,
       };
       if (this.artist) {
         await this.artistRepo.update(this.artist.id, request);
@@ -201,5 +222,9 @@ export class DrawerFormArtistComponent implements OnInit, OnChanges {
 
   onSelectImage(event: any) {
     this.selectedImageFile = event.files[0];
+  }
+
+  onSelectImage2(event: any) {
+    this.selectedImage2File = event.files[0];
   }
 }
