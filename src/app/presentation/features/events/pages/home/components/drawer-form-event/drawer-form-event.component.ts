@@ -66,7 +66,6 @@ export class DrawerFormEvent implements OnInit, OnChanges {
 
   eventDate = new FormControl(new Date());
   startTime = new FormControl();
-  endTime = new FormControl();
 
   minDate = new Date();
 
@@ -139,9 +138,6 @@ export class DrawerFormEvent implements OnInit, OnChanges {
         imageUrl: imageUrl ?? '',
         eventDate: format(this.eventDate.value, 'yyyy-MM-dd'),
         startTime: format(this.startTime.value, 'HH:mm:ss'),
-        endTime: this.endTime.value
-          ? format(this.endTime.value, 'HH:mm:ss')
-          : null,
         eventCategoryId: this.selectedEventCategory.value?.id!,
       };
 
@@ -192,7 +188,6 @@ export class DrawerFormEvent implements OnInit, OnChanges {
     this.selectedEventCategory.reset();
     this.eventDate.reset();
     this.startTime.reset();
-    this.endTime.reset();
     this.selectedImageFile = null;
   }
 

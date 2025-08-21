@@ -9,10 +9,16 @@ import {
 import { ButtonModule } from 'primeng/button';
 import { SelectFileComponent } from '@components/select-file.component';
 import { InputComponent } from '@components/input.component';
+import { AppTextAreaComponent } from '@components/text-area.component';
 
 @Component({
   selector: 'add-club',
-  imports: [InputComponent, SelectFileComponent, ButtonModule],
+  imports: [
+    InputComponent,
+    SelectFileComponent,
+    ButtonModule,
+    AppTextAreaComponent,
+  ],
   template: `
     <form
       (submit)="onSubmit($event)"
@@ -26,12 +32,13 @@ import { InputComponent } from '@components/input.component';
         [error]="nameError"
       />
 
-      <app-input
+      <app-text-area
+        id="descrip"
         label="Description"
         [model]="description"
         (modelChange)="onDescriptionChanged($event)"
-        class="w-full"
         [error]="descriptionError"
+        class="w-full"
       />
 
       <app-select-file class="w-full" label="Logo" [(value)]="logoFile" />
