@@ -132,7 +132,7 @@ export class DrawerFormEvent implements OnInit, OnChanges {
         imageUrl = url;
       }
 
-      const request = {
+      const body = {
         clubId: this.selectedClub.value?.id!,
         title: this.title,
         description: this.descrip,
@@ -145,25 +145,21 @@ export class DrawerFormEvent implements OnInit, OnChanges {
         eventCategoryId: this.selectedEventCategory.value?.id!,
       };
 
-      console.log(request);
-
-      return;
-
-      //if (this.event) {
-      //  //await this.artistRepo.update(this.artist.id, request);
-      //  this.onSaved.emit();
-      //  this.resetForm();
-      //} else {
-      //  this.eventService.add(request).subscribe({
-      //    next: (res) => {
-      //      if (res.isSuccess) {
-      //        this.onSaved.emit();
-      //        this.resetForm();
-      //      }
-      //    },
-      //    error: (err) => console.error(err),
-      //  });
-      //}
+      if (this.event) {
+        //await this.artistRepo.update(this.artist.id, request);
+        this.onSaved.emit();
+        this.resetForm();
+      } else {
+        this.eventService.add(body).subscribe({
+          next: (res) => {
+            if (res.isSuccess) {
+              this.onSaved.emit();
+              this.resetForm();
+            }
+          },
+          error: (err) => console.error(err),
+        });
+      }
     } catch (error) {
       console.log(error);
     } finally {

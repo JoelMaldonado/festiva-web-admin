@@ -15,14 +15,7 @@ export class EventService {
     return this.http.get<Result<EventModel[]>>(this.url);
   }
 
-  add(request: {
-    clubId: number;
-    title: string;
-    description: string;
-    imageUrl: string;
-    eventDatetime: string;
-    eventCategoryId: number;
-  }) {
+  add(request: any) {
     return this.http.post<Result<any>>(this.url, request);
   }
 }
