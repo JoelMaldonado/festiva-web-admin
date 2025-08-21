@@ -28,7 +28,8 @@ import { ClubService } from 'app/services/club.service';
 import { EventModel } from '@model/event';
 import { EventService } from '@services/event.service';
 import { InputComponent } from '@components/input.component';
-import { AppTextAreaComponent } from "@components/text-area.component";
+import { AppTextAreaComponent } from '@components/text-area.component';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'drawer-form-event',
@@ -42,8 +43,8 @@ import { AppTextAreaComponent } from "@components/text-area.component";
     FileUploadModule,
     DatePickerModule,
     InputComponent,
-    AppTextAreaComponent
-],
+    AppTextAreaComponent,
+  ],
   templateUrl: './drawer-form-event.component.html',
 })
 export class DrawerFormEvent implements OnInit, OnChanges {
@@ -64,6 +65,8 @@ export class DrawerFormEvent implements OnInit, OnChanges {
   descrip = '';
 
   eventDate = new FormControl(new Date());
+  startTime = new FormControl();
+  endTime = new FormControl();
 
   minDate = new Date();
 
@@ -108,6 +111,16 @@ export class DrawerFormEvent implements OnInit, OnChanges {
       return;
     }
 
+    if (this.eventDate.value === null) {
+      alert('Please select a valid event date.');
+      return;
+    }
+
+    if (this.startTime.value === null) {
+      alert('Please select a valid start time.');
+      return;
+    }
+
     try {
       this.isLoading = true;
       var imageUrl: string | null = null;
@@ -124,25 +137,33 @@ export class DrawerFormEvent implements OnInit, OnChanges {
         title: this.title,
         description: this.descrip,
         imageUrl: imageUrl ?? '',
-        eventDatetime: this.eventDate.value?.toISOString() ?? '',
+        eventDate: format(this.eventDate.value, 'yyyy-MM-dd'),
+        startTime: format(this.startTime.value, 'HH:mm:ss'),
+        endTime: this.endTime.value
+          ? format(this.endTime.value, 'HH:mm:ss')
+          : null,
         eventCategoryId: this.selectedEventCategory.value?.id!,
       };
 
-      if (this.event) {
-        //await this.artistRepo.update(this.artist.id, request);
-        this.onSaved.emit();
-        this.resetForm();
-      } else {
-        this.eventService.add(request).subscribe({
-          next: (res) => {
-            if (res.isSuccess) {
-              this.onSaved.emit();
-              this.resetForm();
-            }
-          },
-          error: (err) => console.error(err),
-        });
-      }
+      console.log(request);
+
+      return;
+
+      //if (this.event) {
+      //  //await this.artistRepo.update(this.artist.id, request);
+      //  this.onSaved.emit();
+      //  this.resetForm();
+      //} else {
+      //  this.eventService.add(request).subscribe({
+      //    next: (res) => {
+      //      if (res.isSuccess) {
+      //        this.onSaved.emit();
+      //        this.resetForm();
+      //      }
+      //    },
+      //    error: (err) => console.error(err),
+      //  });
+      //}
     } catch (error) {
       console.log(error);
     } finally {
