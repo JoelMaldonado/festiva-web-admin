@@ -26,7 +26,7 @@ export class HomeEventsComponent implements OnInit {
 
   listEvents: EventModel[] = [];
   drawerForm = false;
-  selectedEvent: Event | null = null;
+  selectedEvent: EventModel | null = null;
   showForm = false;
   isLoadingTable = true;
 

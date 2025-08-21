@@ -3,7 +3,8 @@ export interface EventModel {
   title: string;
   description: string;
   imageUrl: string;
-  eventDatetime: Date;
+  eventDate: Date;
+  startTime: string;
   idClub: number;
   nameClub: string;
   idEventCategory: number;

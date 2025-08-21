@@ -20,8 +20,8 @@
     <ng-template pTemplate="body" let-event let-index="rowIndex">
       <tr>
         <td>{{ index + 1 }}. {{ event.title }}</td>
-        <td>{{ event.eventDatetime | date : "dd/MM/yyyy" }}</td>
-        <td>{{ event.eventDatetime | date : "HH:mm a" }}</td>
+        <td>{{ event.eventDate | date : "dd/MM/yyyy" }}</td>
+        <td>{{ event.startTime }}</td>
         <td>
           <p-button
             pTooltip="Artists"
