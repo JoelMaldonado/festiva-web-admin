@@ -1,0 +1,37 @@
+<div class="flex flex-col gap-4">
+  <app-top title="Event Schedule" />
+
+  <div class="flex items-center gap-4">
+    <app-input-date
+      label="Event Date"
+      [(value)]="eventDate"
+      [minDate]="minDate"
+    />
+    <app-input-time label="Start Time" [(value)]="startTime" />
+    <p-button
+      label="Guardar"
+      icon="pi pi-plus"
+      [rounded]="true"
+      [disabled]="!eventDate || !startTime"
+      (onClick)="save()"
+      [loading]="isLoadingSaving"
+    />
+  </div>
+
+  <p-table [value]="listEventSchedule" [loading]="isLoading">
+    <ng-template #header>
+      <tr>
+        <th>Nro</th>
+        <th>Date</th>
+        <th>Start Time</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-item let-i="rowIndex">
+      <tr>
+        <td>{{ i + 1 }}</td>
+        <td>{{ item.eventDate }}</td>
+        <td>{{ item.startTime }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

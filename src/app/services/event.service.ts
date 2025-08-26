@@ -18,4 +18,8 @@ export class EventService {
   add(request: any) {
     return this.http.post<Result<any>>(this.url, request);
   }
+
+  fetchEventSchedule(idEvent: string) {
+    return this.http.get<Result<any>>(`${this.url}/${idEvent}/schedule`);
+  }
 }

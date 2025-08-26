@@ -32,11 +32,15 @@
             [text]="true"
             (click)="toPath(event.id, 'artists')"
           />
-          <!--
-          
-          <button>Edit</button>
-          <button>Delete</button>
-          -->
+          <p-button
+            pTooltip="Schedule"
+            showDelay="100"
+            hideDelay="100"
+            icon="pi pi-calendar"
+            [rounded]="true"
+            [text]="true"
+            (click)="toPath(event.id, 'schedule')"
+          />
         </td>
       </tr>
     </ng-template>
