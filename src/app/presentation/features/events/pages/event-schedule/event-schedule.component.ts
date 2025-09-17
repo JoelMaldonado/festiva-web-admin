@@ -6,7 +6,7 @@ import { TableModule } from 'primeng/table';
 import { AppInputDateComponent } from '@components/input-date.component';
 import { CommonModule } from '@angular/common';
 import { InputTimeComponent } from '@components/input-time.component';
-import { format } from 'date-fns';
+import { format, isValid, parse } from 'date-fns';
 
 @Component({
   selector: 'app-event-schedule',
@@ -72,8 +72,8 @@ export class EventScheduleComponent implements OnInit {
 
     const body = {
       eventId: this.idEvent,
-      eventDate: format(this.eventDate, 'yyyy-MM-dd'),
-      startTime: this.startTime,
+      eventDate: this.formatTime(this.eventDate, 'yyyy-MM-dd'),
+      startTime: this.formatTime(this.startTime, 'HH:mm'),
     };
 
     this.eventScheduleService.save(body).subscribe({
@@ -92,5 +92,14 @@ export class EventScheduleComponent implements OnInit {
         this.isLoadingSaving = false;
       },
     });
+  }
+
+  formatTime(value: Date | string, pattern: string): string {
+    const d =
+      value instanceof Date
+        ? value
+        : parse(String(value).trim(), pattern, new Date()); // usa el mismo patrón para parsear
+
+    return isValid(d) ? format(d, pattern) : '';
   }
 }
