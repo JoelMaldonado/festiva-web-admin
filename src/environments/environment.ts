@@ -12,4 +12,5 @@ export const environment = {
     measurementId: 'G-KX89T3HQH4',
   },
   production: true,
+  version: '1.0.1',
 };

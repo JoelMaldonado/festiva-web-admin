@@ -64,7 +64,7 @@
     </a>
     }
   </nav>
-  <div>
+  <div class="flex flex-col items-center">
     <p-button
       icon="pi pi-sign-out"
       label="Cerrar sesión"
@@ -72,5 +72,6 @@
       [rounded]="true"
       (click)="logout()"
     />
+    <span class="text-sm text-gray-400"> v{{ getVersion() }} </span>
   </div>
 </div>

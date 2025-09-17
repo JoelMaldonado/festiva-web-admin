@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { StorageService } from 'app/core/services/storage.service';
+import { environment } from 'environments/environment';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
 import Swal from 'sweetalert2';
@@ -63,5 +64,9 @@ export class ToolbarComponent {
 
   closeMenu() {
     this.isMenuOpen.set(false);
+  }
+
+  getVersion() {
+    return environment.version;
   }
 }
