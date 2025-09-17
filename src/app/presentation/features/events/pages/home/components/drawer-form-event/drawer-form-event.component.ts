@@ -137,12 +137,13 @@ export class DrawerFormEvent implements OnInit, OnChanges {
         description: this.descrip,
         imageUrl: imageUrl ?? '',
         eventDate: format(this.eventDate.value, 'yyyy-MM-dd'),
-        startTime: format(this.startTime.value, 'HH:mm:ss'),
+        startTime: format(this.startTime.value, 'HH:mm'),
         eventCategoryId: this.selectedEventCategory.value?.id!,
       };
 
+      console.log(body);
+
       if (this.event) {
-        //await this.artistRepo.update(this.artist.id, request);
         this.onSaved.emit();
         this.resetForm();
       } else {
