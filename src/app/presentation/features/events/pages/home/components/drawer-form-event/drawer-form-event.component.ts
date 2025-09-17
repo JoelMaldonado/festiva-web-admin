@@ -29,7 +29,7 @@ import { EventModel } from '@model/event';
 import { EventService } from '@services/event.service';
 import { InputComponent } from '@components/input.component';
 import { AppTextAreaComponent } from '@components/text-area.component';
-import { format } from 'date-fns';
+import { format, isValid, parse } from 'date-fns';
 
 @Component({
   selector: 'drawer-form-event',
@@ -136,8 +136,8 @@ export class DrawerFormEvent implements OnInit, OnChanges {
         title: this.title,
         description: this.descrip,
         imageUrl: imageUrl ?? '',
-        eventDate: format(this.eventDate.value, 'yyyy-MM-dd'),
-        startTime: format(this.startTime.value, 'HH:mm'),
+        eventDate: this.formatTime(this.eventDate.value, 'yyyy-MM-dd'),
+        startTime: this.formatTime(this.startTime.value, 'HH:mm'),
         eventCategoryId: this.selectedEventCategory.value?.id!,
       };
 
@@ -162,6 +162,15 @@ export class DrawerFormEvent implements OnInit, OnChanges {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  formatTime(value: Date | string, pattern: string): string {
+    const d =
+      value instanceof Date
+        ? value
+        : parse(String(value).trim(), pattern, new Date()); // usa el mismo patrón para parsear
+
+    return isValid(d) ? format(d, pattern) : '';
   }
 
   async getAllClub() {
