@@ -32,7 +32,7 @@ export class EventScheduleComponent implements OnInit {
   isLoadingSaving = false;
 
   eventDate: Date | null = null;
-  startTime: Date | null = null;
+  startTime = '19:00';
 
   ngOnInit() {
     if (!this.idEvent) {
@@ -73,7 +73,7 @@ export class EventScheduleComponent implements OnInit {
     const body = {
       eventId: this.idEvent,
       eventDate: format(this.eventDate, 'yyyy-MM-dd'),
-      startTime: format(this.startTime, 'HH:mm'),
+      startTime: this.startTime,
     };
 
     this.eventScheduleService.save(body).subscribe({
@@ -81,7 +81,6 @@ export class EventScheduleComponent implements OnInit {
         if (res.isSuccess) {
           this.loadEventSchedule();
           this.eventDate = null;
-          this.startTime = null;
         } else {
           console.log(res.message);
         }

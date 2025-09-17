@@ -41,10 +41,10 @@ import { TextareaModule } from 'primeng/textarea';
 export class InputTimeComponent {
   @Input() label!: string;
 
-  @Input() value!: Date | null;
-  @Output() valueChange = new EventEmitter<Date | null>();
+  @Input() value!: string | null;
+  @Output() valueChange = new EventEmitter<string | null>();
 
-  onChange(value: Date | null) {
+  onChange(value: string | null) {
     this.valueChange.emit(value);
   }
 }

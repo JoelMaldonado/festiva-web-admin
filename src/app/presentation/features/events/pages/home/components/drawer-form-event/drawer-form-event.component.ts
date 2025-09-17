@@ -65,7 +65,7 @@ export class DrawerFormEvent implements OnInit, OnChanges {
   descrip = '';
 
   eventDate = new FormControl(new Date());
-  startTime = new FormControl();
+  startTime = new FormControl('19:00');
 
   minDate = new Date();
 
