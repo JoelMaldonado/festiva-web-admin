@@ -47,7 +47,7 @@ import { EventService } from '@services/event.service';
           <div class="mt-5 flex flex-col gap-3">
             <div class="flex items-center gap-3">
               <img
-                src="https://picsum.photos/seed/club/96/96"
+                [src]="event?.clubLogoUrl"
                 alt="Logo del club"
                 class="h-12 w-12 rounded-xl object-cover border border-white/15"
                 loading="lazy"
