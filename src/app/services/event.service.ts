@@ -16,7 +16,7 @@ export class EventService {
   }
 
   getById(id: string) {
-    return this.http.get<Result<any>>(`${this.url}/${id}`);
+    return this.http.get<Result<any>>(`${this.url}/detail/${id}`);
   }
 
   add(request: any) {

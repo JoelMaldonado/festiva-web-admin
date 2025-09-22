@@ -15,18 +15,22 @@ import { EventService } from '@services/event.service';
       <article
         class="relative grid md:grid-cols-2 gap-0 overflow-hidden rounded-2xl border border-white/15 bg-white/10 backdrop-blur-xl shadow-2xl ring-1 ring-white/10"
       >
-        <!-- MEDIA: a la izquierda en web, arriba en mobile -->
-        <div class="relative md:min-h-[320px]">
-          <img
-            [src]="event?.imageUrl"
-            alt="Imagen del evento"
-            class="h-56 w-full md:h-full object-cover"
-            loading="lazy"
-          />
-          <!-- sutil degradado para legibilidad -->
+        <div class="relative w-full max-w-[400px] ms-3 mt-3">
           <div
-            class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"
-          ></div>
+            class="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50"
+          >
+            <img
+              [src]="event?.imageUrl"
+              alt="Imagen del evento"
+              class="h-full w-full object-contain"
+              loading="lazy"
+              decoding="async"
+            />
+            <!-- Degradado sutil opcional -->
+            <div
+              class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"
+            ></div>
+          </div>
         </div>
 
         <!-- CONTENT -->
@@ -35,7 +39,7 @@ import { EventService } from '@services/event.service';
           <h2 class="text-xl md:text-2xl font-bold leading-tight">
             {{ event?.title }}
           </h2>
-          <p class="mt-2 text-sm md:text-base text-slate-300">
+          <p class="mt-2 text-sm md:text-base text-slate-300 line-clamp-5">
             {{ event?.description }}
           </p>
 
