@@ -9,6 +9,7 @@ import { Artist } from '@dto/artist';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
+import { EventInfoCardComponent } from "../../components/event-info-card.component";
 
 @Component({
   selector: 'event-artists',
@@ -20,7 +21,8 @@ import { SelectModule } from 'primeng/select';
     TableModule,
     ButtonModule,
     SelectModule,
-  ],
+    EventInfoCardComponent
+],
 })
 export class EventArtistsComponent implements OnInit {
   private readonly eventArtistService = inject(EventArtistService);

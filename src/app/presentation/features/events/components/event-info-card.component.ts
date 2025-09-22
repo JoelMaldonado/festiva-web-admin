@@ -1,0 +1,94 @@
+import { Component, inject, Input, OnInit } from '@angular/core';
+import { EventService } from '@services/event.service';
+
+@Component({
+  selector: 'event-info-card',
+  template: `
+    <section class="relative my-4 w-[50%]">
+      <div
+        class="pointer-events-none absolute -top-10 -left-10 h-56 w-56 rounded-full bg-rose-500/30 blur-3xl"
+      ></div>
+      <div
+        class="pointer-events-none absolute -bottom-12 -right-10 h-64 w-64 rounded-full bg-indigo-500/30 blur-3xl"
+      ></div>
+
+      <article
+        class="relative grid md:grid-cols-2 gap-0 overflow-hidden rounded-2xl border border-white/15 bg-white/10 backdrop-blur-xl shadow-2xl ring-1 ring-white/10"
+      >
+        <!-- MEDIA: a la izquierda en web, arriba en mobile -->
+        <div class="relative md:min-h-[320px]">
+          <img
+            [src]="event?.imageUrl"
+            alt="Imagen del evento"
+            class="h-56 w-full md:h-full object-cover"
+            loading="lazy"
+          />
+          <!-- sutil degradado para legibilidad -->
+          <div
+            class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"
+          ></div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="p-5 md:p-6 text-slate-100">
+          <!-- Título + descripción -->
+          <h2 class="text-xl md:text-2xl font-bold leading-tight">
+            {{ event?.title }}
+          </h2>
+          <p class="mt-2 text-sm md:text-base text-slate-300">
+            {{ event?.description }}
+          </p>
+
+          <!-- Club + logo + dirección -->
+          <div class="mt-5 flex flex-col gap-3">
+            <div class="flex items-center gap-3">
+              <img
+                src="https://picsum.photos/seed/club/96/96"
+                alt="Logo del club"
+                class="h-12 w-12 rounded-xl object-cover border border-white/15"
+                loading="lazy"
+              />
+              <div>
+                <p class="text-xs text-slate-400">Organiza</p>
+                <p class="font-semibold">{{ event?.clubName }}</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2 text-slate-300">
+              <!-- ícono ubicación -->
+              <svg
+                viewBox="0 0 24 24"
+                class="mt-0.5 h-5 w-5 shrink-0"
+                aria-hidden="true"
+              >
+                <path
+                  fill="currentColor"
+                  d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"
+                />
+              </svg>
+              <p class="text-sm md:text-base">{{ event?.location }} <br /></p>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  `,
+})
+export class EventInfoCardComponent implements OnInit {
+  service = inject(EventService);
+
+  event: any;
+
+  @Input({ required: true }) idEvent!: string;
+
+  ngOnInit(): void {
+    this.service.getById(this.idEvent).subscribe({
+      next: (res) => {
+        this.event = res.data;
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
+}

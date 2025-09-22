@@ -1,5 +1,9 @@
 <div class="flex flex-col gap-4">
-  <app-top title="Artistas" />
+  <app-top title="Artists" />
+
+  @if (idEvent) {
+  <event-info-card [idEvent]="idEvent" />
+  }
 
   <div class="flex items-center gap-4">
     <p-select

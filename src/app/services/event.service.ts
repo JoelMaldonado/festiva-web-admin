@@ -15,6 +15,10 @@ export class EventService {
     return this.http.get<Result<EventModel[]>>(this.url);
   }
 
+  getById(id: string) {
+    return this.http.get<Result<any>>(`${this.url}/${id}`);
+  }
+
   add(request: any) {
     return this.http.post<Result<any>>(this.url, request);
   }
