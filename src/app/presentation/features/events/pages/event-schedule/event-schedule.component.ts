@@ -83,6 +83,7 @@ export class EventScheduleComponent implements OnInit {
         if (res.isSuccess) {
           this.loadEventSchedule();
           this.eventDate = null;
+          this.startTime = '19:00';
         } else {
           console.log(res.message);
         }

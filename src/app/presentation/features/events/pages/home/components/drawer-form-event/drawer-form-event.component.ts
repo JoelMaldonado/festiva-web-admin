@@ -197,7 +197,7 @@ export class DrawerFormEvent implements OnInit, OnChanges {
     this.selectedClub.reset();
     this.selectedEventCategory.reset();
     this.eventDate.reset();
-    this.startTime.reset();
+    this.startTime = new FormControl('19:00');
     this.selectedImageFile = null;
   }
 
