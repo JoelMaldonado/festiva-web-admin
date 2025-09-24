@@ -1,5 +1,5 @@
 import { ArtistType } from '@model/artist-type';
-import { EventCategory } from '@model/event-category';
+import { Category } from '@model/category';
 import { SocialNetwork } from '@model/social-network';
 import { StatusEnum } from 'app/data/enum/status-enum';
 import { Observable } from 'rxjs';
@@ -13,10 +13,8 @@ export abstract class CommonRepository {
   abstract restoreArtistType(id: number): Promise<void>;
 
   // Event Category
-  abstract fetchAllEventCategory(
-    status: StatusEnum
-  ): Observable<EventCategory[]>;
-  abstract getEventCategory(id: number): Observable<EventCategory>;
+  abstract fetchAllEventCategory(status: StatusEnum): Observable<Category[]>;
+  abstract getEventCategory(id: number): Observable<Category>;
   abstract createEventCategory(title: string): Observable<void>;
   abstract updateEventCategory(id: number, title: string): Observable<void>;
   abstract deleteEventCategory(id: number): Observable<void>;

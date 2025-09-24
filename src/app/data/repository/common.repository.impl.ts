@@ -1,21 +1,20 @@
 import { inject, Injectable } from '@angular/core';
 import { ArtistType } from '@model/artist-type';
 import { CommonRepository } from '@repository/common.repository';
-import { catchError, firstValueFrom, map, Observable, of } from 'rxjs';
+import { firstValueFrom, map, Observable } from 'rxjs';
 import { StatusEnum } from '../enum/status-enum';
-import { EventCategory } from '@model/event-category';
 import { ArtistTypeService } from '@services/artist-type.service';
-import { EventCategoryService } from '@services/event-category.service';
+import { CategoryService } from '@services/category.service';
 import { SocialNetwork } from '@model/social-network';
 import { SocialNetworkService } from '@services/social-network.service';
-import { UploadImageUseCase } from 'app/domain/usecase/upload-image.usecase';
+import { Category } from '@model/category';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommonRepositoryImpl extends CommonRepository {
   private readonly artistTypeService = inject(ArtistTypeService);
-  private readonly eventCategoryService = inject(EventCategoryService);
+  private readonly categoryService = inject(CategoryService);
   private readonly socialNetworkService = inject(SocialNetworkService);
 
   //*********************************************//
@@ -61,30 +60,28 @@ export class CommonRepositoryImpl extends CommonRepository {
   //************************************************//
   //**************** Event Category ****************//
   //************************************************//
-  override fetchAllEventCategory(
-    status: StatusEnum
-  ): Observable<EventCategory[]> {
-    return this.eventCategoryService.fetchAll(status).pipe(
+  override fetchAllEventCategory(status: StatusEnum): Observable<Category[]> {
+    return this.categoryService.fetchAll(status).pipe(
       map((res) => {
         if (!res.isSuccess) {
           throw new Error(res.message);
         }
-        return res.data?.map((e) => EventCategory.fromDto(e)) ?? [];
+        return res.data ?? [];
       })
     );
   }
-  override getEventCategory(id: number): Observable<EventCategory> {
-    return this.eventCategoryService.getById(id).pipe(
+  override getEventCategory(id: number): Observable<Category> {
+    return this.categoryService.getById(id).pipe(
       map((res) => {
         if (!res.isSuccess) {
           throw new Error(res.message);
         }
-        return EventCategory.fromDto(res.data!);
+        return res.data!;
       })
     );
   }
   override createEventCategory(title: string): Observable<void> {
-    return this.eventCategoryService.create(title).pipe(
+    return this.categoryService.create(title).pipe(
       map((res) => {
         if (!res.isSuccess) {
           throw new Error(res.message);
@@ -93,7 +90,7 @@ export class CommonRepositoryImpl extends CommonRepository {
     );
   }
   override updateEventCategory(id: number, title: string): Observable<void> {
-    return this.eventCategoryService.update(id, title).pipe(
+    return this.categoryService.update(id, title).pipe(
       map((res) => {
         if (!res.isSuccess) {
           throw new Error(res.message);
@@ -102,7 +99,7 @@ export class CommonRepositoryImpl extends CommonRepository {
     );
   }
   override deleteEventCategory(id: number): Observable<void> {
-    return this.eventCategoryService.delete(id).pipe(
+    return this.categoryService.delete(id).pipe(
       map((res) => {
         if (!res.isSuccess) {
           throw new Error(res.message);
@@ -111,7 +108,7 @@ export class CommonRepositoryImpl extends CommonRepository {
     );
   }
   override restoreEventCategory(id: number): Observable<void> {
-    return this.eventCategoryService.restore(id).pipe(
+    return this.categoryService.restore(id).pipe(
       map((res) => {
         if (!res.isSuccess) {
           throw new Error(res.message);

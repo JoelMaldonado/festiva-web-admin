@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AppTopComponent } from '@components/app-top.component';
-import { EventCategory } from '@model/event-category';
+import { Category } from '@model/category';
 import { CommonRepository } from '@repository/common.repository';
 import { StatusEnum } from 'app/data/enum/status-enum';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -45,9 +45,9 @@ export class EventCategoriesComponent implements OnInit {
   private readonly confirmationService = inject(ConfirmationService);
   private readonly messageService = inject(MessageService);
 
-  list: EventCategory[] = [];
+  list: Category[] = [];
 
-  eventCategorySelected: EventCategory | null = null;
+  eventCategorySelected: Category | null = null;
   showForm = false;
 
   name = new FormControl('');
@@ -74,9 +74,9 @@ export class EventCategoriesComponent implements OnInit {
     this.showForm = true;
   }
 
-  showFormEdit(eventCagtegory: EventCategory) {
+  showFormEdit(eventCagtegory: Category) {
     this.eventCategorySelected = eventCagtegory;
-    this.name.setValue(eventCagtegory.name);
+    this.name.setValue(eventCagtegory.title);
     this.showForm = true;
   }
 

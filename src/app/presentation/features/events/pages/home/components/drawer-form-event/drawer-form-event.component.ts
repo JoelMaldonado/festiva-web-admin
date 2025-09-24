@@ -22,7 +22,6 @@ import {
 } from 'app/domain/usecase/upload-image.usecase';
 import { StatusEnum } from 'app/data/enum/status-enum';
 import { Club } from '@dto/club';
-import { EventCategory } from '@model/event-category';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ClubService } from 'app/services/club.service';
 import { EventModel } from '@model/event';
@@ -30,6 +29,7 @@ import { EventService } from '@services/event.service';
 import { InputComponent } from '@components/input.component';
 import { AppTextAreaComponent } from '@components/text-area.component';
 import { format, isValid, parse } from 'date-fns';
+import { Category } from '@model/category';
 
 @Component({
   selector: 'drawer-form-event',
@@ -54,12 +54,12 @@ export class DrawerFormEvent implements OnInit, OnChanges {
   private readonly eventService = inject(EventService);
 
   listClub: Club[] = [];
-  listEventCategory: EventCategory[] = [];
+  listEventCategory: Category[] = [];
 
   @Input() event?: EventModel;
 
   selectedClub = new FormControl<Club | undefined>(undefined);
-  selectedEventCategory = new FormControl<EventCategory | undefined>(undefined);
+  selectedEventCategory = new FormControl<Category | undefined>(undefined);
 
   title = '';
   descrip = '';
