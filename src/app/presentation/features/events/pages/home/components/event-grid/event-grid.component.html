@@ -1,6 +1,6 @@
 <section class="flex flex-col gap-4">
   <app-select-date
-    [daySelected]="daySelected"
+    [daySelected]="service.daySelected()"
     (daySelectedChange)="setDay($event)"
   />
 

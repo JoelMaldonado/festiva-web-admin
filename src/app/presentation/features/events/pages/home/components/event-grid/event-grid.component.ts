@@ -18,7 +18,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
-import { AppSelectDateComponent } from "@components/app-select-date.component";
+import { AppSelectDateComponent } from '@components/app-select-date.component';
+import { EventsService } from 'app/presentation/features/events/events.service';
 
 @Component({
   selector: 'event-grid',
@@ -27,24 +28,22 @@ import { AppSelectDateComponent } from "@components/app-select-date.component";
     CommonModule,
     MatIconModule,
     EventCardComponent,
-    AppSelectDateComponent
-],
+    AppSelectDateComponent,
+  ],
 })
 export class EventGridComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly eventService = inject(EventService);
   private readonly router = inject(Router);
-  
-  daySelected = new Date();
+  readonly service = inject(EventsService);
 
   setDay(date: Date) {
     if (!date) return;
-    this.daySelected = date;
+    this.service.daySelected.set(date);
     this.page = 1;
     this.listEvents = [];
     this.endReached = false;
     this.loadNextPage();
   }
-
 
   listEvents: any[] = [];
 
@@ -100,7 +99,7 @@ export class EventGridComponent implements OnInit, AfterViewInit, OnDestroy {
         this.page,
         this.limit,
         undefined,
-        format(this.daySelected, 'yyyy-MM-dd')
+        format(this.service.daySelected(), 'yyyy-MM-dd')
       )
       .pipe(take(1))
       .subscribe({

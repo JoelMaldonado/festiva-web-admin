@@ -21,6 +21,8 @@ export class EventsService {
   eventSelected = signal<EventModel | null>(null);
   isLoadingEvent = signal<boolean>(false);
 
+  daySelected = signal<Date>(new Date());
+
   getAllCategories() {
     this.categoryService.fetchAll(1).subscribe({
       next: (res) => {
