@@ -56,7 +56,7 @@ import { EventsService } from '../events.service';
           </p>
 
           <!-- descripción -->
-          <p class="mt-2 text-sm md:text-base text-slate-300 md:leading-7">
+          <p class="mt-2 text-sm md:text-base text-slate-300 md:leading-7 line-clamp-5">
             {{ service.eventSelected()?.description }}
           </p>
 
