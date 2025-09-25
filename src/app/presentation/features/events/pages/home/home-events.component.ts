@@ -7,6 +7,7 @@ import { DrawerFormEvent } from './components/drawer-form-event/drawer-form-even
 import { EventModel } from '@model/event';
 import { FormsModule } from '@angular/forms';
 import { EventGridComponent } from './components/event-grid/event-grid.component';
+import { AppInputDateComponent } from '@components/input-date.component';
 
 @Component({
   selector: 'home-events',

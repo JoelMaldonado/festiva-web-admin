@@ -14,13 +14,11 @@ import { take } from 'rxjs';
 import { format } from 'date-fns';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatNativeDateModule } from '@angular/material/core';
 import { AppSelectDateComponent } from '@components/app-select-date.component';
 import { EventsService } from 'app/presentation/features/events/events.service';
 import { Category } from '@model/category';
+import { AppInputDateComponent } from '@components/input-date.component';
+import { AppButtonComponent } from "@components/app-button.component";
 
 @Component({
   selector: 'event-grid',
@@ -30,7 +28,8 @@ import { Category } from '@model/category';
     MatIconModule,
     EventCardComponent,
     AppSelectDateComponent,
-  ],
+    AppButtonComponent
+],
 })
 export class EventGridComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly eventService = inject(EventService);
