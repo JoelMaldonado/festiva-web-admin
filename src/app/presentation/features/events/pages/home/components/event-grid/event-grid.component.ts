@@ -11,21 +11,40 @@ import { Router } from '@angular/router';
 import { EventCardComponent } from '@components/event-card.component';
 import { EventService } from '@services/event.service';
 import { take } from 'rxjs';
-import { DateBadgeComponent } from '@components/date-badge.component';
-import { AppFloatingActionButton } from '@components/app-floating-action-button.component';
 import { format } from 'date-fns';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { AppSelectDateComponent } from "@components/app-select-date.component";
 
 @Component({
   selector: 'event-grid',
   templateUrl: `./event-grid.component.html`,
-  imports: [EventCardComponent, DateBadgeComponent, AppFloatingActionButton],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    EventCardComponent,
+    AppSelectDateComponent
+],
 })
 export class EventGridComponent implements OnInit, AfterViewInit, OnDestroy {
-  listDays: Date[] = [];
-  daySelected: Date = new Date();
-
   private readonly eventService = inject(EventService);
   private readonly router = inject(Router);
+  
+  daySelected = new Date();
+
+  setDay(date: Date) {
+    if (!date) return;
+    this.daySelected = date;
+    this.page = 1;
+    this.listEvents = [];
+    this.endReached = false;
+    this.loadNextPage();
+  }
+
 
   listEvents: any[] = [];
 
@@ -39,46 +58,8 @@ export class EventGridComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private io?: IntersectionObserver;
 
-  prevDay() {
-    // retrocede un día
-    const prev = this.daySelected;
-    prev.setDate(prev.getDate() - 1);
-    this.daySelected = prev;
-    this.updateList();
-  }
-
-  nextDay() {
-    const next = new Date(this.daySelected);
-    next.setDate(next.getDate() + 1);
-    this.daySelected = next;
-    this.updateList();
-  }
-
-  updateList() {
-    this.listDays = Array.from({ length: 7 }, (_, i) => {
-      const d = new Date(this.daySelected);
-      d.setDate(this.daySelected.getDate() + i);
-      return d;
-    });
-  }
-
-  selectDay(day: Date) {
-    this.daySelected = day;
-    this.page = 1;
-    this.listEvents = [];
-    this.endReached = false;
-    this.loadNextPage();
-  }
-
   ngOnInit(): void {
     this.loadNextPage();
-    // Inicializa los días (ejemplo: próximos 7 días)
-    const today = new Date();
-    for (let i = 0; i < 7; i++) {
-      const date = new Date();
-      date.setDate(today.getDate() + i);
-      this.listDays.push(date);
-    }
   }
 
   ngAfterViewInit(): void {

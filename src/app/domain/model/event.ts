@@ -9,4 +9,8 @@ export interface EventModel {
   nameClub: string;
   idEventCategory: number;
   idStatus: number;
+
+  clubLogoUrl: string;
+  clubName: string;
+  location: string;
 }

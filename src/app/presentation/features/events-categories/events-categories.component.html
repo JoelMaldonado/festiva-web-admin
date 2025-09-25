@@ -88,7 +88,7 @@
     <!-- Grid de categorías -->
     <ul class="mt-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
       <!-- Item (repítelo con @for; cambia valores por los reales) -->
-      @for (item of listCategories; track $index) {
+      @for (item of service.listCategory(); track $index) {
       <li>
         <label
           class="group relative block cursor-pointer rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-3 hover:shadow-sm transition focus-within:ring-2 focus-within:ring-p1"

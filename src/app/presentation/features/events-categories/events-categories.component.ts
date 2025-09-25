@@ -7,6 +7,7 @@ import { Category } from '@model/category';
 import { EventCategory } from '@model/event-category';
 import { EventCategoryService } from '@services/event-category.service';
 import { delay } from 'rxjs';
+import { EventsService } from '../events/events.service';
 
 @Component({
   selector: 'events-categories-component',
@@ -17,10 +18,9 @@ import { delay } from 'rxjs';
 export class EventsCategoriesComponent {
   @Input() idEvent?: string;
 
-  categoriesService = inject(CategoryService);
-  eventCategoryService = inject(EventCategoryService);
+  private readonly eventCategoryService = inject(EventCategoryService);
+  readonly service = inject(EventsService);
 
-  listCategories: Category[] = [];
   listEventCategories: EventCategory[] = [];
 
   ngOnInit() {
@@ -28,21 +28,7 @@ export class EventsCategoriesComponent {
       alert('Invalid event ID');
       return;
     }
-    this.loadCategories();
     this.loadEventCategories();
-  }
-
-  loadCategories() {
-    this.categoriesService.fetchAll(1).subscribe({
-      next: (result) => {
-        if (result?.isSuccess) {
-          this.listCategories = result.data || [];
-        }
-      },
-      error: (err) => {
-        console.error('Error fetching categories', err);
-      },
-    });
   }
 
   loadEventCategories() {
@@ -63,7 +49,6 @@ export class EventsCategoriesComponent {
     return this.listEventCategories.some((c) => c.categoryId === id);
   }
 
-  /** Toggle al hacer click */
   toggleCategory(id: number): void {
     const exists = this.isSelected(id);
     if (exists) {

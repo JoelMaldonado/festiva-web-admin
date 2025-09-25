@@ -59,7 +59,7 @@ import { AppFloatingActionButton } from './app-floating-action-button.component'
               <span
                 class="inline-flex items-center px-4 py-1.5 rounded-full
                      bg-neutral-900/80 text-white text-sm font-semibold
-                     ring-2 ring-pink-400 shadow-[0_6px_20px_-6px_rgba(255,64,129,0.6)]"
+                     ring-2 ring-p1 shadow-[0_6px_20px_-6px_rgba(255,64,129,0.6)]"
               >
                 {{ category }}
               </span>
