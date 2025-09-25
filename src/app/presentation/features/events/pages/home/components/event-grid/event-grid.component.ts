@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { AppSelectDateComponent } from '@components/app-select-date.component';
 import { EventsService } from 'app/presentation/features/events/events.service';
+import { Category } from '@model/category';
 
 @Component({
   selector: 'event-grid',
@@ -46,6 +47,18 @@ export class EventGridComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   listEvents: any[] = [];
+
+  selectCategory(category: Category) {
+    if (this.service.selectedCategory() === category) {
+      this.service.selectedCategory.set(null);
+    } else {
+      this.service.selectedCategory.set(category);
+    }
+    this.page = 1;
+    this.listEvents = [];
+    this.endReached = false;
+    this.loadNextPage();
+  }
 
   page = 1; // página actual (1-based)
   limit = 20; // tamaño de lote
