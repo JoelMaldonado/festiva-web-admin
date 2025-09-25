@@ -7,12 +7,12 @@ import { EventCategoryService } from '@services/event-category.service';
 import { EventsOldService } from '../events-old/events-old.service';
 
 @Component({
-  selector: 'events-categories-component',
+  selector: 'event-categories-component',
   imports: [EventInfoCardComponent, AppTopComponent, AppButtonComponent],
   standalone: true,
-  templateUrl: './events-categories.component.html',
+  templateUrl: './event-categories.component.html',
 })
-export class EventsCategoriesComponent {
+export class EventCategoriesComponent {
   @Input() idEvent?: string;
 
   private readonly eventCategoryService = inject(EventCategoryService);

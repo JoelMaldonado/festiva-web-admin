@@ -13,6 +13,7 @@ import { Club } from '@dto/club';
 import { FileUploadModule } from 'primeng/fileupload';
 import { DrawerModule } from 'primeng/drawer';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { AppFestButtonComponent } from "@components/app-fest-button.component";
 
 @Component({
   selector: 'app-list-clubs',
@@ -29,7 +30,8 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     FileUploadModule,
     DrawerModule,
     FloatLabelModule,
-  ],
+    AppFestButtonComponent
+],
   templateUrl: './list-clubs.component.html',
 })
 export class ListClubsComponent implements OnInit {

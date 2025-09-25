@@ -1,13 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NgIf } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   standalone: true,
   selector: 'fest-button',
-  imports: [NgIf],
+  imports: [NgIf, MatIconModule],
   template: `
     <button
-      type="button"
+      [type]="type"
       class="fest-btn group relative isolate inline-flex items-center gap-2
              rounded-2xl px-4 py-2.5 text-sm font-semibold text-white
              focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400/60
@@ -33,18 +34,12 @@ import { NgIf } from '@angular/common';
       <span class="relative z-10 inline-flex items-center gap-2">
         <!-- Icono / Spinner -->
         <ng-container *ngIf="!loading; else spinner">
-          <svg
-            viewBox="0 0 24 24"
-            class="h-5 w-5 transition-transform duration-300 group-hover:rotate-6 group-active:scale-90"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
+          @if(matIcon) {
+          <mat-icon
+            class="transition-transform duration-300 group-hover:rotate-6 group-active:scale-90"
+            >{{ matIcon }}</mat-icon
           >
-            <path d="M12 5v14M5 12h14" />
-          </svg>
+          }
         </ng-container>
         <ng-template #spinner>
           <svg
@@ -131,9 +126,12 @@ import { NgIf } from '@angular/common';
   ],
 })
 export class AppFestButtonComponent {
+  @Input() type: 'button' | 'submit' = 'button';
   @Input({ required: true }) label!: string;
   @Input() loading = false;
   @Output() clicked = new EventEmitter<void>();
+
+  @Input() matIcon?: string;
 
   onClick() {
     if (this.loading) return;
