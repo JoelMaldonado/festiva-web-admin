@@ -10,11 +10,10 @@ type Club = {
   coverUrl?: string;
 };
 type Artist = { id: number | string; name: string; avatarUrl?: string };
+
 type Schedule = {
   date: string;
   time: string;
-  endDate?: string;
-  endTime?: string;
 };
 
 @Component({
@@ -110,7 +109,7 @@ export class EventFormComponent {
   selectedCategories = new Set<string>();
 
   // Schedules (al menos 1)
-  schedules: Schedule[] = [{ date: '', time: '', endDate: '', endTime: '' }];
+  schedules: Schedule[] = [{ date: '', time: '' }];
 
   // Imagen única
   imageFile: File | null = null;
@@ -155,7 +154,7 @@ export class EventFormComponent {
   }
 
   addSchedule() {
-    this.schedules.push({ date: '', time: '', endDate: '', endTime: '' });
+    this.schedules.push({ date: '', time: '' });
   }
   removeSchedule(i: number) {
     if (this.schedules.length > 1) this.schedules.splice(i, 1);

@@ -15,10 +15,6 @@ export const eventRoutes: Routes = [
     component: EventFormComponent,
   },
   {
-    path: ':idEvent/edit',
-    component: EventFormComponent,
-  },
-  {
     path: ':idEvent/artists',
     component: EventArtistsComponent,
   },
