@@ -7,8 +7,10 @@ import { CommonModule } from '@angular/common';
 import { InputTimeComponent } from '@components/input-time.component';
 import { format, isValid, parse } from 'date-fns';
 import { EventInfoCardComponent } from '../events-old/components/event-info-card.component';
+import { AppFestButtonComponent } from '@components/app-fest-button.component';
 
 @Component({
+  standalone: true,
   selector: 'app-event-schedule',
   imports: [
     CommonModule,
@@ -17,6 +19,7 @@ import { EventInfoCardComponent } from '../events-old/components/event-info-card
     AppInputDateComponent,
     InputTimeComponent,
     EventInfoCardComponent,
+    AppFestButtonComponent,
   ],
   templateUrl: './event-schedule.component.html',
 })
