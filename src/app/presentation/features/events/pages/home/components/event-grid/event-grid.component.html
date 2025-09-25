@@ -1,4 +1,23 @@
-<section>
+<section class="flex flex-col gap-4">
+  <div class="flex items-center gap-3">
+
+    <app-floating-action-button matIcon="chevron_left" (click)="prevDay()" />
+
+    <div class="flex flex-row gap-2 flex-1">
+      @for (item of listDays; track $index) {
+      <date-badge
+        [date]="item"
+        [isActive]="daySelected === item"
+        (selected)="selectDay(item)"
+      />
+      }
+    </div>
+
+    <!-- Flecha derecha -->
+    <app-floating-action-button matIcon="chevron_right" (click)="nextDay()" />
+  </div>
+
+  <!-- Grid -->
   <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
     @for (item of listEvents; track $index) {
     <event-card
@@ -7,7 +26,22 @@
       [date]="item.eventDate"
       [category]="item.nameEventCategory"
       [venue]="item.nameClub"
+      (toArtists)="toPath(item.id ?? item.eventId, 'artists')"
+      (toSchedule)="toPath(item.id ?? item.eventId, 'schedule')"
+      (toCategory)="toPath(item.id ?? item.eventId, 'categories')"
     />
     }
   </div>
+
+  <!-- Loader / Estado -->
+  @if (loading) {
+  <div class="text-center text-sm opacity-70 py-3">Cargando más eventos…</div>
+  } @if (endReached && listEvents.length > 0) {
+  <div class="text-center text-xs opacity-60 py-3">No hay más eventos</div>
+  } @if (!loading && listEvents.length === 0 && endReached) {
+  <div class="text-center text-sm opacity-70 py-6">Sin resultados</div>
+  }
+
+  <!-- Sentinel: el observer mira este elemento para cargar más -->
+  <div #infiniteScrollAnchor class="h-1"></div>
 </section>

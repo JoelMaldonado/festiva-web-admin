@@ -1,11 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { AppFloatingActionButton } from './app-floating-action-button.component';
 
 @Component({
   standalone: true,
   selector: 'event-card',
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, AppFloatingActionButton],
   template: `
     <article
       class="group relative rounded-2xl ring-1 ring-white/10 shadow-black/30 shadow-md
@@ -82,34 +90,24 @@ import { MatIconModule } from '@angular/material/icon';
           <div class="absolute inset-0 flex items-center justify-center">
             <div class="grid grid-flow-col gap-4">
               <!-- Comprar -->
-              <button
-                type="button"
-                class="h-12 w-12 rounded-full bg-white text-neutral-900 shadow-lg
-                     hover:scale-105 active:scale-95 transition flex items-center justify-center"
-                (click)="onBuy?.()"
-              >
-                <mat-icon>shopping_bag</mat-icon>
-              </button>
 
-              <!-- Compartir -->
-              <button
-                type="button"
-                class="h-12 w-12 rounded-full bg-white text-neutral-900 shadow-lg
-                     hover:scale-105 active:scale-95 transition flex items-center justify-center"
-                (click)="onShare?.()"
-              >
-                <mat-icon>share</mat-icon>
-              </button>
+              <app-floating-action-button
+                matIcon="group"
+                tooltip="Artists"
+                (clicked)="clickedArtists()"
+              />
 
-              <!-- Guardar -->
-              <button
-                type="button"
-                class="h-12 w-12 rounded-full bg-white text-neutral-900 shadow-lg
-                     hover:scale-105 active:scale-95 transition flex items-center justify-center"
-                (click)="onSave?.()"
-              >
-                <mat-icon>favorite</mat-icon>
-              </button>
+              <app-floating-action-button
+                matIcon="calendar_month"
+                tooltip="Schedule"
+                (clicked)="clickedSchedule()"
+              />
+
+              <app-floating-action-button
+                matIcon="category"
+                tooltip="Category"
+                (clicked)="clickedCategory()"
+              />
             </div>
           </div>
 
@@ -136,13 +134,24 @@ export class EventCardComponent {
   @Input() venue?: string;
 
   // acciones opcionales
-  @Input() onBuy?: () => void;
-  @Input() onShare?: () => void;
-  @Input() onSave?: () => void;
+  @Output() toArtists = new EventEmitter<void>();
+  @Output() toSchedule = new EventEmitter<void>();
+  @Output() toCategory = new EventEmitter<void>();
+
+  clickedArtists() {
+    this.toArtists?.emit();
+  }
+
+  clickedSchedule() {
+    this.toSchedule?.emit();
+  }
+
+  clickedCategory() {
+    this.toCategory?.emit();
+  }
 
   flipped = false;
 
-  // Mobile: permitir tap para voltear
   toggleFlip() {
     this.flipped = !this.flipped;
   }
