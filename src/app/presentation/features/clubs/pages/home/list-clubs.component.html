@@ -21,100 +21,167 @@
       <p-button type="submit" icon="pi pi-search" label="Buscar" />
     </form>
   </div>
-  <p-table
-    [value]="clubsFiltered"
-    [loading]="isLoading"
-    [paginator]="true"
-    [rows]="10"
+
+  <!-- Estado: cargando -->
+  @if (isLoading) {
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
   >
-    <ng-template #header>
-      <tr>
-        <th>Club</th>
-        <th>Actions</th>
-      </tr>
-    </ng-template>
-    <ng-template #body let-product>
-      <tr>
-        <td>
-          <div class="flex flex-row items-center gap-2">
-            <img
-              [src]="product.logoUrl"
-              alt="Logo"
-              class="object-cover w-10 h-10 rounded-md"
-            />
-            {{ product.name }}
-          </div>
-        </td>
-        <td>
-          <div>
-            <p-button
-              pTooltip="Covers"
-              showDelay="100"
-              hideDelay="100"
-              icon="pi pi-camera"
-              [rounded]="true"
-              [text]="true"
-              (click)="toPath(product.id, 'covers')"
-            />
-            <p-button
-              pTooltip="Locations"
-              showDelay="100"
-              hideDelay="100"
-              icon="pi pi-map-marker"
-              [rounded]="true"
-              [text]="true"
-              (click)="toPath(product.id, 'locations')"
-            />
+    @for (s of [0,1,2,3,4,5,6,7]; track $index) {
+    <div
+      class="h-64 rounded-2xl border border-white/10 bg-white/5 animate-pulse"
+    ></div>
+    }
+  </div>
+  } @else {
 
-            <p-button
-              pTooltip="Detail"
-              showDelay="100"
-              hideDelay="100"
-              icon="pi pi-eye"
-              [rounded]="true"
-              [text]="true"
-              (click)="toDetail(product.id)"
-            />
-            <p-button
-              pTooltip="Schedule"
-              showDelay="100"
-              hideDelay="100"
-              icon="pi pi-clock"
-              [rounded]="true"
-              [text]="true"
-              (click)="toPath(product.id, 'schedule')"
-            />
-            <p-button
-              pTooltip="Social Networks"
-              showDelay="100"
-              hideDelay="100"
-              icon="pi pi-share-alt"
-              [rounded]="true"
-              [text]="true"
-              (click)="toPath(product.id, 'social-networks')"
-            />
-            <p-button
-              pTooltip="Contact Email"
-              showDelay="100"
-              hideDelay="100"
-              icon="pi pi-envelope"
-              [rounded]="true"
-              [text]="true"
-              (click)="toPath(product.id, 'emails')"
-            />
+  <!-- Estado: sin resultados -->
+  @if (!clubsFiltered || clubsFiltered.length === 0) {
+  <div
+    class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl ring-1 ring-white/10 p-10 text-center"
+  >
+    <p class="text-slate-300 font-semibold">No se encontraron clubes</p>
+    <p class="text-sm text-slate-400 mt-1">Ajusta tu búsqueda o filtros.</p>
+  </div>
+  } @else {
 
-            <p-button
-              pTooltip="Contact Phone"
-              showDelay="100"
-              hideDelay="100"
-              icon="pi pi-phone"
-              [rounded]="true"
-              [text]="true"
-              (click)="toPath(product.id, 'phones')"
-            />
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+  <!-- Grid de cards (sin paginación) -->
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
+  >
+    @for (club of clubsFiltered; track club.id) {
+    <article
+      class="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl ring-1 ring-white/10 shadow-xl transition hover:shadow-2xl hover:ring-white/20"
+    >
+      <!-- Media -->
+      <div class="relative aspect-[16/10] bg-neutral-900">
+        <img
+          [src]="club.covers[0]?.urlImage || club.logoUrl"
+          alt="Cover {{ club.name }}"
+          class="h-full w-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"
+        ></div>
+
+        <!-- Logo -->
+        <img
+          [src]="club.logoUrl"
+          alt="Logo {{ club.name }}"
+          class="absolute top-3 right-3 h-10 w-10 rounded-xl object-cover border border-white/20 bg-white/10 backdrop-blur-sm"
+          loading="lazy"
+          decoding="async"
+        />
+
+        <!-- Nombre -->
+        <div class="absolute left-3 bottom-3">
+          <span
+            class="inline-flex items-center rounded-xl bg-black/50 px-3 py-1 text-sm font-semibold text-white ring-1 ring-white/15"
+          >
+            {{ club.name }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="p-4">
+        <!-- ID (discreto) -->
+        <div class="text-xs text-slate-400">
+          ID: <span class="text-slate-300 font-medium">#{{ club.id }}</span>
+        </div>
+
+        <!-- Acciones -->
+        <div class="mt-3 flex flex-wrap items-center gap-1.5">
+          <p-button
+            pTooltip="Covers"
+            showDelay="100"
+            hideDelay="100"
+            icon="pi pi-camera"
+            [rounded]="true"
+            [text]="true"
+            [styleClass]="
+              '!text-slate-200 hover:!bg-white/10 !border !border-white/10 !rounded-lg'
+            "
+            (click)="toPath(club.id, 'covers')"
+          />
+          <p-button
+            pTooltip="Locations"
+            showDelay="100"
+            hideDelay="100"
+            icon="pi pi-map-marker"
+            [rounded]="true"
+            [text]="true"
+            [styleClass]="
+              '!text-slate-200 hover:!bg-white/10 !border !border-white/10 !rounded-lg'
+            "
+            (click)="toPath(club.id, 'locations')"
+          />
+          <p-button
+            pTooltip="Detail"
+            showDelay="100"
+            hideDelay="100"
+            icon="pi pi-eye"
+            [rounded]="true"
+            [text]="true"
+            [styleClass]="
+              '!text-slate-200 hover:!bg-white/10 !border !border-white/10 !rounded-lg'
+            "
+            (click)="toDetail(club.id)"
+          />
+          <p-button
+            pTooltip="Schedule"
+            showDelay="100"
+            hideDelay="100"
+            icon="pi pi-clock"
+            [rounded]="true"
+            [text]="true"
+            [styleClass]="
+              '!text-slate-200 hover:!bg-white/10 !border !border-white/10 !rounded-lg'
+            "
+            (click)="toPath(club.id, 'schedule')"
+          />
+          <p-button
+            pTooltip="Social Networks"
+            showDelay="100"
+            hideDelay="100"
+            icon="pi pi-share-alt"
+            [rounded]="true"
+            [text]="true"
+            [styleClass]="
+              '!text-slate-200 hover:!bg-white/10 !border !border-white/10 !rounded-lg'
+            "
+            (click)="toPath(club.id, 'social-networks')"
+          />
+          <p-button
+            pTooltip="Contact Email"
+            showDelay="100"
+            hideDelay="100"
+            icon="pi pi-envelope"
+            [rounded]="true"
+            [text]="true"
+            [styleClass]="
+              '!text-slate-200 hover:!bg-white/10 !border !border-white/10 !rounded-lg'
+            "
+            (click)="toPath(club.id, 'emails')"
+          />
+          <p-button
+            pTooltip="Contact Phone"
+            showDelay="100"
+            hideDelay="100"
+            icon="pi pi-phone"
+            [rounded]="true"
+            [text]="true"
+            [styleClass]="
+              '!text-slate-200 hover:!bg-white/10 !border !border-white/10 !rounded-lg'
+            "
+            (click)="toPath(club.id, 'phones')"
+          />
+        </div>
+      </div>
+    </article>
+    }
+  </div>
+  } }
 </div>
