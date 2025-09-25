@@ -24,9 +24,12 @@ export class EventsDashboardService {
   }
 
   // filters
+  searchInput = signal<string>('');
+
   selectedCategory = signal<Category | null>(null);
-  daySelected = signal<Date>(new Date());
   listCategory = signal<Category[]>([]);
+
+  daySelected = signal<Date>(new Date());
 
   // pagination
   listEvents: any[] = [];
@@ -53,6 +56,12 @@ export class EventsDashboardService {
     });
   }
 
+  resetPagination() {
+    this.page = 1;
+    this.listEvents = [];
+    this.endReached = false;
+  }
+
   loadNextPage() {
     if (this.loading || this.endReached) return;
     this.loading = true;
@@ -62,7 +71,8 @@ export class EventsDashboardService {
         this.page,
         this.limit,
         this.selectedCategory()?.id,
-        format(this.daySelected(), 'yyyy-MM-dd')
+        format(this.daySelected(), 'yyyy-MM-dd'),
+        this.searchInput()
       )
       .pipe(take(1))
       .subscribe({
@@ -94,9 +104,7 @@ export class EventsDashboardService {
   setDay(date: Date) {
     if (!date) return;
     this.daySelected.set(date);
-    this.page = 1;
-    this.listEvents = [];
-    this.endReached = false;
+    this.resetPagination();
     this.loadNextPage();
   }
 
@@ -106,9 +114,7 @@ export class EventsDashboardService {
     } else {
       this.selectedCategory.set(category);
     }
-    this.page = 1;
-    this.listEvents = [];
-    this.endReached = false;
+    this.resetPagination();
     this.loadNextPage();
   }
 }

@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { EventsDashboardService } from './events-dashboard.service';
 import { Drawer } from 'primeng/drawer';
 import { EventsFormComponent } from './components/events-form.component';
-import { EventsDashboardHeaderComponent } from './components/events-dashboard-header.component';
+import { EventsFiltersComponent } from './components/events-filters.component';
 import { EventsGridComponent } from './components/events-grid.component';
 
 @Component({
@@ -14,7 +14,7 @@ import { EventsGridComponent } from './components/events-grid.component';
     CommonModule,
     MatIconModule,
     Drawer,
-    EventsDashboardHeaderComponent,
+    EventsFiltersComponent,
     EventsGridComponent,
     EventsFormComponent,
   ],
@@ -31,7 +31,7 @@ import { EventsGridComponent } from './components/events-grid.component';
         />
       </p-drawer>
 
-      <events-dashboard-header />
+      <events-filters />
 
       <events-grid
         [listEvents]="service.listEvents"

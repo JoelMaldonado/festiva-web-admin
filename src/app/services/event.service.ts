@@ -31,7 +31,8 @@ export class EventService {
     page: number,
     limit: number,
     categoryId?: number,
-    date?: string
+    date?: string,
+    search?: string
   ) {
     let params = new HttpParams().set('page', page).set('limit', limit);
 
@@ -40,6 +41,9 @@ export class EventService {
     }
     if (date) {
       params = params.set('date', date);
+    }
+    if (search) {
+      params = params.set('search', search);
     }
 
     return this.http.get<Result<any>>(`${this.url}/paged`, { params });

@@ -3,12 +3,19 @@ import { Component, inject } from '@angular/core';
 import { AppSelectDateComponent } from '@components/app-select-date.component';
 import { EventsDashboardService } from '../events-dashboard.service';
 import { AppFestButtonComponent } from '@components/app-fest-button.component';
-import { EventsMetricsComponent } from "./events-metrics.component";
+import { EventsMetricsComponent } from './events-metrics.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
-  selector: 'events-dashboard-header',
-  imports: [CommonModule, AppSelectDateComponent, AppFestButtonComponent, EventsMetricsComponent],
+  selector: 'events-filters',
+  imports: [
+    CommonModule,
+    FormsModule,
+    AppSelectDateComponent,
+    AppFestButtonComponent,
+    EventsMetricsComponent,
+  ],
   template: `
     <section class="max-w-6xl mx-auto px-4">
       <article
@@ -44,6 +51,7 @@ import { EventsMetricsComponent } from "./events-metrics.component";
               <input
                 id="q"
                 type="text"
+                [(ngModel)]="service.searchInput"
                 placeholder="Buscar eventos por su nombre"
                 class="w-full rounded-xl border border-white/10 bg-white/5 text-slate-100 placeholder:text-slate-400 px-4 py-2.5 pr-12 outline-none focus:ring-2 focus:ring-pink-500/40"
               />
@@ -51,6 +59,7 @@ import { EventsMetricsComponent } from "./events-metrics.component";
                 type="button"
                 class="absolute right-1.5 top-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-slate-200 hover:bg-white/10 border border-white/10"
                 aria-label="Buscar"
+                (click)="search()"
               >
                 Buscar
               </button>
@@ -88,9 +97,13 @@ import { EventsMetricsComponent } from "./events-metrics.component";
     </section>
   `,
 })
-export class EventsDashboardHeaderComponent {
+export class EventsFiltersComponent {
   readonly service = inject(EventsDashboardService);
 
+  search() {
+    this.service.resetPagination();
+    this.service.loadNextPage();
+  }
   showForm() {
     this.service.showForm = true;
   }
