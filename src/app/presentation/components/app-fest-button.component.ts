@@ -1,22 +1,27 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { NgIf } from '@angular/common';
 
 @Component({
   standalone: true,
   selector: 'fest-button',
+  imports: [NgIf],
   template: `
     <button
       type="button"
       class="fest-btn group relative isolate inline-flex items-center gap-2
              rounded-2xl px-4 py-2.5 text-sm font-semibold text-white
              focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400/60
-             transition active:scale-[0.98] select-none"
-      (click)="onClick()"
+             transition active:scale-[0.98] select-none
+             disabled:opacity-60 disabled:cursor-not-allowed"
+      [disabled]="loading"
       [attr.aria-label]="label"
+      [attr.aria-busy]="loading"
+      (click)="onClick()"
     >
       <!-- Fondo visible SIEMPRE -->
       <span class="bg absolute inset-0 rounded-2xl z-0"></span>
 
-      <!-- Halo (debajo del botón, pero contenido al stacking del botón) -->
+      <!-- Halo -->
       <span class="glow absolute -inset-px rounded-2xl -z-10"></span>
 
       <!-- Borde/shine sutil -->
@@ -26,19 +31,45 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
       <!-- Contenido -->
       <span class="relative z-10 inline-flex items-center gap-2">
-        <svg
-          viewBox="0 0 24 24"
-          class="h-5 w-5 transition-transform duration-300
-                 group-hover:rotate-6 group-active:scale-90"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M12 5v14M5 12h14" />
-        </svg>
+        <!-- Icono / Spinner -->
+        <ng-container *ngIf="!loading; else spinner">
+          <svg
+            viewBox="0 0 24 24"
+            class="h-5 w-5 transition-transform duration-300 group-hover:rotate-6 group-active:scale-90"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+        </ng-container>
+        <ng-template #spinner>
+          <svg
+            class="h-5 w-5 animate-spin"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            />
+            <path
+              class="opacity-90"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4A4 4 0 004 12z"
+            />
+          </svg>
+        </ng-template>
+
+        <!-- Texto (si prefieres cambiarlo en loading, cámbialo a 'Procesando…') -->
         {{ label }}
       </span>
     </button>
@@ -49,7 +80,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
         display: inline-block;
       }
 
-      /* Gradiente que se mueve en hover/focus */
       .fest-btn .bg {
         background: linear-gradient(90deg, #ec4899, #a855f7, #22d3ee, #ec4899);
         background-size: 300% 300%;
@@ -63,7 +93,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
         filter: saturate(1.3);
       }
 
-      /* Halo/glow bonito que aparece en hover */
       .fest-btn .glow {
         background: conic-gradient(
           from 90deg,
@@ -78,17 +107,15 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
       }
       .fest-btn:hover .glow,
       .fest-btn:focus-visible .glow {
-        opacity: 0.9;
+        opacity: 0.85;
       }
 
-      /* Borde/shine interno sutil */
       .fest-btn .shine {
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18),
           0 10px 30px -10px rgba(236, 72, 153, 0.55);
         border: 1px solid rgba(255, 255, 255, 0.1);
       }
 
-      /* Animación del gradiente */
       @keyframes festGradient {
         0% {
           background-position: 0% 50%;
@@ -104,10 +131,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   ],
 })
 export class AppFestButtonComponent {
-  @Input() label = 'Crear Evento';
+  @Input({ required: true }) label!: string;
+  @Input() loading = false;
   @Output() clicked = new EventEmitter<void>();
 
   onClick() {
+    if (this.loading) return;
     this.clicked.emit();
   }
 }

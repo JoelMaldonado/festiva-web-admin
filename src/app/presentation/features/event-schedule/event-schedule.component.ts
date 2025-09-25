@@ -6,7 +6,7 @@ import { AppInputDateComponent } from '@components/input-date.component';
 import { CommonModule } from '@angular/common';
 import { InputTimeComponent } from '@components/input-time.component';
 import { format, isValid, parse } from 'date-fns';
-import { EventInfoCardComponent } from '../../components/event-info-card.component';
+import { EventInfoCardComponent } from "../events-old/components/event-info-card.component";
 
 @Component({
   selector: 'app-event-schedule',
@@ -16,8 +16,8 @@ import { EventInfoCardComponent } from '../../components/event-info-card.compone
     TableModule,
     AppInputDateComponent,
     InputTimeComponent,
-    EventInfoCardComponent,
-  ],
+    EventInfoCardComponent
+],
   templateUrl: './event-schedule.component.html',
 })
 export class EventScheduleComponent implements OnInit {

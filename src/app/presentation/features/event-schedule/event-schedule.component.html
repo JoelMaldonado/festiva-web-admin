@@ -25,22 +25,8 @@
         (click)="save()"
         aria-label="Guardar horario"
       >
+        @if (isLoadingSaving) {
         <svg
-          *ngIf="!isLoadingSaving"
-          class="h-5 w-5"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M12 5v14M5 12h14" />
-        </svg>
-
-        <svg
-          *ngIf="isLoadingSaving"
           class="h-5 w-5 animate-spin"
           viewBox="0 0 24 24"
           fill="none"
@@ -60,6 +46,20 @@
             d="M4 12a8 8 0 018-8v4A4 4 0 004 12z"
           ></path>
         </svg>
+        } @else {
+        <svg
+          class="h-5 w-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+        }
 
         <span>{{ isLoadingSaving ? "Guardando…" : "Guardar" }}</span>
       </button>

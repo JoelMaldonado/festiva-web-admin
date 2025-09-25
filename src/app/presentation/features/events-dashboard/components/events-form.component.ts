@@ -47,7 +47,7 @@ import { AppFestButtonComponent } from '@components/app-fest-button.component';
     AppFestButtonComponent,
   ],
   template: `
-    <form (submit)="onSubmit($event)" class="flex flex-col gap-4 pt-2">
+    <form (submit)="onSubmit()" class="flex flex-col gap-4 pt-2">
       <!-- Select Club -->
       <p-select
         [options]="listClub"
@@ -109,8 +109,8 @@ import { AppFestButtonComponent } from '@components/app-fest-button.component';
 
       <fest-button
         label="Save"
-        loading="isLoading"
-        (clicked)="onSubmit($event)"
+        [loading]="isLoading"
+        (clicked)="onSubmit()"
       />
     </form>
   `,
@@ -164,9 +164,7 @@ export class EventsFormComponent implements OnInit, OnChanges {
     }
   }
 
-  async onSubmit(e: any) {
-    e.preventDefault();
-
+  async onSubmit() {
     if (this.selectedClub.invalid) {
       this.selectedClub.markAsTouched();
       return;
