@@ -14,9 +14,13 @@ export class EventScheduleService {
     return this.http.get<Result<any>>(`${this.url}/${idEvent}`);
   }
 
-  save(
-    query: any
-  ) {
-    return this.http.post<Result<any>>(`${this.url}`, query);
+  save(eventId: string | number, eventDate: string, startTime: string) {
+    const body = {
+      eventId,
+      eventDate,
+      startTime,
+    };
+
+    return this.http.post<Result<any>>(`${this.url}`, body);
   }
 }

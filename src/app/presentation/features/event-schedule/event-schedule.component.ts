@@ -6,7 +6,7 @@ import { AppInputDateComponent } from '@components/input-date.component';
 import { CommonModule } from '@angular/common';
 import { InputTimeComponent } from '@components/input-time.component';
 import { format, isValid, parse } from 'date-fns';
-import { EventInfoCardComponent } from "../events-old/components/event-info-card.component";
+import { EventInfoCardComponent } from '../events-old/components/event-info-card.component';
 
 @Component({
   selector: 'app-event-schedule',
@@ -16,8 +16,8 @@ import { EventInfoCardComponent } from "../events-old/components/event-info-card
     TableModule,
     AppInputDateComponent,
     InputTimeComponent,
-    EventInfoCardComponent
-],
+    EventInfoCardComponent,
+  ],
   templateUrl: './event-schedule.component.html',
 })
 export class EventScheduleComponent implements OnInit {
@@ -63,6 +63,11 @@ export class EventScheduleComponent implements OnInit {
   }
 
   save() {
+    if (!this.idEvent) {
+      alert('Invalid event ID');
+      return;
+    }
+
     if (!this.eventDate || !this.startTime) {
       alert('Please select both event date and start time');
       return;
@@ -70,29 +75,29 @@ export class EventScheduleComponent implements OnInit {
 
     this.isLoadingSaving = true;
 
-    const body = {
-      eventId: this.idEvent,
-      eventDate: this.formatTime(this.eventDate, 'yyyy-MM-dd'),
-      startTime: this.formatTime(this.startTime, 'HH:mm'),
-    };
-
-    this.eventScheduleService.save(body).subscribe({
-      next: (res) => {
-        if (res.isSuccess) {
-          this.loadEventSchedule();
-          this.eventDate = null;
-          this.startTime = '19:00';
-        } else {
-          console.log(res.message);
-        }
-      },
-      error: (error) => {
-        console.log(error);
-      },
-      complete: () => {
-        this.isLoadingSaving = false;
-      },
-    });
+    this.eventScheduleService
+      .save(
+        this.idEvent,
+        this.formatTime(this.eventDate, 'yyyy-MM-dd'),
+        this.formatTime(this.startTime, 'HH:mm')
+      )
+      .subscribe({
+        next: (res) => {
+          if (res.isSuccess) {
+            this.loadEventSchedule();
+            this.eventDate = null;
+            this.startTime = '19:00';
+          } else {
+            console.log(res.message);
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+        complete: () => {
+          this.isLoadingSaving = false;
+        },
+      });
   }
 
   formatTime(value: Date | string, pattern: string): string {
