@@ -17,8 +17,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { AppSelectDateComponent } from '@components/app-select-date.component';
 import { EventsService } from 'app/presentation/features/events/events.service';
 import { Category } from '@model/category';
-import { AppInputDateComponent } from '@components/input-date.component';
-import { AppButtonComponent } from "@components/app-button.component";
 
 @Component({
   selector: 'event-grid',
@@ -28,8 +26,7 @@ import { AppButtonComponent } from "@components/app-button.component";
     MatIconModule,
     EventCardComponent,
     AppSelectDateComponent,
-    AppButtonComponent
-],
+  ],
 })
 export class EventGridComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly eventService = inject(EventService);
