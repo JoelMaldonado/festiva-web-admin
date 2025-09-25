@@ -1,25 +1,23 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { EventScheduleService } from '@services/event-schedule.service';
 import { AppTopComponent } from '@components/app-top.component';
-import { Button } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { AppInputDateComponent } from '@components/input-date.component';
 import { CommonModule } from '@angular/common';
 import { InputTimeComponent } from '@components/input-time.component';
 import { format, isValid, parse } from 'date-fns';
-import { EventInfoCardComponent } from "../../components/event-info-card.component";
+import { EventInfoCardComponent } from '../../components/event-info-card.component';
 
 @Component({
   selector: 'app-event-schedule',
   imports: [
     CommonModule,
     AppTopComponent,
-    Button,
     TableModule,
     AppInputDateComponent,
     InputTimeComponent,
-    EventInfoCardComponent
-],
+    EventInfoCardComponent,
+  ],
   templateUrl: './event-schedule.component.html',
 })
 export class EventScheduleComponent implements OnInit {
