@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Result } from '@dto/result';
 import { EventModel } from '@model/event';
@@ -25,5 +25,23 @@ export class EventService {
 
   fetchEventSchedule(idEvent: string) {
     return this.http.get<Result<any>>(`${this.url}/${idEvent}/schedule`);
+  }
+
+  fetchAllPaged(
+    page: number,
+    limit: number,
+    categoryId?: number,
+    date?: string
+  ) {
+    let params = new HttpParams().set('page', page).set('limit', limit);
+
+    if (categoryId != null) {
+      params = params.set('categoryId', categoryId);
+    }
+    if (date) {
+      params = params.set('date', date);
+    }
+
+    return this.http.get<Result<any>>(`${this.url}/paged`, { params });
   }
 }

@@ -8,7 +8,9 @@ import { Router } from '@angular/router';
 import { EventService } from '@services/event.service';
 import { EventModel } from '@model/event';
 import { FormsModule } from '@angular/forms';
-import { InputComponent } from "@components/input.component";
+import { InputComponent } from '@components/input.component';
+import { EventCardComponent } from '@components/event-card.component';
+import { EventGridComponent } from "./components/event-grid/event-grid.component";
 
 @Component({
   selector: 'home-events',
@@ -19,12 +21,13 @@ import { InputComponent } from "@components/input.component";
     ButtonModule,
     DrawerModule,
     DrawerFormEvent,
-    InputComponent
+    InputComponent,
+    EventGridComponent
 ],
   templateUrl: './home-events.component.html',
   standalone: true,
 })
-export class HomeEventsComponent implements OnInit {
+export class HomeEventsComponent {
   private readonly eventService = inject(EventService);
   private readonly router = inject(Router);
 
@@ -34,24 +37,8 @@ export class HomeEventsComponent implements OnInit {
   showForm = false;
   isLoadingTable = true;
 
-  ngOnInit() {
-    this.getAll();
-  }
-
-  getAll() {
-    this.isLoadingTable = true;
-    this.eventService.fetchAll().subscribe({
-      next: (res) => {
-        this.listEvents = res.data || [];
-      },
-      error: (err) => console.error(err),
-      complete: () => (this.isLoadingTable = false),
-    });
-  }
-
   onSaved() {
     this.drawerForm = false;
-    this.getAll();
   }
 
   toPath(id: number, path: string) {
