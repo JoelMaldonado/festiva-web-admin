@@ -1,11 +1,14 @@
 <section class="flex flex-col gap-4">
-
-  <app-select-date [daySelected]="daySelected" (daySelectedChange)="setDay($event)" />
+  <app-select-date
+    [daySelected]="daySelected"
+    (daySelectedChange)="setDay($event)"
+  />
 
   <!-- Grid -->
   <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
     @for (item of listEvents; track $index) {
     <event-card
+      [eventId]="item.eventId"
       [coverUrl]="item.imageUrl"
       [title]="item.title"
       [date]="item.eventDate"

@@ -77,6 +77,11 @@ import { AppFloatingActionButton } from './app-floating-action-button.component'
               <mat-icon class="opacity-70">location_on</mat-icon>
               <span class="text-sm truncate">{{ venue }}</span>
             </div>
+
+            <!-- ID del evento (discreto) -->
+            <div class="mt-1 text-right text-neutral-400/70 italic text-sm">
+              #{{ eventId }}
+            </div>
           </div>
         </div>
 
@@ -127,6 +132,7 @@ import { AppFloatingActionButton } from './app-floating-action-button.component'
   `,
 })
 export class EventCardComponent {
+  @Input() eventId?: string;
   @Input() coverUrl?: string;
   @Input() title?: string;
   @Input() date?: Date;

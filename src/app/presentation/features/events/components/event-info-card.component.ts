@@ -1,5 +1,4 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { EventService } from '@services/event.service';
 import { EventsService } from '../events.service';
 
 @Component({
@@ -52,6 +51,9 @@ import { EventsService } from '../events.service';
           <h2 class="text-xl md:text-2xl font-extrabold leading-tight">
             {{ service.eventSelected()?.title }}
           </h2>
+          <p class="mt-1 text-sm text-slate-400/70 italic">
+            ID: {{ service.eventSelected()?.id }}
+          </p>
 
           <!-- descripción -->
           <p class="mt-2 text-sm md:text-base text-slate-300 md:leading-7">
