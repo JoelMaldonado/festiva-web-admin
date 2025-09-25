@@ -25,7 +25,10 @@ import { EventsGridComponent } from './components/events-grid.component';
         [(visible)]="service.showForm"
         position="right"
       >
-        <events-form (onSaved)="service.onSaved()" />
+        <events-form
+          [listCategory]="service.listCategory()"
+          (onSaved)="service.onSaved()"
+        />
       </p-drawer>
 
       <events-dashboard-header />

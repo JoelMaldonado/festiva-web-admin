@@ -3,6 +3,7 @@ import { Category } from '@model/category';
 import { EventModel } from '@model/event';
 import { CategoryService } from '@services/category.service';
 import { EventService } from '@services/event.service';
+import { StatusEnum } from 'app/data/enum/status-enum';
 import { format } from 'date-fns';
 import { take } from 'rxjs';
 
@@ -40,7 +41,7 @@ export class EventsDashboardService {
   }
 
   getAllCategories() {
-    this.categoryService.fetchAll(1).subscribe({
+    this.categoryService.fetchAll(StatusEnum.active).subscribe({
       next: (res) => {
         if (res.isSuccess) {
           this.listCategory.set(res.data || []);

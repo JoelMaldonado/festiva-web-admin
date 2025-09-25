@@ -9,7 +9,6 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { CommonRepository } from '@repository/common.repository';
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
@@ -20,7 +19,6 @@ import {
   FolderFirebase,
   UploadImageUseCase,
 } from 'app/domain/usecase/upload-image.usecase';
-import { StatusEnum } from 'app/data/enum/status-enum';
 import { Club } from '@dto/club';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ClubService } from 'app/services/club.service';
@@ -30,6 +28,7 @@ import { InputComponent } from '@components/input.component';
 import { AppTextAreaComponent } from '@components/text-area.component';
 import { format, isValid, parse } from 'date-fns';
 import { Category } from '@model/category';
+import { AppFestButtonComponent } from '@components/app-fest-button.component';
 
 @Component({
   standalone: true,
@@ -45,6 +44,7 @@ import { Category } from '@model/category';
     DatePickerModule,
     InputComponent,
     AppTextAreaComponent,
+    AppFestButtonComponent,
   ],
   template: `
     <form (submit)="onSubmit($event)" class="flex flex-col gap-4 pt-2">
@@ -59,8 +59,8 @@ import { Category } from '@model/category';
 
       <!-- Select Category -->
       <p-select
-        [options]="listEventCategory"
-        [formControl]="selectedEventCategory"
+        [options]="listCategory"
+        [formControl]="selectedCategory"
         optionLabel="title"
         placeholder="Select Category"
         class="w-full"
@@ -107,28 +107,27 @@ import { Category } from '@model/category';
         (onSelect)="onSelectImage($event)"
       />
 
-      <p-button
-        type="submit"
-        label="Guardar"
-        styleClass="w-full"
-        [loading]="isLoading"
+      <fest-button
+        label="Save"
+        loading="isLoading"
+        (clicked)="onSubmit($event)"
       />
     </form>
   `,
 })
 export class EventsFormComponent implements OnInit, OnChanges {
   private readonly clubService = inject(ClubService);
-  private readonly commonRepository = inject(CommonRepository);
   private readonly uploadImage = inject(UploadImageUseCase);
   private readonly eventService = inject(EventService);
 
+  @Input({ required: true }) listCategory: Category[] = [];
+
   listClub: Club[] = [];
-  listEventCategory: Category[] = [];
 
   @Input() event?: EventModel;
 
   selectedClub = new FormControl<Club | undefined>(undefined);
-  selectedEventCategory = new FormControl<Category | undefined>(undefined);
+  selectedCategory = new FormControl<Category | undefined>(undefined);
 
   title = '';
   descrip = '';
@@ -145,7 +144,6 @@ export class EventsFormComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.getAllClub();
-    this.getAllEventCategory();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -162,7 +160,7 @@ export class EventsFormComponent implements OnInit, OnChanges {
       this.descrip = '';
       this.eventDate.reset();
       this.selectedClub.reset();
-      this.selectedEventCategory.reset();
+      this.selectedCategory.reset();
     }
   }
 
@@ -174,8 +172,8 @@ export class EventsFormComponent implements OnInit, OnChanges {
       return;
     }
 
-    if (this.selectedEventCategory.invalid) {
-      this.selectedEventCategory.markAsTouched();
+    if (this.selectedCategory.invalid) {
+      this.selectedCategory.markAsTouched();
       return;
     }
 
@@ -207,7 +205,7 @@ export class EventsFormComponent implements OnInit, OnChanges {
         imageUrl: imageUrl ?? '',
         eventDate: this.formatTime(this.eventDate.value, 'yyyy-MM-dd'),
         startTime: this.formatTime(this.startTime.value, 'HH:mm'),
-        eventCategoryId: this.selectedEventCategory.value?.id!,
+        eventCategoryId: this.selectedCategory.value?.id!,
       };
 
       console.log(body);
@@ -251,20 +249,11 @@ export class EventsFormComponent implements OnInit, OnChanges {
     });
   }
 
-  async getAllEventCategory() {
-    this.commonRepository.fetchAllEventCategory(StatusEnum.active).subscribe({
-      next: (res) => {
-        this.listEventCategory = res;
-      },
-      error: (err) => console.error(err),
-    });
-  }
-
   resetForm() {
     this.title = '';
     this.descrip = '';
     this.selectedClub.reset();
-    this.selectedEventCategory.reset();
+    this.selectedCategory.reset();
     this.eventDate.reset();
     this.startTime = new FormControl('19:00');
     this.selectedImageFile = null;
