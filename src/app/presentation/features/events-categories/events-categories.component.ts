@@ -1,13 +1,10 @@
 import { Component, inject, Input } from '@angular/core';
-import { EventInfoCardComponent } from '../events/components/event-info-card.component';
+import { EventInfoCardComponent } from '../events-old/components/event-info-card.component';
 import { AppTopComponent } from '@components/app-top.component';
 import { AppButtonComponent } from '@components/app-button.component';
-import { CategoryService } from '@services/category.service';
-import { Category } from '@model/category';
 import { EventCategory } from '@model/event-category';
 import { EventCategoryService } from '@services/event-category.service';
-import { delay } from 'rxjs';
-import { EventsService } from '../events/events.service';
+import { EventsOldService } from '../events-old/events-old.service';
 
 @Component({
   selector: 'events-categories-component',
@@ -19,7 +16,7 @@ export class EventsCategoriesComponent {
   @Input() idEvent?: string;
 
   private readonly eventCategoryService = inject(EventCategoryService);
-  readonly service = inject(EventsService);
+  readonly service = inject(EventsOldService);
 
   listEventCategories: EventCategory[] = [];
 

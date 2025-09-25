@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { EventsService } from '../events.service';
+import { EventsOldService } from '../events-old.service';
 
 @Component({
   selector: 'event-info-card',
@@ -104,7 +104,7 @@ import { EventsService } from '../events.service';
   `,
 })
 export class EventInfoCardComponent implements OnInit {
-  service = inject(EventsService);
+  service = inject(EventsOldService);
 
   @Input({ required: true }) idEvent!: string;
 

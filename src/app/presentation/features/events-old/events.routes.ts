@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { HomeEventsComponent } from './pages/home/home-events.component';
+import { AppEventsComponent } from '../events-dashboard/events-dashboard.component';
 import { EventArtistsComponent } from './pages/artists/event-artists.component';
 import { EventScheduleComponent } from './pages/event-schedule/event-schedule.component';
 import { EventsCategoriesComponent } from '../events-categories/events-categories.component';
@@ -7,7 +7,7 @@ import { EventsCategoriesComponent } from '../events-categories/events-categorie
 export const eventRoutes: Routes = [
   {
     path: '',
-    component: HomeEventsComponent,
+    component: AppEventsComponent,
   },
   {
     path: ':idEvent/artists',

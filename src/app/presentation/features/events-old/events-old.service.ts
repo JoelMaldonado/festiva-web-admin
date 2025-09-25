@@ -8,7 +8,7 @@ import { delay } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class EventsService {
+export class EventsOldService {
   private readonly categoryService = inject(CategoryService);
   private readonly eventService = inject(EventService);
 
@@ -17,12 +17,10 @@ export class EventsService {
   }
 
   listCategory = signal<Category[]>([]);
-  selectedCategory = signal<Category | null>(null);
-
+  
   eventSelected = signal<EventModel | null>(null);
   isLoadingEvent = signal<boolean>(false);
 
-  daySelected = signal<Date>(new Date());
 
   getAllCategories() {
     this.categoryService.fetchAll(1).subscribe({
@@ -44,7 +42,6 @@ export class EventsService {
     this.isLoadingEvent.set(true);
     this.eventService
       .getById(eventId.toString())
-      .pipe(delay(1500))
       .subscribe({
         next: (res) => this.eventSelected.set(res.data),
         error: (err) => console.log(err),
