@@ -17,6 +17,7 @@ export class EventsService {
   }
 
   listCategory = signal<Category[]>([]);
+  selectedCategory = signal<Category | null>(null);
 
   eventSelected = signal<EventModel | null>(null);
   isLoadingEvent = signal<boolean>(false);

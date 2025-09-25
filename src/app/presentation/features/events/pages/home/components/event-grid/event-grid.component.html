@@ -3,6 +3,22 @@
     [daySelected]="service.daySelected()"
     (daySelectedChange)="setDay($event)"
   />
+  <div class="flex flex-wrap gap-2 gap-y-3">
+    @for (item of service.listCategory(); track $index) {
+    <button
+      type="button"
+      class="inline-flex items-center px-5 py-1.5 rounded-full border text-sm font-medium transition focus:outline-none select-none whitespace-nowrap"
+      [ngClass]="
+        service.selectedCategory() === item
+          ? 'border-pink-500 text-white bg-pink-600/20'
+          : 'border-gray-500 text-gray-300 hover:bg-gray-700/30'
+      "
+      (click)="service.selectedCategory.set(item)"
+    >
+      {{ item.title }}
+    </button>
+    }
+  </div>
 
   <!-- Grid -->
   <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">

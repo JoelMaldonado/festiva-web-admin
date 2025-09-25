@@ -98,7 +98,7 @@ export class EventGridComponent implements OnInit, AfterViewInit, OnDestroy {
       .fetchAllPaged(
         this.page,
         this.limit,
-        undefined,
+        this.service.selectedCategory()?.id,
         format(this.service.daySelected(), 'yyyy-MM-dd')
       )
       .pipe(take(1))
