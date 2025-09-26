@@ -104,7 +104,7 @@ import { FestFabButtonComponent } from './fest-fab-button.component';
 
               <fest-fab-button
                 variant="secondary"
-                matIcon="calendar_month"
+                matIcon="date_range"
                 (clicked)="clickedSchedule()"
               />
 
