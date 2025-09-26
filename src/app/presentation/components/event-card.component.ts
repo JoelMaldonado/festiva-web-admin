@@ -9,11 +9,16 @@ import {
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { AppFloatingActionButton } from './app-floating-action-button.component';
+import { FestFabButtonComponent } from './fest-fab-button.component';
 
 @Component({
   standalone: true,
   selector: 'event-card',
-  imports: [CommonModule, MatIconModule, AppFloatingActionButton],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    FestFabButtonComponent
+],
   template: `
     <article
       class="group relative rounded-2xl ring-1 ring-white/10 shadow-black/30 shadow-md
@@ -94,23 +99,22 @@ import { AppFloatingActionButton } from './app-floating-action-button.component'
           <!-- Botones -->
           <div class="absolute inset-0 flex items-center justify-center">
             <div class="grid grid-flow-col gap-4">
-              <!-- Comprar -->
 
-              <app-floating-action-button
+              <fest-fab-button
+                variant="primary"
                 matIcon="group"
-                tooltip="Artists"
                 (clicked)="clickedArtists()"
               />
 
-              <app-floating-action-button
+              <fest-fab-button
+                variant="secondary"
                 matIcon="calendar_month"
-                tooltip="Schedule"
                 (clicked)="clickedSchedule()"
               />
 
-              <app-floating-action-button
+              <fest-fab-button
+                variant="accent"
                 matIcon="category"
-                tooltip="Category"
                 (clicked)="clickedCategory()"
               />
             </div>
