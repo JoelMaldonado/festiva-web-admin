@@ -28,7 +28,7 @@ import { InputComponent } from '@components/input.component';
 import { AppTextAreaComponent } from '@components/text-area.component';
 import { format, isValid, parse } from 'date-fns';
 import { Category } from '@model/category';
-import { AppFestButtonComponent } from '@components/app-fest-button.component';
+import { AppFestButtonComponent } from '@components/fest-button.component';
 
 @Component({
   standalone: true,

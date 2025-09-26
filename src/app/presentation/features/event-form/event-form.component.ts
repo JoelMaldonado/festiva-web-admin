@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AppFestButtonComponent } from '@components/app-fest-button.component';
+import { AppFestButtonComponent } from '@components/fest-button.component';
+import { FestInputComponent } from '@components/fest-input.component';
 
 type Club = {
   id: number | string;
@@ -19,7 +20,12 @@ type Schedule = {
 @Component({
   standalone: true,
   selector: 'app-event-form',
-  imports: [CommonModule, FormsModule, AppFestButtonComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    AppFestButtonComponent,
+    FestInputComponent,
+  ],
   templateUrl: './event-form.component.html',
 })
 export class EventFormComponent {

@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { InputTimeComponent } from '@components/input-time.component';
 import { format, isValid, parse } from 'date-fns';
 import { EventInfoCardComponent } from '../events-old/components/event-info-card.component';
-import { AppFestButtonComponent } from '@components/app-fest-button.component';
+import { AppFestButtonComponent } from '@components/fest-button.component';
 
 @Component({
   standalone: true,

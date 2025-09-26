@@ -13,7 +13,7 @@ import { Club } from '@dto/club';
 import { FileUploadModule } from 'primeng/fileupload';
 import { DrawerModule } from 'primeng/drawer';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { AppFestButtonComponent } from "@components/app-fest-button.component";
+import { AppFestButtonComponent } from "@components/fest-button.component";
 
 @Component({
   selector: 'app-list-clubs',
