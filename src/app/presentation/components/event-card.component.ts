@@ -4,11 +4,9 @@ import {
   EventEmitter,
   HostListener,
   Input,
-  OnInit,
   Output,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { AppFloatingActionButton } from './app-floating-action-button.component';
 import { FestFabButtonComponent } from './fest-fab-button.component';
 
 @Component({
@@ -95,22 +93,24 @@ import { FestFabButtonComponent } from './fest-fab-button.component';
           <!-- Botones -->
           <div class="absolute inset-0 flex items-center justify-center">
             <div class="grid grid-flow-col gap-4">
-      
               <fest-fab-button
                 variant="primary"
                 matIcon="recent_actors"
+                tooltip="Artists"
                 (clicked)="clickedArtists()"
               />
 
               <fest-fab-button
                 variant="secondary"
                 matIcon="date_range"
+                tooltip="Schedule"
                 (clicked)="clickedSchedule()"
               />
 
               <fest-fab-button
                 variant="accent"
                 matIcon="style"
+                tooltip="Categories"
                 (clicked)="clickedCategory()"
               />
             </div>

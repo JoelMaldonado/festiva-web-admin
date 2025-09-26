@@ -1,13 +1,14 @@
 import { CommonModule, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 type FabVariant = 'primary' | 'secondary' | 'accent';
 
 @Component({
   standalone: true,
   selector: 'fest-fab-button',
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, MatTooltipModule],
   template: `
     <div class="relative inline-block group" [ngClass]="'variant-' + variant">
       <button
@@ -20,6 +21,7 @@ type FabVariant = 'primary' | 'secondary' | 'accent';
                disabled:opacity-50 disabled:cursor-not-allowed"
         (click)="onClick()"
         [disabled]="disabled"
+        [matTooltip]="tooltip"
         aria-label="FAB"
       >
         <!-- Glow (neón) -->
@@ -101,6 +103,9 @@ export class FestFabButtonComponent {
 
   /** Variante de color interna (sin hex externos) */
   @Input() variant: FabVariant = 'primary';
+
+  /** Texto del tooltip (opcional) */
+  @Input() tooltip?: string;
 
   /** Deshabilitar botón */
   @Input() disabled = false;
