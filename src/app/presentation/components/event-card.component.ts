@@ -14,11 +14,7 @@ import { FestFabButtonComponent } from './fest-fab-button.component';
 @Component({
   standalone: true,
   selector: 'event-card',
-  imports: [
-    CommonModule,
-    MatIconModule,
-    FestFabButtonComponent
-],
+  imports: [CommonModule, MatIconModule, FestFabButtonComponent],
   template: `
     <article
       class="group relative rounded-2xl ring-1 ring-white/10 shadow-black/30 shadow-md
@@ -99,10 +95,10 @@ import { FestFabButtonComponent } from './fest-fab-button.component';
           <!-- Botones -->
           <div class="absolute inset-0 flex items-center justify-center">
             <div class="grid grid-flow-col gap-4">
-
+      
               <fest-fab-button
                 variant="primary"
-                matIcon="group"
+                matIcon="recent_actors"
                 (clicked)="clickedArtists()"
               />
 
@@ -114,7 +110,7 @@ import { FestFabButtonComponent } from './fest-fab-button.component';
 
               <fest-fab-button
                 variant="accent"
-                matIcon="category"
+                matIcon="style"
                 (clicked)="clickedCategory()"
               />
             </div>
