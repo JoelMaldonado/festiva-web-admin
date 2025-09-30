@@ -70,6 +70,8 @@ import { AppFestButtonComponent } from '@components/fest-button.component';
 
       <app-text-area id="descrip" label="Description" [(model)]="descrip" />
 
+      <app-input id="url" label="URL" [(model)]="url" />
+
       <!-- FECHA -->
       <p-floatlabel variant="on">
         <p-datepicker
@@ -107,11 +109,7 @@ import { AppFestButtonComponent } from '@components/fest-button.component';
         (onSelect)="onSelectImage($event)"
       />
 
-      <fest-button
-        label="Save"
-        [loading]="isLoading"
-        (clicked)="onSubmit()"
-      />
+      <fest-button label="Save" [loading]="isLoading" (clicked)="onSubmit()" />
     </form>
   `,
 })
@@ -131,6 +129,7 @@ export class EventsFormComponent implements OnInit, OnChanges {
 
   title = '';
   descrip = '';
+  url = '';
 
   eventDate = new FormControl(new Date());
   startTime = new FormControl('19:00');
@@ -204,6 +203,7 @@ export class EventsFormComponent implements OnInit, OnChanges {
         eventDate: this.formatTime(this.eventDate.value, 'yyyy-MM-dd'),
         startTime: this.formatTime(this.startTime.value, 'HH:mm'),
         eventCategoryId: this.selectedCategory.value?.id!,
+        ticketUrl: this.url,
       };
 
       console.log(body);

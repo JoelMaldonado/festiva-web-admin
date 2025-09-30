@@ -47,6 +47,8 @@ import { MatInputModule } from '@angular/material/input';
             <input
               matInput
               [matDatepicker]="picker"
+              [min]="minDate"
+              [max]="maxDate"
               [value]="daySelected"
               (dateChange)="onDatePicked($event.value)"
             />
@@ -72,6 +74,10 @@ import { MatInputModule } from '@angular/material/input';
 export class AppSelectDateComponent {
   @Input() daySelected!: Date;
   @Output() daySelectedChange = new EventEmitter<Date>();
+
+  // minDate y maxDate para el datepicker
+  minDate = new Date(2025, 9, 5);
+  maxDate = new Date(2025, 9, 29);
 
   shift(deltaDays: number) {
     const d = new Date(this.daySelected);
