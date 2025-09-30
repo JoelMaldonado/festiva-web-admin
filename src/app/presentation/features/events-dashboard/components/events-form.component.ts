@@ -255,6 +255,7 @@ export class EventsFormComponent implements OnInit, OnChanges {
     this.eventDate.reset();
     this.startTime = new FormControl('19:00');
     this.selectedImageFile = null;
+    this.ticketUrl = '';
   }
 
   onSelectImage(event: any) {
