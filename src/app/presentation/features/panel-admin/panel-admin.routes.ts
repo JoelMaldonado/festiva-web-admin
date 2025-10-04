@@ -1,16 +1,12 @@
 import { Routes } from '@angular/router';
-import { HomePanelAdminComponent } from './pages/home/home-panel-admin.component';
 import { UserTypesComponent } from './pages/user-types/user-types.component';
 import { EventCategoriesComponent } from './pages/event-categories/event-categories.component';
 import { SocialNetworksComponent } from './pages/social-networks/social-networks.component';
 import { ArtistTypesComponent } from './pages/artist-types/artist-types.component';
 import { TrashComponent } from './pages/trash/trash.component';
+import { DynamicQrComponent } from './pages/dynamic-qr/dynamic-qr.component';
 
 export const panelAdminRoutes: Routes = [
-  {
-    path: '',
-    component: HomePanelAdminComponent,
-  },
   {
     path: 'user-types',
     component: UserTypesComponent,
@@ -30,5 +26,9 @@ export const panelAdminRoutes: Routes = [
   {
     path: 'trash',
     component: TrashComponent,
+  },
+  {
+    path: 'dynamic-qr',
+    component: DynamicQrComponent,
   },
 ];

@@ -10,7 +10,6 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { AppTopComponent } from '../../../../components/app-top.component';
 import { DrawerModule } from 'primeng/drawer';
 import { ToastModule } from 'primeng/toast';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -30,7 +29,6 @@ import { ButtonModule } from 'primeng/button';
     MatIconModule,
     MatTooltipModule,
     ConfirmDialogModule,
-    AppTopComponent,
     DrawerModule,
     ToastModule,
     InputTextModule,

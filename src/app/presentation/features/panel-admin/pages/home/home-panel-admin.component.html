@@ -1,9 +1,0 @@
-<div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-  @for (item of items; track $index) {
-  <card-panel-admin
-    [title]="item.title"
-    [description]="item.description"
-    (toDetail)="toDetail(item.path)"
-  />
-  }
-</div>
