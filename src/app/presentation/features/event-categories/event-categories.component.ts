@@ -15,6 +15,8 @@ import { EventsOldService } from '../events-old/events-old.service';
 export class EventCategoriesComponent {
   @Input() idEvent?: string;
 
+  prueba = false;
+
   private readonly eventCategoryService = inject(EventCategoryService);
   readonly service = inject(EventsOldService);
 

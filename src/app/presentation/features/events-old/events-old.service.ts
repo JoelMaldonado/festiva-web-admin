@@ -40,7 +40,7 @@ export class EventsOldService {
       return;
     }
     this.isLoadingEvent.set(true);
-    this.eventService
+    this.eventService 
       .getById(eventId.toString())
       .subscribe({
         next: (res) => this.eventSelected.set(res.data),

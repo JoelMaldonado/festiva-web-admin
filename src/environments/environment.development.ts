@@ -1,7 +1,5 @@
 export const environment = {
-  //baseUrl: 'http://localhost:3245/api', // Local
-  //baseUrl: 'https://api.festiva.no:3001/api', // QA
-  baseUrl: 'https://api.festiva.no:8001/api', // Prod
+  baseUrl: 'http://localhost:3245/api', // Local
   mapboxToken:
     'pk.eyJ1IjoiamptZmRldiIsImEiOiJjbTgybXg0YjUxbGs1MmpxM210OTdmbTE2In0.AjmCpDHaiKjNj-XosGXXuA',
   firebaseConfig: {
