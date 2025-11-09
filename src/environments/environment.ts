@@ -1,5 +1,6 @@
 export const environment = {
-  baseUrl: 'https://api.festiva.no/general/api',
+  //baseUrl: 'https://festiva.no/general/api',
+  baseUrl: 'https://www.festiva.no/general/api',
   mapboxToken:
     'pk.eyJ1IjoiamptZmRldiIsImEiOiJjbTgybXg0YjUxbGs1MmpxM210OTdmbTE2In0.AjmCpDHaiKjNj-XosGXXuA',
   firebaseConfig: {
