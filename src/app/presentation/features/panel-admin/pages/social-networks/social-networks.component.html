@@ -1,103 +1,177 @@
-<p-confirmdialog />
-<p-toast />
+<!-- Drawer: Crear / Editar red social -->
 <p-drawer
-  [header]="
-    socialNetworkSelected ? 'Edit Social Network' : 'Create Social Network'
-  "
+  [header]="socialNetworkSelected ? 'Editar red social' : 'Nueva red social'"
   [(visible)]="showForm"
   position="right"
+  styleClass="!w-full sm:!w-[480px]"
 >
-  <form
-    (submit)="onSubmit($event)"
-    class="flex flex-col items-center gap-6 pt-2"
-  >
-    <p-floatlabel variant="on" class="w-full">
+  <form (submit)="onSubmit($event)" class="flex flex-col gap-6 pt-2">
+    <div class="flex flex-col gap-1.5">
+      <label class="text-xs font-semibold text-t3 uppercase tracking-wider">Nombre</label>
       <input
-        pInputText
-        id="name"
+        type="text"
         [formControl]="name"
         autocomplete="off"
-        class="w-full"
+        placeholder="Ej: Instagram, TikTok..."
+        class="w-full px-4 py-2.5 bg-b3 border border-b4 rounded-xl text-t1 text-sm placeholder-t3 focus:outline-none focus:border-p1 focus:ring-1 focus:ring-p1 transition-all"
       />
-      <label for="name">Name</label>
-    </p-floatlabel>
+    </div>
 
-    <p-fileUpload
-      name="file"
-      accept="image/*"
-      mode="basic"
-      chooseLabel="Subir Imagen"
-      [auto]="false"
-      (onSelect)="onSelectImage($event)"
-    />
-    <p-button type="submit" label="Guardar" [loading]="isLoadingSave" />
+    <div class="flex flex-col gap-1.5">
+      <label class="text-xs font-semibold text-t3 uppercase tracking-wider">Logo</label>
+      @if (socialNetworkSelected?.logoUrl && !selectedImageFile) {
+        <div class="flex items-center gap-3 p-3 bg-b3 rounded-xl border border-b4">
+          <img [src]="socialNetworkSelected!.logoUrl" alt="Logo actual" class="w-10 h-10 object-contain rounded-lg" />
+          <span class="text-xs text-t3">Logo actual</span>
+        </div>
+      }
+      <label
+        class="flex items-center gap-2 px-4 py-2.5 bg-b3 border border-b4 border-dashed rounded-xl text-t3 text-sm cursor-pointer hover:border-p1 hover:text-p1 transition-all"
+      >
+        <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">upload</mat-icon>
+        @if (selectedImageFile) {
+          {{ selectedImageFile.name }}
+        } @else {
+          Seleccionar imagen
+        }
+        <input type="file" accept="image/*" class="hidden" (change)="onSelectImage($event)" />
+      </label>
+    </div>
+
+    <button
+      type="submit"
+      [disabled]="isLoadingSave"
+      class="w-full py-2.5 bg-p1 hover:bg-pink-600 disabled:opacity-50 text-white text-sm font-semibold rounded-xl transition-colors"
+    >
+      @if (isLoadingSave) { Guardando... } @else { Guardar }
+    </button>
   </form>
 </p-drawer>
 
-<div class="flex items-center justify-between mb-4">
-  <button mat-raised-button type="button" (click)="showFormNew()">
-    Agregar
+<!-- Header -->
+<div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+  <div>
+    <h1 class="text-2xl font-bold text-t1">Redes sociales</h1>
+    <p class="text-sm text-t3 mt-0.5">
+      @if (isLoadingTable) { Cargando... }
+      @else { {{ list.length }} redes registradas }
+    </p>
+  </div>
+  <button
+    (click)="showFormNew()"
+    class="flex items-center gap-1.5 px-4 py-2.5 bg-p1 hover:bg-pink-600 active:bg-pink-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-lg shadow-p1/20"
+  >
+    <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">add</mat-icon>
+    Nueva red social
   </button>
 </div>
 
-<p-table
-  [value]="list"
-  class="overflow-hidden rounded-lg shadow"
-  [paginator]="true"
-  [rows]="10"
-  [loading]="isLoadingTable"
->
-  <ng-template pTemplate="header">
-    <tr>
-      <th class="text-left">Nro</th>
-      <th class="text-left">Nombre</th>
-      <th class="text-left">Estado</th>
-      <th class="text-left">Acciones</th>
-    </tr>
-  </ng-template>
+<!-- Tabla -->
+<div class="bg-b2 rounded-2xl border border-b4 overflow-hidden">
 
-  <ng-template pTemplate="body" let-item let-i="rowIndex">
-    <tr>
-      <td>{{ i + 1 }}</td>
-      <td>
-        <div class="flex items-center gap-2">
-          <img [src]="item.logoUrl" alt="Logo" class="w-8 h-8" />
-          <span> {{ item.name }}</span>
+  <!-- Skeleton -->
+  @if (isLoadingTable) {
+    <div class="divide-y divide-b4">
+      @for (_ of [1,2,3,4,5]; track $index) {
+        <div class="flex items-center gap-4 px-6 py-4 animate-pulse">
+          <div class="w-10 h-10 bg-b4 rounded-xl shrink-0"></div>
+          <div class="flex-1 h-3.5 bg-b4 rounded w-36"></div>
+          <div class="w-16 h-6 bg-b4 rounded-lg ml-auto"></div>
+          <div class="flex gap-1">
+            <div class="w-8 h-8 bg-b4 rounded-lg"></div>
+            <div class="w-8 h-8 bg-b4 rounded-lg"></div>
+          </div>
         </div>
-      </td>
-      <td>
-        <p-tag
-          [value]="item.idStatus === 1 ? 'Activo' : 'Inactivo'"
-          [severity]="item.idStatus === 1 ? 'success' : 'danger'"
-        >
-        </p-tag>
-      </td>
-      <td>
-        @if (item.idStatus == 1) {
+      }
+    </div>
+  }
+
+  @if (!isLoadingTable) {
+    <!-- Cabecera -->
+    <div class="hidden md:flex items-center gap-4 px-6 py-3 border-b border-b4">
+      <span class="flex-1 text-xs font-semibold text-t3 uppercase tracking-wider">Red social</span>
+      <span class="w-20 text-xs font-semibold text-t3 uppercase tracking-wider">Estado</span>
+      <span class="w-20 text-xs font-semibold text-t3 uppercase tracking-wider text-right">Acciones</span>
+    </div>
+
+    <!-- Filas -->
+    <div class="divide-y divide-b4">
+      @for (item of list; track item.id) {
+        <div class="group flex items-center gap-4 px-6 py-4 hover:bg-b3 transition-colors">
+          <!-- Logo + nombre -->
+          <div class="flex items-center gap-3 flex-1 min-w-0">
+            @if (item.logoUrl) {
+              <img
+                [src]="item.logoUrl"
+                [alt]="item.name"
+                class="w-10 h-10 rounded-xl object-contain bg-b3 p-1.5 shrink-0 ring-2 ring-b4 group-hover:ring-p1/30 transition-all"
+              />
+            } @else {
+              <div class="w-10 h-10 rounded-xl bg-b4 flex items-center justify-center shrink-0 ring-2 ring-b4">
+                <mat-icon class="text-t3 !text-[20px]">share</mat-icon>
+              </div>
+            }
+            <p class="text-sm font-semibold text-t1 truncate">{{ item.name }}</p>
+          </div>
+
+          @if (item.idStatus === 1) {
+            <span class="px-2.5 py-1 bg-green-500/10 text-green-400 text-xs font-semibold rounded-lg whitespace-nowrap">
+              Activo
+            </span>
+          } @else {
+            <span class="px-2.5 py-1 bg-red-500/10 text-red-400 text-xs font-semibold rounded-lg whitespace-nowrap">
+              Inactivo
+            </span>
+          }
+
+          <div class="flex items-center gap-0.5 shrink-0">
+            @if (item.idStatus === 1) {
+              <button
+                mat-icon-button
+                matTooltip="Editar"
+                (click)="showFormEdit(item)"
+                class="!text-t3 hover:!text-t1 !transition-colors"
+              >
+                <mat-icon class="!text-[18px]">edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                matTooltip="Eliminar"
+                (click)="deleteItem($event, item.id)"
+                class="!text-t3 hover:!text-red-400 !transition-colors"
+              >
+                <mat-icon class="!text-[18px]">delete</mat-icon>
+              </button>
+            } @else {
+              <button
+                mat-icon-button
+                matTooltip="Restaurar"
+                (click)="restoreItem($event, item.id)"
+                class="!text-t3 hover:!text-green-400 !transition-colors"
+              >
+                <mat-icon class="!text-[18px]">restore_alt</mat-icon>
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Estado vacío -->
+    @if (list.length === 0) {
+      <div class="flex flex-col items-center justify-center py-16 text-center">
+        <div class="w-14 h-14 bg-b3 rounded-2xl flex items-center justify-center mb-4">
+          <mat-icon class="text-t3 !text-[28px] !w-[28px] !h-[28px]">share</mat-icon>
+        </div>
+        <p class="text-t2 font-semibold">Sin redes sociales</p>
+        <p class="text-t3 text-sm mt-1">Agrega la primera red social</p>
         <button
-          mat-icon-button
-          matTooltip="Editar"
-          (click)="showFormEdit(item)"
+          (click)="showFormNew()"
+          class="mt-4 px-4 py-2.5 bg-p1 hover:bg-pink-600 text-white text-sm font-semibold rounded-xl transition-colors"
         >
-          <mat-icon class="text-t1">edit</mat-icon>
+          Nueva red social
         </button>
-        <button
-          mat-icon-button
-          matTooltip="Eliminar"
-          (click)="deleteItem($event, item.id)"
-        >
-          <mat-icon class="text-t1">delete</mat-icon>
-        </button>
-        } @else {
-        <button
-          mat-icon-button
-          matTooltip="Restaurar"
-          (click)="restoreItem($event, item.id)"
-        >
-          <mat-icon class="text-t1">restore_alt</mat-icon>
-        </button>
-        }
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+      </div>
+    }
+  }
+</div>

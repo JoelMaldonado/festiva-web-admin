@@ -1,15 +1,138 @@
-<app-top title="Detail" />
-<div
-  class="flex flex-col items-center gap-8 py-12 px-4 m-8 bg-b1 rounded-2xl shadow-xl"
+<!-- Drawer: Editar club -->
+<p-drawer
+  header="Editar club"
+  [(visible)]="showEditForm"
+  position="right"
+  styleClass="!w-full sm:!w-[480px]"
 >
-  <img
-    [src]="club.logoUrl"
-    alt="Club Logo"
-    class="object-cover w-36 h-36 border-4 rounded-full shadow-lg border-p1"
-  />
+  <add-club [clubSelected]="clubAsTyped" (onSave)="showEditForm = false; getClub()" />
+</p-drawer>
 
-  <h1 class="text-2xl font-bold sm:text-4xl">{{ club.name }}</h1>
-  <p class="mt-2 text-sm text-t2 sm:text-base w-[50%]">
-    {{ club.description }}
-  </p>
+<div class="max-w-3xl mx-auto">
+
+  <!-- Barra superior -->
+  <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+    <button
+      (click)="goBack()"
+      class="flex items-center gap-1.5 text-t3 hover:text-t1 transition-colors text-sm font-medium"
+    >
+      <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">arrow_back</mat-icon>
+      Clubs
+    </button>
+
+    @if (!loading && club) {
+      <button
+        (click)="showEditForm = true"
+        class="flex items-center gap-1.5 px-3.5 py-2 bg-b3 hover:bg-b4 border border-b4 text-t1 text-sm font-medium rounded-xl transition-colors"
+      >
+        <mat-icon class="!text-[16px] !w-[16px] !h-[16px]">edit</mat-icon>
+        Editar
+      </button>
+    }
+  </div>
+
+  <!-- Skeleton -->
+  @if (loading) {
+    <div class="space-y-4 animate-pulse">
+      <div class="bg-b2 rounded-2xl border border-b4 p-6 flex items-center gap-5">
+        <div class="w-20 h-20 rounded-2xl bg-b4 shrink-0"></div>
+        <div class="flex-1 space-y-2">
+          <div class="h-5 bg-b4 rounded w-40"></div>
+          <div class="h-3.5 bg-b4 rounded w-64"></div>
+          <div class="h-3 bg-b4 rounded w-32"></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        @for (_ of [1,2,3,4,5,6]; track $index) {
+          <div class="bg-b2 rounded-2xl border border-b4 p-4 h-24 animate-pulse">
+            <div class="w-7 h-7 bg-b4 rounded-lg mb-3"></div>
+            <div class="h-3 bg-b4 rounded w-20"></div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  @if (!loading && club) {
+    <div class="space-y-4">
+
+      <!-- Hero -->
+      <div class="bg-b2 rounded-2xl border border-b4 overflow-hidden">
+        <!-- Cover si existe -->
+        @if (club.covers?.[0]?.urlImage) {
+          <div class="relative h-36 md:h-44">
+            <img
+              [src]="club.covers[0].urlImage"
+              [alt]="club.name"
+              class="w-full h-full object-cover"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-b2 via-b2/20 to-transparent"></div>
+          </div>
+        }
+
+        <div class="flex items-center gap-5 p-6" [class.-mt-10]="club.covers?.[0]?.urlImage" [class.relative]="club.covers?.[0]?.urlImage" [class.z-10]="club.covers?.[0]?.urlImage">
+          <!-- Logo -->
+          @if (club.logoUrl) {
+            <img
+              [src]="club.logoUrl"
+              [alt]="club.name"
+              class="w-20 h-20 rounded-2xl object-cover shrink-0 ring-4 ring-b2 shadow-xl"
+            />
+          } @else {
+            <div class="w-20 h-20 rounded-2xl bg-b4 flex items-center justify-center shrink-0 ring-4 ring-b2">
+              <mat-icon class="text-t3 !text-4xl !w-10 !h-10">nightlife</mat-icon>
+            </div>
+          }
+
+          <div class="min-w-0">
+            <h1 class="text-2xl font-bold text-t1 truncate">{{ club.name }}</h1>
+            @if (club.description) {
+              <p class="text-sm text-t3 mt-1 line-clamp-2">{{ club.description }}</p>
+            }
+            <p class="text-xs text-t3 mt-1.5">#{{ club.id }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Secciones de gestión -->
+      <div>
+        <h2 class="text-xs font-semibold text-t3 uppercase tracking-wider mb-3 px-1">Gestión del club</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          @for (section of sections; track section.key) {
+            <button
+              (click)="toSection(section.key)"
+              class="group flex flex-col items-start gap-3 p-4 bg-b2 hover:bg-b3 border border-b4 hover:border-p1/30 rounded-2xl transition-all text-left"
+            >
+              <div class="w-9 h-9 rounded-xl bg-b3 group-hover:bg-p1/10 flex items-center justify-center transition-colors">
+                <mat-icon class="text-t3 group-hover:text-p1 !text-[20px] !w-[20px] !h-[20px] transition-colors">
+                  {{ section.icon }}
+                </mat-icon>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-t1 group-hover:text-t1">{{ section.label }}</p>
+                <p class="text-xs text-t3 mt-0.5 leading-snug">{{ section.description }}</p>
+              </div>
+              <mat-icon class="text-t3 group-hover:text-p1 !text-[16px] self-end transition-colors">chevron_right</mat-icon>
+            </button>
+          }
+        </div>
+      </div>
+
+    </div>
+  }
+
+  <!-- No encontrado -->
+  @if (!loading && !club) {
+    <div class="flex flex-col items-center justify-center py-24 text-center">
+      <div class="w-14 h-14 bg-b3 rounded-2xl flex items-center justify-center mb-4">
+        <mat-icon class="text-t3 !text-[28px] !w-[28px] !h-[28px]">nightlife</mat-icon>
+      </div>
+      <p class="text-t2 font-semibold">Club no encontrado</p>
+      <p class="text-t3 text-sm mt-1">El club que buscas no existe o fue eliminado.</p>
+      <button (click)="goBack()" class="mt-4 text-p1 text-sm font-medium hover:underline">
+        Volver a la lista
+      </button>
+    </div>
+  }
+
 </div>

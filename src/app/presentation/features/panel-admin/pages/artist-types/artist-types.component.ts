@@ -1,55 +1,33 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ArtistType } from '@model/artist-type';
 import { CommonRepository } from '@repository/common.repository';
 import { StatusEnum } from 'app/data/enum/status-enum';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { TableModule } from 'primeng/table';
-import { TagModule } from 'primeng/tag';
 import { DrawerModule } from 'primeng/drawer';
-import { ToastModule } from 'primeng/toast';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
-import { FloatLabel } from 'primeng/floatlabel';
-import { ButtonModule } from 'primeng/button';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-artist-types',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
-    TableModule,
-    TagModule,
+    DrawerModule,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    ConfirmDialogModule,
-    DrawerModule,
-    ToastModule,
-    InputTextModule,
-    FloatLabel,
-    ButtonModule,
   ],
   templateUrl: './artist-types.component.html',
-  providers: [ConfirmationService, MessageService],
 })
 export class ArtistTypesComponent implements OnInit {
   private readonly repo = inject(CommonRepository);
-  private readonly confirmationService = inject(ConfirmationService);
-  private readonly messageService = inject(MessageService);
 
   list: ArtistType[] = [];
-
   artistSelected: ArtistType | null = null;
   showForm = false;
-
   name = new FormControl('');
-
   isLoadingSave = false;
   isLoadingTable = false;
 
@@ -82,95 +60,69 @@ export class ArtistTypesComponent implements OnInit {
 
   async onSubmit(event: Event) {
     event.preventDefault();
-    if (!this.name.value) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Advertencia',
-        detail: 'El nombre es requerido.',
-      });
-      return;
-    }
+    if (!this.name.value) return;
     try {
       this.isLoadingSave = true;
       if (this.artistSelected) {
-        await this.repo.updateArtistType(
-          this.artistSelected.id,
-          this.name.value
-        );
+        await this.repo.updateArtistType(this.artistSelected.id, this.name.value);
       } else {
         await this.repo.createArtistType(this.name.value);
       }
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Éxito',
-        detail: 'Artista guardado correctamente.',
-      });
       this.showForm = false;
       this.artistSelected = null;
       this.name.reset();
       await this.getAll();
+      Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Guardado correctamente', showConfirmButton: false, timer: 2000, background: '#222222', color: '#ffffff' });
     } catch (err) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Error al guardar el artista.',
-      });
+      console.error(err);
+      Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo guardar el tipo de artista.', background: '#222222', color: '#ffffff' });
     } finally {
       this.isLoadingSave = false;
     }
   }
 
-  async deleteItem(event: Event, id: number) {
-    this.confirmationService.confirm({
-      target: event.target as EventTarget,
-      message: '¿Estás seguro que deseas eliminar esta categoría?.',
-      header: 'Eliminar',
-      icon: 'pi pi-exclamation-triangle',
-      rejectLabel: 'Cancelar',
-      rejectButtonProps: {
-        label: 'Cancelar',
-        severity: 'secondary',
-        outlined: true,
-      },
-      acceptButtonProps: {
-        label: 'Eliminar',
-        severity: 'danger',
-      },
-      accept: async () => {
-        try {
-          await this.repo.deleteArtistType(id);
-          await this.getAll();
-        } catch (error) {
-          console.log(error);
-        }
-      },
+  async deleteItem(_event: Event, id: number) {
+    const result = await Swal.fire({
+      title: '¿Eliminar tipo de artista?',
+      text: 'Esta acción lo marcará como inactivo.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#e11d48',
+      cancelButtonColor: '#374151',
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+      background: '#222222',
+      color: '#ffffff',
     });
+    if (result.isConfirmed) {
+      try {
+        await this.repo.deleteArtistType(id);
+        await this.getAll();
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }
 
-  async restoreItem(event: Event, id: number) {
-    this.confirmationService.confirm({
-      target: event.target as EventTarget,
-      message: '¿Estás seguro que deseas restaurar esta categoría?',
-      header: 'Restaurar',
-      icon: 'pi pi-exclamation-triangle',
-      rejectLabel: 'Cancelar',
-      rejectButtonProps: {
-        label: 'Cancelar',
-        severity: 'secondary',
-        outlined: true,
-      },
-      acceptButtonProps: {
-        label: 'Restaurar',
-        severity: 'success',
-      },
-      accept: async () => {
-        try {
-          await this.repo.restoreArtistType(id);
-          await this.getAll();
-        } catch (error) {
-          console.log(error);
-        }
-      },
+  async restoreItem(_event: Event, id: number) {
+    const result = await Swal.fire({
+      title: '¿Restaurar tipo de artista?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#16a34a',
+      cancelButtonColor: '#374151',
+      confirmButtonText: 'Restaurar',
+      cancelButtonText: 'Cancelar',
+      background: '#222222',
+      color: '#ffffff',
     });
+    if (result.isConfirmed) {
+      try {
+        await this.repo.restoreArtistType(id);
+        await this.getAll();
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }
 }

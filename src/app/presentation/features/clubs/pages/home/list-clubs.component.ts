@@ -1,70 +1,57 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { TableModule } from 'primeng/table';
-import { TooltipModule } from 'primeng/tooltip';
+import { FormsModule } from '@angular/forms';
+import { DrawerModule } from 'primeng/drawer';
 import { AddClubComponent } from './components/add-club.component';
 import { ClubService } from 'app/services/club.service';
 import { Club } from '@dto/club';
-import { FileUploadModule } from 'primeng/fileupload';
-import { DrawerModule } from 'primeng/drawer';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { AppFestButtonComponent } from "@components/fest-button.component";
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-list-clubs',
   imports: [
-    CommonModule,
     FormsModule,
-    ReactiveFormsModule,
-    TableModule,
-    ButtonModule,
-    TooltipModule,
-    DialogModule,
-    AddClubComponent,
-    InputTextModule,
-    FileUploadModule,
     DrawerModule,
-    FloatLabelModule,
-    AppFestButtonComponent
-],
+    AddClubComponent,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
+  ],
   templateUrl: './list-clubs.component.html',
 })
 export class ListClubsComponent implements OnInit {
   clubs: Club[] = [];
   clubsFiltered: Club[] = [];
-
-  clubService = inject(ClubService);
-
+  clubSelected?: Club;
+  showForm = false;
+  isLoading = false;
   filter = '';
 
-  showForm = false;
+  private readonly clubService = inject(ClubService);
+  private readonly router = inject(Router);
 
-  search() {
-    if (this.filter.length === 0) {
-      this.clubsFiltered = this.clubs;
-    } else {
-      this.clubsFiltered = this.clubs.filter((club) =>
-        club.name.toLowerCase().includes(this.filter.toLowerCase())
-      );
-    }
+  get hasFilter(): boolean {
+    return this.filter.trim().length > 0;
   }
 
   ngOnInit(): void {
     this.getClubs();
   }
 
-  value: string | undefined;
-  isLoading = false;
-  router = inject(Router);
+  search() {
+    const term = this.filter.toLowerCase().trim();
+    this.clubsFiltered = !term
+      ? this.clubs
+      : this.clubs.filter((c) => c.name.toLowerCase().includes(term));
+  }
 
-  onSavedClub() {
-    this.showForm = false;
-    this.getClubs();
+  clearFilter() {
+    this.filter = '';
+    this.clubsFiltered = [...this.clubs];
   }
 
   getClubs() {
@@ -74,26 +61,33 @@ export class ListClubsComponent implements OnInit {
         if (res.isSuccess) {
           this.clubs = res.data ?? [];
           this.clubsFiltered = res.data ?? [];
-        } else {
-          console.error(res.message);
         }
       },
-      error: (err) => {
-        console.error(err);
-      },
-      complete: () => {
-        this.isLoading = false;
-      },
+      error: (err) => console.error(err),
+      complete: () => (this.isLoading = false),
     });
   }
 
-  toPath(id: number, path: string) {
-    this.router.navigate(['menu', 'clubs', id, path]);
+  newClub() {
+    this.clubSelected = undefined;
+    this.showForm = true;
+  }
+
+  editClub(club: Club) {
+    this.clubSelected = club;
+    this.showForm = true;
   }
 
   toDetail(id: number) {
     this.router.navigate(['menu', 'clubs', id]);
   }
 
-  clubSelected?: Club;
+  toPath(id: number, path: string) {
+    this.router.navigate(['menu', 'clubs', id, path]);
+  }
+
+  onSavedClub() {
+    this.showForm = false;
+    this.getClubs();
+  }
 }
