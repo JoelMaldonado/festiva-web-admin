@@ -11,5 +11,4 @@ export const environment = {
     measurementId: '',
   },
   production: true,
-  version: '1.0.1',
 };

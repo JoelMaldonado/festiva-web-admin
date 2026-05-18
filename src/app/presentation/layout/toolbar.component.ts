@@ -67,6 +67,6 @@ export class ToolbarComponent {
   }
 
   getVersion() {
-    return environment.version;
+    return 'v1.2.0'
   }
 }
