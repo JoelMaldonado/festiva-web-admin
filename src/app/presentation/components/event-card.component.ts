@@ -90,9 +90,9 @@ import { FestFabButtonComponent } from './fest-fab-button.component';
                bg-neutral-900/95 ring-1 ring-white/10"
           (click)="$event.stopPropagation()"
         >
-          <!-- Botones -->
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="grid grid-flow-col gap-4">
+          <div class="absolute inset-0 flex flex-col items-center justify-center gap-5">
+            <!-- 3 acciones principales -->
+            <div class="flex gap-4">
               <fest-fab-button
                 variant="primary"
                 matIcon="recent_actors"
@@ -114,12 +114,24 @@ import { FestFabButtonComponent } from './fest-fab-button.component';
                 (clicked)="clickedCategory()"
               />
             </div>
+
+            <!-- Eliminar -->
+            <button
+              type="button"
+              (click)="clickedDelete()"
+              class="flex items-center gap-1.5 px-4 py-1.5 rounded-xl
+                     text-sm font-semibold text-red-400
+                     border border-red-500/20 bg-red-500/0
+                     hover:bg-red-500/15 hover:text-red-300 hover:border-red-500/40
+                     transition-all duration-200 select-none"
+            >
+              <mat-icon class="!text-base !w-4 !h-4">delete_outline</mat-icon>
+              Eliminar evento
+            </button>
           </div>
 
           <!-- Texto auxiliar -->
-          <div
-            class="absolute bottom-3 inset-x-3 text-center text-neutral-300 text-xs"
-          >
+          <div class="absolute bottom-3 inset-x-3 text-center text-neutral-400 text-xs">
             Tap / hover para volver
           </div>
         </div>
@@ -143,6 +155,7 @@ export class EventCardComponent {
   @Output() toArtists = new EventEmitter<void>();
   @Output() toSchedule = new EventEmitter<void>();
   @Output() toCategory = new EventEmitter<void>();
+  @Output() toDelete = new EventEmitter<void>();
 
   clickedArtists() {
     this.toArtists?.emit();
@@ -154,6 +167,13 @@ export class EventCardComponent {
 
   clickedCategory() {
     this.toCategory?.emit();
+  }
+
+  clickedDelete() {
+    const confirmed = window.confirm('¿Estás seguro de que deseas eliminar este evento? Esta acción no se puede deshacer.');
+    if (confirmed) {
+      this.toDelete.emit();
+    }
   }
 
   flipped = false;

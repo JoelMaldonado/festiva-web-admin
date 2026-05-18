@@ -4,8 +4,7 @@ import { EventModel } from '@model/event';
 import { CategoryService } from '@services/category.service';
 import { EventService } from '@services/event.service';
 import { StatusEnum } from 'app/data/enum/status-enum';
-import { format } from 'date-fns';
-import { take } from 'rxjs';
+import { firstValueFrom, take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -15,28 +14,30 @@ export class EventsDashboardService {
   private readonly eventService = inject(EventService);
 
   // form
-  drawerForm = false;
   selectedEvent: EventModel | null = null;
   showForm = false;
 
   onSaved() {
-    this.drawerForm = false;
+    this.showForm = false;
+    this.resetPagination();
+    this.loadNextPage();
   }
 
   // filters
   searchInput = signal<string>('');
-
   selectedCategory = signal<Category | null>(null);
   listCategory = signal<Category[]>([]);
 
-  daySelected = signal<Date>(new Date());
+  // rango de fechas (strings YYYY-MM-DD, vacío = sin filtro)
+  dateFrom = signal<string>('');
+  dateTo = signal<string>('');
 
   // pagination
   listEvents: any[] = [];
-  page = 1; // página actual (1-based)
-  limit = 20; // tamaño de lote
-  loading = false; // para bloquear llamadas concurrentes
-  endReached = false; // true cuando el backend ya no devuelve más items
+  page = 1;
+  limit = 20;
+  loading = false;
+  endReached = false;
 
   constructor() {
     this.getAllCategories();
@@ -46,13 +47,9 @@ export class EventsDashboardService {
   getAllCategories() {
     this.categoryService.fetchAll(StatusEnum.active).subscribe({
       next: (res) => {
-        if (res.isSuccess) {
-          this.listCategory.set(res.data || []);
-        }
+        if (res.isSuccess) this.listCategory.set(res.data || []);
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: (err) => console.error(err),
     });
   }
 
@@ -66,13 +63,21 @@ export class EventsDashboardService {
     if (this.loading || this.endReached) return;
     this.loading = true;
 
+    const search = this.searchInput().trim() || undefined;
+
+    // Si hay búsqueda activa, ignorar el rango de fechas
+    // (el backend devolverá desde hoy en adelante sin filtro de fecha)
+    const dateFrom = !search ? (this.dateFrom() || undefined) : undefined;
+    const dateTo   = !search ? (this.dateTo()   || undefined) : undefined;
+
     this.eventService
       .fetchAllPaged(
         this.page,
         this.limit,
         this.selectedCategory()?.id,
-        format(this.daySelected(), 'yyyy-MM-dd'),
-        this.searchInput()
+        search,
+        dateFrom,
+        dateTo,
       )
       .pipe(take(1))
       .subscribe({
@@ -85,7 +90,6 @@ export class EventsDashboardService {
             const toAppend = items.filter(
               (e: any) => !currentIds.has(e.id ?? e.eventId)
             );
-
             this.listEvents = [...this.listEvents, ...toAppend];
             this.page += 1;
           } else {
@@ -100,20 +104,25 @@ export class EventsDashboardService {
       });
   }
 
-  // Setters
-  setDay(date: Date) {
-    if (!date) return;
-    this.daySelected.set(date);
+  async deleteEvent(eventId: number): Promise<void> {
+    const res = await firstValueFrom(this.eventService.delete(eventId));
+    if (res.isSuccess) {
+      this.resetPagination();
+      this.loadNextPage();
+    }
+  }
+
+  setDateRange(from: string, to: string) {
+    this.dateFrom.set(from);
+    this.dateTo.set(to);
     this.resetPagination();
     this.loadNextPage();
   }
 
   selectCategory(category: Category) {
-    if (this.selectedCategory() === category) {
-      this.selectedCategory.set(null);
-    } else {
-      this.selectedCategory.set(category);
-    }
+    this.selectedCategory.set(
+      this.selectedCategory() === category ? null : category
+    );
     this.resetPagination();
     this.loadNextPage();
   }

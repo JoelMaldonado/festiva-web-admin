@@ -27,24 +27,24 @@ export class EventService {
     return this.http.get<Result<any>>(`${this.url}/${idEvent}/schedule`);
   }
 
+  delete(id: number) {
+    return this.http.delete<Result<any>>(`${this.url}/${id}`);
+  }
+
   fetchAllPaged(
     page: number,
     limit: number,
     categoryId?: number,
-    date?: string,
-    search?: string
+    search?: string,
+    dateFrom?: string,
+    dateTo?: string,
   ) {
     let params = new HttpParams().set('page', page).set('limit', limit);
 
-    if (categoryId != null) {
-      params = params.set('categoryId', categoryId);
-    }
-    if (date) {
-      params = params.set('date', date);
-    }
-    if (search) {
-      params = params.set('search', search);
-    }
+    if (categoryId != null) params = params.set('categoryId', categoryId);
+    if (search)             params = params.set('search', search);
+    if (dateFrom)           params = params.set('dateFrom', dateFrom);
+    if (dateTo)             params = params.set('dateTo', dateTo);
 
     return this.http.get<Result<any>>(`${this.url}/paged`, { params });
   }

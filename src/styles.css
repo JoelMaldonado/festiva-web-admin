@@ -30,3 +30,37 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+/* ── Dark Drawer ── */
+.p-drawer {
+  background: #111111 !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.p-drawer-header {
+  background: #111111 !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+  padding: 1.25rem 1.5rem !important;
+}
+
+.p-drawer-title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 1.1rem !important;
+}
+
+.p-drawer-content {
+  background: #111111 !important;
+  padding: 1.25rem 1.5rem !important;
+}
+
+.p-drawer-close-button {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.p-drawer-close-button:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+}

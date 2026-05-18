@@ -26,9 +26,10 @@ import { Router } from '@angular/router';
           [date]="item.eventDate"
           [category]="item.nameEventCategory"
           [venue]="item.nameClub"
-          (toArtists)="toPath(item.eventId ?? item.eventId, 'artists')"
-          (toSchedule)="toPath(item.eventId ?? item.eventId, 'schedule')"
-          (toCategory)="toPath(item.eventId ?? item.eventId, 'categories')"
+          (toArtists)="toPath(item.eventId, 'artists')"
+          (toSchedule)="toPath(item.eventId, 'schedule')"
+          (toCategory)="toPath(item.eventId, 'categories')"
+          (toDelete)="deleteEvent.emit(item.eventId)"
         />
         }
       </div>
@@ -58,6 +59,7 @@ export class EventsGridComponent {
   @Input({ required: true }) endReached = false;
 
   @Output() loadNextPage = new EventEmitter<void>();
+  @Output() deleteEvent = new EventEmitter<number>();
 
   @ViewChild('infiniteScrollAnchor', { static: true })
   infiniteScrollAnchor!: ElementRef<HTMLDivElement>;
