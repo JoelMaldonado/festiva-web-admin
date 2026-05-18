@@ -23,6 +23,19 @@ export class EventService {
     return this.http.post<Result<any>>(this.url, request);
   }
 
+  createV2(dto: {
+    clubId: number;
+    title: string;
+    description?: string;
+    imageUrl?: string;
+    ticketUrl?: string;
+    categoryIds: number[];
+    schedules: { date: string; startTime: string }[];
+    artistIds?: number[];
+  }) {
+    return this.http.post<Result<{ eventId: number }>>(`${this.url}/v2`, dto);
+  }
+
   fetchEventSchedule(idEvent: string) {
     return this.http.get<Result<any>>(`${this.url}/${idEvent}/schedule`);
   }

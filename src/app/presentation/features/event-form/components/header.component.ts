@@ -1,36 +1,36 @@
-import { Component, OnInit } from '@angular/core';
-import { AppFestButtonComponent } from '@components/fest-button.component';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   standalone: true,
   selector: 'event-header',
-  imports: [AppFestButtonComponent],
+  imports: [MatIconModule],
   template: `
-    <article
-      class="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl ring-1 ring-white/10 shadow-2xl mb-6"
-    >
-      <div
-        class="pointer-events-none absolute -top-24 -left-24 h-64 w-64 rounded-full bg-pink-500/20 blur-3xl"
-      ></div>
-      <div
-        class="pointer-events-none absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-fuchsia-500/20 blur-3xl"
-      ></div>
-
-      <div class="relative p-5 md:p-6">
-        <div class="flex items-start justify-between gap-3">
-          <div>
-            <h1 class="text-2xl md:text-3xl font-extrabold text-white">
-              Crear evento
-            </h1>
-            <p class="text-sm text-slate-400 mt-1">
-              Asocia un club, agrega artistas y categorías, sube una imagen y
-              programa fechas.
-            </p>
-          </div>
-          <fest-button label="Guardar" />
-        </div>
+    <div class="flex items-start justify-between gap-4 mb-6">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-t1">Crear evento</h1>
+        <p class="text-sm text-t3 mt-1">
+          Sube una imagen, asocia un club, agrega artistas y programa las fechas.
+        </p>
       </div>
-    </article>
+      <button
+        type="button"
+        (click)="onSave.emit()"
+        [disabled]="isSaving"
+        class="shrink-0 flex items-center gap-2 px-5 py-2.5 bg-p1 hover:bg-pink-600 active:bg-pink-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-colors shadow-lg shadow-p1/20"
+      >
+        @if (isSaving) {
+          <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+          Guardando...
+        } @else {
+          <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">check</mat-icon>
+          Guardar evento
+        }
+      </button>
+    </div>
   `,
 })
-export class EventHeaderComponent {}
+export class EventHeaderComponent {
+  @Input() isSaving = false;
+  @Output() onSave = new EventEmitter<void>();
+}

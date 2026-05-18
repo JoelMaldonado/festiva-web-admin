@@ -1,31 +1,62 @@
 <section class="max-w-6xl mx-auto px-4 pt-6 pb-16">
-  <event-header />
+  <event-header [isSaving]="isSaving" (onSave)="onSubmit()" />
 
-  <!-- Main layout -->
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <div class="lg:col-span-2 space-y-6">
-      <event-club />
-      <fest-input
-        label="Title"
-        placeholder="Ej. Latin Night"
-        [maxLength]="120"
-        [required]="true"
-        [(value)]="title"
-      />
-      <fest-text-area
-        label="Description"
-        placeholder="Ex. A night full of latin vibes"
-        [maxLength]="600"
-        [required]="true"
-        [(value)]="description"
-        [rows]="6"
-      />
+    <div class="lg:col-span-2 space-y-4">
+      <!-- 1. Imagen primero -->
+      <event-upload-image (imageChange)="previewImage = $event" />
+
+      <!-- 2. Club -->
+      <event-club (clubChange)="previewClub = $event" />
+
+      <!-- 3. Título -->
+      <div class="bg-b2 rounded-2xl border border-b4 p-5">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-sm font-semibold text-t1">Título del evento</h2>
+          <span class="text-xs text-red-400 font-medium">Obligatorio</span>
+        </div>
+        <fest-input
+          label="Título"
+          placeholder="Ej. Latin Night"
+          [maxLength]="120"
+          [required]="true"
+          [(value)]="title"
+        />
+      </div>
+
+      <!-- 4. Descripción -->
+      <div class="bg-b2 rounded-2xl border border-b4 p-5">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-sm font-semibold text-t1">Descripción</h2>
+          <span class="text-xs text-red-400 font-medium">Obligatoria</span>
+        </div>
+        <fest-text-area
+          label="Descripción"
+          placeholder="Describe de qué trata el evento..."
+          [maxLength]="600"
+          [required]="true"
+          [(value)]="description"
+          [rows]="5"
+        />
+      </div>
+
+      <!-- 5. Artistas -->
       <event-artists />
-      <event-categories />
+
+      <!-- 6. Categorías -->
+      <event-categories (categoriesChange)="previewCategories = $event" />
+
+      <!-- 7. Fechas -->
       <event-schedule />
-      <event-upload-image />
     </div>
 
-    <event-preview [title]="title" [description]="description" />
+    <!-- Sidebar preview -->
+    <event-preview
+      [title]="title"
+      [description]="description"
+      [imageUrl]="previewImage"
+      [club]="previewClub"
+      [categories]="previewCategories"
+    />
   </div>
 </section>

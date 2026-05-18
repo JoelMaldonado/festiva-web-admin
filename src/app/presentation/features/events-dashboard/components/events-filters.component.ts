@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { EventsDashboardService } from '../events-dashboard.service';
 import { AppFestButtonComponent } from '@components/fest-button.component';
 import { EventsMetricsComponent } from './events-metrics.component';
@@ -88,6 +89,7 @@ import { AppDateRangeComponent } from '@components/app-date-range.component';
 })
 export class EventsFiltersComponent {
   readonly service = inject(EventsDashboardService);
+  private readonly router = inject(Router);
 
   search() {
     this.service.resetPagination();
@@ -95,6 +97,6 @@ export class EventsFiltersComponent {
   }
 
   showForm() {
-    this.service.showForm = true;
+    this.router.navigate(['menu', 'events', 'new']);
   }
 }
