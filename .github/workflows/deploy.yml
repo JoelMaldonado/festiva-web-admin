@@ -49,7 +49,7 @@ jobs:
           EOF
 
       - name: Build Angular (production)
-        run: pnpm run build -- --configuration production
+        run: pnpm run build --configuration production
 
       - name: Upload files to server
         uses: appleboy/scp-action@v1
