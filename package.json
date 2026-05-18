@@ -10,9 +10,14 @@
   },
   "private": true,
   "pnpm": {
-    "auditConfig": {
-      "minimumReleaseAge": 0
-    }
+    "onlyBuiltDependencies": [
+      "@firebase/util",
+      "@parcel/watcher",
+      "esbuild",
+      "lmdb",
+      "msgpackr-extract",
+      "protobufjs"
+    ]
   },
   "dependencies": {
     "@angular/animations": "^20.0.6",
