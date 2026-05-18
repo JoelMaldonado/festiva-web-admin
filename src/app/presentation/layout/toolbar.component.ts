@@ -1,14 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { StorageService } from 'app/core/services/storage.service';
-import { environment } from 'environments/environment';
-import { ButtonModule } from 'primeng/button';
-import { ToolbarModule } from 'primeng/toolbar';
+import { Button } from 'primeng/button';
+import { Toolbar } from 'primeng/toolbar';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-toolbar',
-  imports: [ToolbarModule, ButtonModule, RouterModule],
+  imports: [Toolbar, Button, RouterModule],
   templateUrl: './toolbar.component.html',
 })
 export class ToolbarComponent {
@@ -67,6 +66,6 @@ export class ToolbarComponent {
   }
 
   getVersion() {
-    return 'v1.2.1'
+    return 'v1.2.1';
   }
 }

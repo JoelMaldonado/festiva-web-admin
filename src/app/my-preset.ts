@@ -19,7 +19,7 @@ const MyPreset = definePreset(Material, {
       light: {
         primary: {
           color: '#FF4081',
-          inverseColor: '#ffffff',
+          contrastColor: '#ffffff',
           hoverColor: '#ff639f',
           activeColor: '#f01253',
         },
