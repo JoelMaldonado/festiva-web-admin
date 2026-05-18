@@ -1,110 +1,208 @@
-<app-top title="Detalle" />
-<div class="max-w-5xl p-6 mx-auto space-y-10 bg-white shadow-lg rounded-2xl">
-  <!-- Perfil Principal -->
-  <div
-    class="flex flex-col items-center flex-1 gap-6 md:flex-row md:items-start"
-  >
-    <img
-      [src]="artist?.profileUrl"
-      alt="Foto de perfil"
-      class="object-cover w-48 h-48 rounded-full shadow-md"
-    />
-    <div class="flex-1 space-y-2 text-center md:text-left">
-      <h2 class="text-3xl font-bold text-gray-900">{{ artist?.name }}</h2>
-      <span
-        class="inline-block px-3 py-1 text-sm text-indigo-800 bg-indigo-100 rounded-full"
+<!-- Drawer: Editar artista -->
+<p-drawer
+  header="Editar artista"
+  [(visible)]="showEditForm"
+  position="right"
+  styleClass="!w-full sm:!w-[480px]"
+>
+  <drawer-form-artist
+    [artist]="artist"
+    (onSaved)="showEditForm = false; getArtist()"
+  />
+</p-drawer>
+
+<div class="max-w-3xl mx-auto">
+
+  <!-- Barra superior -->
+  <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+    <button
+      (click)="goBack()"
+      class="flex items-center gap-1.5 text-t3 hover:text-t1 transition-colors text-sm font-medium"
+    >
+      <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">arrow_back</mat-icon>
+      Artistas
+    </button>
+
+    <!-- Acciones principales -->
+    <div class="flex items-center gap-2">
+      <button
+        (click)="showEditForm = true"
+        matTooltip="Editar información"
+        class="flex items-center gap-1.5 px-3.5 py-2 bg-b3 hover:bg-b4 border border-b4 text-t1 text-sm font-medium rounded-xl transition-colors"
       >
-        Tipo de Artista
-      </span>
-      <p class="text-gray-600">Estado: Activo</p>
+        <mat-icon class="!text-[16px] !w-[16px] !h-[16px]">edit</mat-icon>
+        Editar
+      </button>
+      <button
+        (click)="toSocialNetworks()"
+        matTooltip="Gestionar redes sociales"
+        class="flex items-center gap-1.5 px-3.5 py-2 bg-b3 hover:bg-b4 border border-b4 text-t1 text-sm font-medium rounded-xl transition-colors"
+      >
+        <mat-icon class="!text-[16px] !w-[16px] !h-[16px]">share</mat-icon>
+        Redes
+      </button>
+      <button
+        (click)="toTags()"
+        matTooltip="Gestionar etiquetas"
+        class="flex items-center gap-1.5 px-3.5 py-2 bg-b3 hover:bg-b4 border border-b4 text-t1 text-sm font-medium rounded-xl transition-colors"
+      >
+        <mat-icon class="!text-[16px] !w-[16px] !h-[16px]">label</mat-icon>
+        Etiquetas
+      </button>
     </div>
   </div>
 
-  <!-- Descripción -->
-  <div>
-    <h3 class="mb-2 text-xl font-semibold text-gray-800">Descripción</h3>
-    <p class="leading-relaxed text-gray-700">{{ artist?.description }}</p>
-  </div>
-
-  <!-- Biografía -->
-  <div>
-    <h3 class="mb-2 text-xl font-semibold text-gray-800">Biografía</h3>
-    <p class="leading-relaxed text-gray-700">{{ artist?.biography }}</p>
-  </div>
-
-  <!-- Galería de Imágenes -->
-  <div>
-    <h3 class="mb-4 text-xl font-semibold text-gray-800">Galería</h3>
-    <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
-      <img
-        src="https://via.placeholder.com/300"
-        alt="Imagen 1"
-        class="rounded-lg shadow"
-      />
-      <img
-        src="https://via.placeholder.com/300"
-        alt="Imagen 2"
-        class="rounded-lg shadow"
-      />
-      <img
-        src="https://via.placeholder.com/300"
-        alt="Imagen 3"
-        class="rounded-lg shadow"
-      />
+  <!-- Loading skeleton -->
+  @if (loading) {
+    <div class="space-y-4 animate-pulse">
+      <div class="bg-b2 rounded-2xl border border-b4 overflow-hidden">
+        <div class="h-48 bg-b3"></div>
+        <div class="px-6 pb-6 -mt-10">
+          <div class="w-20 h-20 rounded-full bg-b4 ring-4 ring-b2 mb-4"></div>
+          <div class="h-5 bg-b4 rounded w-40 mb-2"></div>
+          <div class="h-4 bg-b4 rounded w-24"></div>
+        </div>
+      </div>
+      <div class="bg-b2 rounded-2xl border border-b4 p-6 space-y-2">
+        <div class="h-3 bg-b4 rounded w-20 mb-3"></div>
+        <div class="h-3 bg-b4 rounded w-full"></div>
+        <div class="h-3 bg-b4 rounded w-4/5"></div>
+      </div>
     </div>
-  </div>
+  }
 
-  <!-- Redes Sociales -->
-  <div>
-    <h3 class="mb-2 text-xl font-semibold text-gray-800">Redes Sociales</h3>
-    <div class="flex gap-4">
-      <a
-        href="#"
-        target="_blank"
-        class="text-blue-500 transition hover:text-blue-700"
-      >
-        🌐 Sitio Web
-      </a>
-      <a
-        href="#"
-        target="_blank"
-        class="text-blue-400 transition hover:text-blue-600"
-      >
-        🐦 Twitter
-      </a>
-      <a
-        href="#"
-        target="_blank"
-        class="text-pink-600 transition hover:text-pink-800"
-      >
-        📸 Instagram
-      </a>
-      <a
-        href="#"
-        target="_blank"
-        class="text-blue-700 transition hover:text-blue-900"
-      >
-        📘 Facebook
-      </a>
-    </div>
-  </div>
+  @if (!loading && artist) {
+    <div class="space-y-4">
 
-  <!-- Tags -->
-  <div>
-    <h3 class="mb-2 text-xl font-semibold text-gray-800">Tags</h3>
-    <div class="flex flex-wrap gap-2">
-      <span class="px-3 py-1 text-sm text-gray-800 bg-gray-200 rounded-full"
-        >Electrónica</span
-      >
-      <span class="px-3 py-1 text-sm text-gray-800 bg-gray-200 rounded-full"
-        >DJ</span
-      >
-      <span class="px-3 py-1 text-sm text-gray-800 bg-gray-200 rounded-full"
-        >Live</span
-      >
-      <span class="px-3 py-1 text-sm text-gray-800 bg-gray-200 rounded-full"
-        >House</span
-      >
+      <!-- Hero: cover + avatar + nombre -->
+      <div class="bg-b2 rounded-2xl border border-b4 overflow-hidden">
+        <!-- Cover -->
+        <div class="relative h-44 md:h-56">
+          @if (artist.profileCoverUrl) {
+            <img
+              [src]="artist.profileCoverUrl"
+              alt="Cover"
+              class="w-full h-full object-cover"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-b2 via-b2/30 to-transparent"></div>
+          } @else {
+            <div class="w-full h-full bg-gradient-to-br from-p1/25 via-b3 to-b4 flex items-end">
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-b2 via-transparent to-transparent"></div>
+          }
+        </div>
+
+        <!-- Perfil -->
+        <div class="px-6 pb-6 -mt-12 relative z-10">
+          @if (artist.profileUrl) {
+            <img
+              [src]="artist.profileUrl"
+              [alt]="artist.name"
+              class="w-24 h-24 rounded-full object-cover ring-4 ring-b2 mb-4 shadow-xl"
+            />
+          } @else {
+            <div class="w-24 h-24 rounded-full bg-b4 ring-4 ring-b2 mb-4 flex items-center justify-center shadow-xl">
+              <mat-icon class="text-t3 !text-4xl !w-10 !h-10">person</mat-icon>
+            </div>
+          }
+
+          <h1 class="text-2xl font-bold text-t1 mb-2">{{ artist.name }}</h1>
+          <span class="inline-block px-3 py-1 bg-p1/10 text-p1 text-xs font-semibold rounded-lg uppercase tracking-wide">
+            {{ artist.artistType || 'Sin tipo' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      @if (artist.description) {
+        <div class="bg-b2 rounded-2xl border border-b4 p-6">
+          <h2 class="text-xs font-semibold text-t3 uppercase tracking-wider mb-3">Descripción</h2>
+          <p class="text-t2 text-sm leading-relaxed">{{ artist.description }}</p>
+        </div>
+      }
+
+      <!-- Biografía -->
+      @if (artist.biography) {
+        <div class="bg-b2 rounded-2xl border border-b4 p-6">
+          <h2 class="text-xs font-semibold text-t3 uppercase tracking-wider mb-3">Biografía</h2>
+          <p class="text-t2 text-sm leading-relaxed">{{ artist.biography }}</p>
+        </div>
+      }
+
+      <!-- Etiquetas -->
+      <div class="bg-b2 rounded-2xl border border-b4 p-6">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xs font-semibold text-t3 uppercase tracking-wider">Etiquetas</h2>
+          <button
+            (click)="toTags()"
+            class="text-xs text-p1 hover:underline font-medium"
+          >
+            Gestionar
+          </button>
+        </div>
+        @if (artistTags.length > 0) {
+          <div class="flex flex-wrap gap-2">
+            @for (tag of artistTags; track tag) {
+              <span class="px-3 py-1 bg-b3 border border-b4 text-t2 text-xs font-medium rounded-lg">
+                {{ tag }}
+              </span>
+            }
+          </div>
+        } @else {
+          <p class="text-t3 text-sm">Sin etiquetas asignadas.</p>
+        }
+      </div>
+
+      <!-- Redes sociales -->
+      <div class="bg-b2 rounded-2xl border border-b4 p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-xs font-semibold text-t3 uppercase tracking-wider mb-1">Redes sociales</h2>
+            <p class="text-t3 text-sm">Gestiona los perfiles sociales de este artista.</p>
+          </div>
+          <button
+            (click)="toSocialNetworks()"
+            class="flex items-center gap-1.5 px-3.5 py-2 bg-b3 hover:bg-b4 border border-b4 text-t1 text-sm font-medium rounded-xl transition-colors shrink-0"
+          >
+            <mat-icon class="!text-[16px] !w-[16px] !h-[16px]">open_in_new</mat-icon>
+            Editar
+          </button>
+        </div>
+      </div>
+
+      <!-- Zona de peligro -->
+      <div class="bg-red/5 border border-red/20 rounded-2xl p-6">
+        <h2 class="text-xs font-semibold text-red uppercase tracking-wider mb-1">Zona de peligro</h2>
+        <p class="text-t3 text-sm mb-4">
+          Eliminar este artista borrará permanentemente toda su información, incluyendo redes sociales y etiquetas.
+        </p>
+        <button
+          (click)="deleteArtist()"
+          class="flex items-center gap-1.5 px-4 py-2.5 bg-red/10 hover:bg-red/20 border border-red/30 text-red text-sm font-semibold rounded-xl transition-colors"
+        >
+          <mat-icon class="!text-[16px] !w-[16px] !h-[16px]">delete</mat-icon>
+          Eliminar artista
+        </button>
+      </div>
+
     </div>
-  </div>
+  }
+
+  <!-- Estado de error / no encontrado -->
+  @if (!loading && !artist) {
+    <div class="flex flex-col items-center justify-center py-24 text-center">
+      <div class="w-14 h-14 bg-b3 rounded-2xl flex items-center justify-center mb-4">
+        <mat-icon class="text-t3 !text-[28px] !w-[28px] !h-[28px]">person_off</mat-icon>
+      </div>
+      <p class="text-t2 font-semibold">Artista no encontrado</p>
+      <p class="text-t3 text-sm mt-1">El artista que buscas no existe o fue eliminado.</p>
+      <button
+        (click)="goBack()"
+        class="mt-4 text-p1 text-sm font-medium hover:underline"
+      >
+        Volver a la lista
+      </button>
+    </div>
+  }
+
 </div>
