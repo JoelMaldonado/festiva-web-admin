@@ -22,6 +22,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate environment.ts
+        run: |
+          cat > src/environments/environment.ts << 'EOF'
+          export const environment = {
+            baseUrl: '${{ secrets.API_BASE_URL }}',
+            mapboxToken: '${{ secrets.MAPBOX_TOKEN }}',
+            firebaseConfig: {
+              projectId: '${{ secrets.FIREBASE_PROJECT_ID }}',
+              appId: '${{ secrets.FIREBASE_APP_ID }}',
+              storageBucket: '${{ secrets.FIREBASE_STORAGE_BUCKET }}',
+              apiKey: '${{ secrets.FIREBASE_API_KEY }}',
+              authDomain: '${{ secrets.FIREBASE_AUTH_DOMAIN }}',
+              messagingSenderId: '${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}',
+              measurementId: '${{ secrets.FIREBASE_MEASUREMENT_ID }}',
+            },
+            production: true,
+            version: '1.0.1',
+          };
+          EOF
+
       - name: Build Angular (production)
         run: npm run build -- --configuration production
 
