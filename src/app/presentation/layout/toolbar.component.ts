@@ -37,6 +37,11 @@ export class ToolbarComponent {
       icon: 'pi pi-fw pi-cog',
       routerLink: 'panel-admin',
     },
+    {
+      label: 'Scraper',
+      icon: 'pi pi-fw pi-cloud-download',
+      routerLink: 'event-scraper',
+    },
   ];
 
   logout() {

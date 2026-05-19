@@ -43,6 +43,13 @@ export const routes: Routes = [
             (m) => m.panelAdminRoutes
           ),
       },
+      {
+        path: 'event-scraper',
+        loadChildren: () =>
+          import('./presentation/features/event-scraper/event-scraper.routes').then(
+            (m) => m.eventScraperRoutes
+          ),
+      },
     ],
   },
   {
