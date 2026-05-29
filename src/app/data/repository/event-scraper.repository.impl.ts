@@ -16,11 +16,8 @@ export class EventScraperRepositoryImpl extends EventScraperRepository {
     return res.data ?? [];
   }
 
-  override async approve(id: number): Promise<void> {
-    await firstValueFrom(this.service.approve(id));
-  }
-
-  override async reject(id: number): Promise<void> {
-    await firstValueFrom(this.service.reject(id));
+  override async remove(id: number): Promise<void> {
+    const res = await firstValueFrom(this.service.remove(id));
+    if (!res.isSuccess) throw new Error(res.message);
   }
 }

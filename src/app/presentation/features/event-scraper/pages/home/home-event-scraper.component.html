@@ -1,45 +1,72 @@
 <!-- Header -->
-<div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+<div class="flex items-start justify-between mb-6 flex-wrap gap-4">
   <div>
-    <h1 class="text-2xl font-bold text-t1">Eventos scrapeados</h1>
+    <h1 class="text-2xl font-bold text-t1">Scraper de eventos</h1>
     <p class="text-sm text-t3 mt-0.5">
-      @if (loading) {
-        Cargando...
-      } @else {
-        {{ filtered.length }} de {{ list.length }} eventos
-        @if (pendingCount > 0) {
-          · <span class="text-amber-400 font-medium">{{ pendingCount }} pendientes</span>
-        }
+      {{ list.length }} eventos totales
+      @if (pendingCount > 0) {
+        · <span class="text-amber-400 font-medium">{{ pendingCount }} pendientes</span>
       }
     </p>
   </div>
 
-  <button
-    (click)="load()"
-    class="flex items-center gap-1.5 px-4 py-2.5 bg-b2 hover:bg-b3 border border-b4 text-t1 text-sm font-semibold rounded-xl transition-colors"
-  >
-    <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">refresh</mat-icon>
-    Actualizar
-  </button>
+  <div class="flex items-center gap-2">
+    <button
+      (click)="openPromote()"
+      [disabled]="pendingCount === 0"
+      matTooltip="Pasa todos los eventos pendientes a producción"
+      class="flex items-center gap-1.5 px-4 py-2.5 bg-b2 hover:bg-b3 border border-b4 text-t1 text-sm font-semibold rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+    >
+      <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">rocket_launch</mat-icon>
+      Pasar a prod
+      @if (pendingCount > 0) {
+        <span class="px-1.5 py-0.5 bg-amber-500/20 text-amber-400 text-xs font-bold rounded-md leading-none">
+          {{ pendingCount }}
+        </span>
+      }
+    </button>
+
+    <button
+      (click)="openScraper()"
+      class="flex items-center gap-1.5 px-4 py-2.5 bg-p1 hover:bg-p1/90 text-white text-sm font-semibold rounded-xl transition-colors"
+    >
+      <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">travel_explore</mat-icon>
+      Scraper eventos
+    </button>
+  </div>
+</div>
+
+<!-- Stats row -->
+<div class="grid grid-cols-3 gap-3 mb-5">
+  <div class="bg-b2 border border-b4 rounded-xl px-4 py-3">
+    <p class="text-xs text-t3 font-medium mb-1">Pendientes</p>
+    <p class="text-2xl font-bold text-amber-400">{{ pendingCount }}</p>
+  </div>
+  <div class="bg-b2 border border-b4 rounded-xl px-4 py-3">
+    <p class="text-xs text-t3 font-medium mb-1">Aprobados</p>
+    <p class="text-2xl font-bold text-green-400">{{ approvedCount }}</p>
+  </div>
+  <div class="bg-b2 border border-b4 rounded-xl px-4 py-3">
+    <p class="text-xs text-t3 font-medium mb-1">Rechazados</p>
+    <p class="text-2xl font-bold text-red-400">{{ rejectedCount }}</p>
+  </div>
 </div>
 
 <!-- Filtros -->
 <div class="flex flex-col sm:flex-row gap-3 mb-5 flex-wrap">
-  <!-- Búsqueda -->
   <div class="relative flex-1 min-w-[180px] max-w-sm">
     <mat-icon class="absolute left-3 top-1/2 -translate-y-1/2 text-t3 !text-[18px] !w-[18px] !h-[18px] pointer-events-none">search</mat-icon>
     <input
       type="text"
-      placeholder="Buscar por título o venue..."
+      placeholder="Buscar por título..."
       [(ngModel)]="searchTerm"
       class="w-full pl-9 pr-4 py-2.5 bg-b2 border border-b4 rounded-xl text-t1 text-sm placeholder-t3 focus:outline-none focus:border-p1 focus:ring-1 focus:ring-p1 transition-all"
     />
   </div>
 
-  <!-- Estado -->
   <select
     [(ngModel)]="selectedStatus"
-    class="px-3 py-2.5 bg-b2 border border-b4 rounded-xl text-sm focus:outline-none focus:border-p1 focus:ring-1 focus:ring-p1 transition-all cursor-pointer"
+    class="px-3 py-2.5 bg-b2 border border-b4 rounded-xl text-sm focus:outline-none focus:border-p1 transition-all cursor-pointer"
     [class.text-t3]="selectedStatus === 'all'"
     [class.text-t1]="selectedStatus !== 'all'"
   >
@@ -49,20 +76,6 @@
     <option value="rejected" class="text-t1 bg-b2">Rechazados</option>
   </select>
 
-  <!-- Fuente -->
-  <select
-    [(ngModel)]="selectedSource"
-    class="px-3 py-2.5 bg-b2 border border-b4 rounded-xl text-sm focus:outline-none focus:border-p1 focus:ring-1 focus:ring-p1 transition-all cursor-pointer"
-    [class.text-t3]="!selectedSource"
-    [class.text-t1]="selectedSource"
-  >
-    <option value="" class="text-t3 bg-b2">Todas las fuentes</option>
-    @for (src of sources; track src) {
-      <option [value]="src" class="text-t1 bg-b2">{{ src }}</option>
-    }
-  </select>
-
-  <!-- Limpiar -->
   @if (hasActiveFilters) {
     <button
       (click)="clearFilters()"
@@ -77,141 +90,114 @@
 <!-- Tabla -->
 <div class="bg-b2 rounded-2xl border border-b4 overflow-hidden">
 
-  <!-- Loading skeleton -->
-  @if (loading) {
-    <div class="divide-y divide-b4">
-      @for (_ of [1,2,3,4,5]; track $index) {
-        <div class="flex items-center gap-4 px-6 py-4 animate-pulse">
-          <div class="w-14 h-10 rounded-lg bg-b4 shrink-0"></div>
-          <div class="flex-1 space-y-2">
-            <div class="h-3 bg-b4 rounded w-40"></div>
-            <div class="h-2.5 bg-b4 rounded w-24"></div>
-          </div>
-          <div class="h-6 w-20 bg-b4 rounded-lg hidden md:block"></div>
-          <div class="h-6 w-16 bg-b4 rounded-full hidden md:block"></div>
-          <div class="flex gap-2 ml-auto">
-            <div class="w-20 h-8 bg-b4 rounded-lg"></div>
-            <div class="w-20 h-8 bg-b4 rounded-lg"></div>
-          </div>
-        </div>
-      }
-    </div>
-  }
+  <!-- Cabecera (desktop) -->
+  <div class="hidden md:grid md:grid-cols-[2.5fr_1fr_1fr_1fr_80px] gap-4 px-6 py-3 border-b border-b4">
+    <span class="text-xs font-semibold text-t3 uppercase tracking-wider">Evento</span>
+    <span class="text-xs font-semibold text-t3 uppercase tracking-wider">Fecha</span>
+    <span class="text-xs font-semibold text-t3 uppercase tracking-wider">Estado</span>
+    <span class="text-xs font-semibold text-t3 uppercase tracking-wider">Scrapeado</span>
+    <span class="text-xs font-semibold text-t3 uppercase tracking-wider text-right">Acción</span>
+  </div>
 
-  <!-- Cabecera de tabla (desktop) -->
-  @if (!loading) {
-    <div class="hidden md:grid md:grid-cols-[2.5fr_1fr_1fr_1fr_160px] gap-4 px-6 py-3 border-b border-b4">
-      <span class="text-xs font-semibold text-t3 uppercase tracking-wider">Evento</span>
-      <span class="text-xs font-semibold text-t3 uppercase tracking-wider">Fecha</span>
-      <span class="text-xs font-semibold text-t3 uppercase tracking-wider">Fuente</span>
-      <span class="text-xs font-semibold text-t3 uppercase tracking-wider">Estado</span>
-      <span class="text-xs font-semibold text-t3 uppercase tracking-wider text-right">Acciones</span>
-    </div>
+  <!-- Filas -->
+  <div class="divide-y divide-b4">
+    @for (event of filtered; track event.id) {
+      <div class="group grid grid-cols-[1fr_auto] md:grid-cols-[2.5fr_1fr_1fr_1fr_80px] gap-4 px-6 py-4 items-center hover:bg-b3 transition-colors">
 
-    <!-- Filas -->
-    <div class="divide-y divide-b4">
-      @for (event of filtered; track event.id) {
-        <div class="group grid grid-cols-[1fr_auto] md:grid-cols-[2.5fr_1fr_1fr_1fr_160px] gap-4 px-6 py-4 items-center hover:bg-b3 transition-colors">
-
-          <!-- Imagen + título + venue -->
-          <div class="flex items-center gap-3 min-w-0">
-            @if (event.imageUrl) {
-              <img
-                [src]="event.imageUrl"
-                [alt]="event.title"
-                class="w-14 h-10 rounded-lg object-cover shrink-0 ring-1 ring-b4"
-              />
-            } @else {
-              <div class="w-14 h-10 rounded-lg bg-b4 flex items-center justify-center shrink-0">
-                <mat-icon class="text-t3 !text-[20px] !w-[20px] !h-[20px]">event</mat-icon>
-              </div>
-            }
-            <div class="min-w-0">
-              <p class="text-sm font-semibold text-t1 truncate">{{ event.title }}</p>
-              <p class="text-xs text-t3 truncate">{{ event.venue }}</p>
-              <!-- Fecha y estado en mobile -->
-              <p class="text-xs text-t3 mt-0.5 md:hidden">{{ formatDate(event.date) }}</p>
+        <!-- Imagen + título + tags -->
+        <div class="flex items-center gap-3 min-w-0">
+          @if (event.imageUrl) {
+            <img
+              [src]="event.imageUrl"
+              [alt]="event.title"
+              class="w-14 h-10 rounded-lg object-cover shrink-0 ring-1 ring-b4"
+            />
+          } @else {
+            <div class="w-14 h-10 rounded-lg bg-b4 flex items-center justify-center shrink-0">
+              <mat-icon class="text-t3 !text-[20px] !w-[20px] !h-[20px]">event</mat-icon>
+            </div>
+          }
+          <div class="min-w-0">
+            <p class="text-sm font-semibold text-t1 truncate">{{ event.title }}</p>
+            <div class="flex items-center gap-1 mt-0.5 flex-wrap">
+              @for (tag of (event.tags ?? [] | slice:0:3); track tag) {
+                <span class="px-1.5 py-0.5 bg-b3 text-t3 text-[10px] font-medium rounded border border-b4 leading-none">
+                  {{ tag }}
+                </span>
+              }
             </div>
           </div>
+        </div>
 
-          <!-- Fecha (desktop) -->
-          <p class="text-sm text-t2 hidden md:block">{{ formatDate(event.date) }}</p>
+        <!-- Fecha (desktop) -->
+        <p class="text-sm text-t2 hidden md:block">{{ formatDate(event.date) }}</p>
 
-          <!-- Fuente (desktop) -->
-          <div class="hidden md:block">
-            <span class="inline-block px-2.5 py-1 bg-b3 text-t2 text-xs font-medium rounded-lg leading-none border border-b4">
-              {{ event.source }}
+        <!-- Estado (desktop) -->
+        <div class="hidden md:block">
+          @if (event.status === 'pending') {
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-500/10 text-amber-400 text-xs font-medium rounded-full">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+              Pendiente
             </span>
-          </div>
-
-          <!-- Estado (desktop) -->
-          <div class="hidden md:block">
-            @if (!event.status || event.status === 'pending') {
-              <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-500/10 text-amber-400 text-xs font-medium rounded-full leading-none">
-                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-                Pendiente
-              </span>
-            } @else if (event.status === 'approved') {
-              <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-green-500/10 text-green-400 text-xs font-medium rounded-full leading-none">
-                <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
-                Aprobado
-              </span>
-            } @else if (event.status === 'rejected') {
-              <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-red-500/10 text-red-400 text-xs font-medium rounded-full leading-none">
-                <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span>
-                Rechazado
-              </span>
-            }
-          </div>
-
-          <!-- Acciones -->
-          <div class="flex items-center gap-2 justify-end">
-            @if (event.status !== 'approved') {
-              <button
-                (click)="approve(event)"
-                matTooltip="Aprobar evento"
-                class="flex items-center gap-1 px-3 py-1.5 bg-green-500/10 hover:bg-green-500/20 text-green-400 text-xs font-semibold rounded-lg border border-green-500/20 transition-colors whitespace-nowrap"
-              >
-                <mat-icon class="!text-[14px] !w-[14px] !h-[14px]">check</mat-icon>
-                Aprobar
-              </button>
-            }
-            @if (event.status !== 'rejected') {
-              <button
-                (click)="reject(event)"
-                matTooltip="Rechazar evento"
-                class="flex items-center gap-1 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-semibold rounded-lg border border-red-500/20 transition-colors whitespace-nowrap"
-              >
-                <mat-icon class="!text-[14px] !w-[14px] !h-[14px]">close</mat-icon>
-                Rechazar
-              </button>
-            }
-          </div>
-
+          } @else if (event.status === 'approved') {
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-green-500/10 text-green-400 text-xs font-medium rounded-full">
+              <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+              Aprobado
+            </span>
+          } @else if (event.status === 'rejected') {
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-red-500/10 text-red-400 text-xs font-medium rounded-full">
+              <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span>
+              Rechazado
+            </span>
+          }
         </div>
-      }
-    </div>
 
-    <!-- Estado vacío -->
-    @if (filtered.length === 0) {
-      <div class="flex flex-col items-center justify-center py-16 text-center">
-        <div class="w-14 h-14 bg-b3 rounded-2xl flex items-center justify-center mb-4">
-          <mat-icon class="text-t3 !text-[28px] !w-[28px] !h-[28px]">event_busy</mat-icon>
+        <!-- Scrapeado en (desktop) -->
+        <p class="text-xs text-t3 hidden md:block">{{ formatScrapedAt(event.scrapedAt) }}</p>
+
+        <!-- Acciones -->
+        <div class="flex items-center justify-end">
+          @if (event.status === 'pending') {
+            <button
+              (click)="deleteEvent(event)"
+              matTooltip="Eliminar del scraping"
+              class="w-8 h-8 flex items-center justify-center rounded-lg text-t3 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+            >
+              <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">delete_outline</mat-icon>
+            </button>
+          }
         </div>
-        @if (hasActiveFilters) {
-          <p class="text-t2 font-semibold">Sin resultados</p>
-          <p class="text-t3 text-sm mt-1">Ningún evento coincide con los filtros aplicados</p>
-          <button
-            (click)="clearFilters()"
-            class="mt-4 text-p1 text-sm font-medium hover:underline"
-          >
-            Limpiar filtros
-          </button>
-        } @else {
-          <p class="text-t2 font-semibold">No hay eventos scrapeados</p>
-          <p class="text-t3 text-sm mt-1">Ejecuta el scraper para obtener nuevos eventos</p>
-        }
+
       </div>
     }
+  </div>
+
+  <!-- Estado vacío -->
+  @if (filtered.length === 0) {
+    <div class="flex flex-col items-center justify-center py-16 text-center">
+      <div class="w-14 h-14 bg-b3 rounded-2xl flex items-center justify-center mb-4">
+        <mat-icon class="text-t3 !text-[28px] !w-[28px] !h-[28px]">event_busy</mat-icon>
+      </div>
+      @if (hasActiveFilters) {
+        <p class="text-t2 font-semibold">Sin resultados</p>
+        <p class="text-t3 text-sm mt-1">Ningún evento coincide con los filtros</p>
+        <button (click)="clearFilters()" class="mt-4 text-p1 text-sm font-medium hover:underline">
+          Limpiar filtros
+        </button>
+      } @else {
+        <p class="text-t2 font-semibold">No hay eventos scrapeados</p>
+        <p class="text-t3 text-sm mt-1">Pulsa "Scraper eventos" para comenzar</p>
+      }
+    </div>
   }
+
 </div>
+
+<!-- Drawer de logs -->
+<scraper-log-drawer
+  [visible]="drawerVisible"
+  [mode]="drawerMode"
+  [logs]="drawerLogs"
+  [done]="drawerDone"
+  (closeDrawer)="closeDrawer()"
+/>

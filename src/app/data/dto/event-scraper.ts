@@ -1,18 +1,15 @@
 export interface EventScraper {
   id: number;
+  externalId: string;
+  clubId: number;
   title: string;
   date: string;
-  venue: string;
-  venueId: number;
-  city: string;
-  description: string;
-  time: string;
-  ticketUrl: string;
-  imageUrl: string;
-  eventUrl: string;
-  sourceUrl: string;
-  source: string;
-  status?: 'pending' | 'approved' | 'rejected';
-  createdAt: string;
-  updatedAt: string;
+  description: string | null;
+  imageUrl: string | null;
+  ticketUrl: string | null;
+  tags: string[] | null;
+  categories: string[] | null;
+  eventId: number | null;
+  status: 'pending' | 'approved' | 'rejected';
+  scrapedAt: string | null;
 }

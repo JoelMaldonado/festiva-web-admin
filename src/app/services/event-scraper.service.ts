@@ -15,11 +15,7 @@ export class EventScraperService {
     return this.http.get<Result<EventScraper[]>>(this.url);
   }
 
-  approve(id: number) {
-    return this.http.patch<Result<EventScraper>>(`${this.url}/${id}/approve`, {});
-  }
-
-  reject(id: number) {
-    return this.http.patch<Result<EventScraper>>(`${this.url}/${id}/reject`, {});
+  remove(id: number) {
+    return this.http.delete<Result<null>>(`${this.url}/${id}`);
   }
 }

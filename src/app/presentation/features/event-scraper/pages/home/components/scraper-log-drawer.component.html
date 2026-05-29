@@ -1,0 +1,82 @@
+<div class="fixed inset-0 z-40 flex justify-end" [class.pointer-events-none]="!visible">
+
+  <!-- Backdrop -->
+  <div
+    class="absolute inset-0 bg-black/60 transition-opacity duration-300"
+    [class.opacity-0]="!visible"
+    [class.opacity-100]="visible"
+    (click)="!done && closeDrawer.emit()"
+  ></div>
+
+  <!-- Panel -->
+  <div
+    class="relative flex flex-col w-[520px] max-w-full bg-b1 border-l border-b4 shadow-2xl transition-transform duration-300"
+    [class.translate-x-full]="!visible"
+    [class.translate-x-0]="visible"
+  >
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-5 py-4 border-b border-b4 shrink-0">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center"
+          [class.bg-p1]="!done"
+          [class.bg-green-500]="done"
+        >
+          <mat-icon class="text-white !text-[18px] !w-[18px] !h-[18px]">
+            {{ done ? 'check' : 'terminal' }}
+          </mat-icon>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-t1">{{ title }}</p>
+          <p class="text-xs text-t3">{{ subtitle }}</p>
+        </div>
+      </div>
+      <button
+        (click)="closeDrawer.emit()"
+        [disabled]="!done"
+        class="w-8 h-8 flex items-center justify-center rounded-lg transition-colors"
+        [class.text-t3]="!done"
+        [class.text-t1]="done"
+        [class.hover:bg-b3]="done"
+        [class.cursor-not-allowed]="!done"
+      >
+        <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Terminal log -->
+    <div class="flex-1 overflow-y-auto p-5 bg-[#0d0d0d] font-mono text-sm space-y-0.5">
+      @for (line of logs; track $index) {
+        @if (line === '[DONE]') {
+          <p class="text-green-400 font-bold mt-2">✓ Proceso completado</p>
+        } @else if (line.startsWith('[ERROR]')) {
+          <p class="text-red-400">{{ line }}</p>
+        } @else {
+          <p class="text-green-300/80">{{ line }}</p>
+        }
+      }
+
+      @if (!done) {
+        <span class="inline-block w-2 h-4 bg-t1 animate-pulse ml-0.5 align-middle"></span>
+      }
+    </div>
+
+    <!-- Footer -->
+    <div class="px-5 py-4 border-t border-b4 shrink-0">
+      @if (done) {
+        <button
+          (click)="closeDrawer.emit()"
+          class="w-full py-2.5 bg-b2 hover:bg-b3 border border-b4 text-t1 text-sm font-semibold rounded-xl transition-colors"
+        >
+          Cerrar
+        </button>
+      } @else {
+        <div class="flex items-center gap-2 text-t3 text-xs">
+          <span class="w-1.5 h-1.5 rounded-full bg-p1 animate-pulse"></span>
+          Ejecutando... no cierres esta ventana
+        </div>
+      }
+    </div>
+
+  </div>
+</div>
